@@ -827,11 +827,9 @@ final class MiniappGenerativeAiService
         }
         $m = strtolower($msg);
 
-        if (str_contains($m, 'ai_scene_not_configured')) {
-            return true;
-        }
-        if (str_contains($m, 'bigmodel_response_not_json')) {
-            return true;
+        // 配置/协议类错误应直接暴露给前端，避免“看起来成功但结果是占位文案”。
+        if (str_contains($m, 'ai_scene_not_configured') || str_contains($m, 'bigmodel_response_not_json')) {
+            return false;
         }
         if (str_contains($m, 'timed out') || str_contains($m, 'timeout')) {
             return true;
