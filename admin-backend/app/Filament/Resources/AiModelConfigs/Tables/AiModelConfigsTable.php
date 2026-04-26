@@ -65,6 +65,9 @@ class AiModelConfigsTable
                             'error_message' => $result['error_message'],
                         ]);
 
+                        $appendRequestUrl = ($result['status'] !== 'success')
+                            && (($result['error_code'] ?? null) !== 'visual_host_openai_path_mismatch');
+
                         $body =
                             $result['status'] === 'success'
                                 ? ($result['error_message'] ?? '测试完成')
@@ -75,7 +78,7 @@ class AiModelConfigsTable
                                                 ->map(fn ($v, $k): string => (string) $k.': '.(string) $v)
                                                 ->implode("\n")
                                             : '')
-                                        .(isset($result['request_url']) ? "\n".$result['request_url'] : ''),
+                                        .(isset($result['request_url']) && $appendRequestUrl ? "\n".$result['request_url'] : ''),
                                 );
 
                         Notification::make()

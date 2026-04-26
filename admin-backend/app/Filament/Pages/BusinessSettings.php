@@ -21,6 +21,8 @@ class BusinessSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    protected static ?string $title = '业务配置';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedWrenchScrewdriver;
 
     protected static ?string $navigationLabel = '业务配置';
@@ -53,18 +55,18 @@ class BusinessSettings extends Page implements HasForms
                     ->schema([
                         Section::make('基础配置')
                             ->schema([
-                                TextInput::make('secret_id')->label('SecretId')->maxLength(200),
+                                TextInput::make('secret_id')->label('密钥编号')->maxLength(200),
                                 TextInput::make('masked_secret_key')
-                                    ->label('SecretKey（掩码）')
+                                    ->label('密钥（掩码）')
                                     ->disabled()
                                     ->dehydrated(false),
                                 TextInput::make('secret_key_update')
-                                    ->label('更新 SecretKey（留空则不修改）')
+                                    ->label('更新密钥（留空则不修改）')
                                     ->password()
                                     ->revealable(),
-                                TextInput::make('bucket')->label('Bucket')->maxLength(200),
-                                TextInput::make('region')->label('Region')->maxLength(120),
-                                TextInput::make('domain')->label('访问域名 Domain')->maxLength(255)->columnSpanFull(),
+                                TextInput::make('bucket')->label('存储桶')->maxLength(200),
+                                TextInput::make('region')->label('地域')->maxLength(120),
+                                TextInput::make('domain')->label('访问域名')->maxLength(255)->columnSpanFull(),
                             ])
                             ->columns(2),
                         Section::make('上传配置')
@@ -74,9 +76,9 @@ class BusinessSettings extends Page implements HasForms
                                     ->label('文件可见性')
                                     ->options(['public' => 'public', 'private' => 'private'])
                                     ->native(false),
-                                TextInput::make('max_file_size')->label('最大文件大小（MB）')->numeric()->minValue(1)->maxValue(2048),
+                                TextInput::make('max_file_size')->label('最大文件大小（兆字节）')->numeric()->minValue(1)->maxValue(2048),
                                 TagsInput::make('allowed_extensions')->label('允许扩展名'),
-                                Toggle::make('use_https')->label('使用 HTTPS'),
+                                Toggle::make('use_https')->label('使用安全传输'),
                                 Toggle::make('use_unique_name')->label('生成唯一文件名'),
                                 Toggle::make('overwrite_enabled')->label('允许覆盖同名文件'),
                                 Toggle::make('is_default')->label('设为默认配置'),
@@ -110,7 +112,7 @@ class BusinessSettings extends Page implements HasForms
         $this->maskedSecretKey = $this->maskSecret((string) ($config['secret_key'] ?? ''));
         $this->form->fill($this->toFormData($config));
 
-        Notification::make()->title('COS 配置已保存')->success()->send();
+        Notification::make()->title('对象存储配置已保存')->success()->send();
     }
 
     public function testTencentCosConnection(TencentCosService $service): void
@@ -120,7 +122,7 @@ class BusinessSettings extends Page implements HasForms
         $saved = $service->getConfig();
         $this->form->fill($this->toFormData($saved));
         $notification = Notification::make()
-            ->title($result['ok'] ? 'COS 连接测试成功' : 'COS 连接测试失败')
+            ->title($result['ok'] ? '对象存储连接测试成功' : '对象存储连接测试失败')
             ->body((string) $result['message']);
         if ($result['ok']) {
             $notification->success();
@@ -137,7 +139,7 @@ class BusinessSettings extends Page implements HasForms
         $saved = $service->getConfig();
         $this->form->fill($this->toFormData($saved));
         $notification = Notification::make()
-            ->title($result['ok'] ? 'COS 测试上传成功' : 'COS 测试上传失败')
+            ->title($result['ok'] ? '对象存储测试上传成功' : '对象存储测试上传失败')
             ->body((string) ($result['file_url'] ?? $result['message']));
         if ($result['ok']) {
             $notification->success();

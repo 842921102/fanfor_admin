@@ -36,7 +36,7 @@ class CirclePostsTable
             ->defaultSort('published_at', 'desc')
             ->columns([
                 TextColumn::make('id')
-                    ->label('ID')
+                    ->label('编号')
                     ->sortable()
                     ->copyable(),
                 ImageColumn::make('cover')
@@ -72,7 +72,7 @@ class CirclePostsTable
                     ->label('内容类型')
                     ->badge()
                     ->formatStateUsing(fn (?string $state): string => match ((string) $state) {
-                        'ai_generated' => 'AI生成',
+                        'ai_generated' => '智能生成',
                         'user_uploaded' => '用户实拍',
                         default => (string) $state,
                     }),
@@ -118,8 +118,7 @@ class CirclePostsTable
                     ->label('关键词')
                     ->schema([
                         TextInput::make('q')
-                            ->label('标题 / 正文 / 昵称')
-                            ->placeholder('模糊搜索'),
+                            ->label('标题 / 正文 / 昵称'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         $q = isset($data['q']) ? trim((string) $data['q']) : '';
@@ -233,7 +232,6 @@ class CirclePostsTable
                     ->icon(Heroicon::OutlinedTrash)
                     ->color('danger')
                     ->requiresConfirmation()
-                    ->modalDescription('将状态标为已删除并软删除，前台不可见。')
                     ->visible(function (CirclePost $record): bool {
                         return ! $record->trashed()
                             && (auth()->user()?->can('delete', $record) ?? false);

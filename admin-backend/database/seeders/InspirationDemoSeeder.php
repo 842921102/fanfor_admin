@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\CircleComment;
 use App\Models\CirclePost;
 use App\Models\User;
+use App\Models\UserFollow;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -42,6 +43,25 @@ class InspirationDemoSeeder extends Seeder
             '家常豆腐', '清汤面暖胃版',
         ];
 
+        // 演示互关关系：前 3 个账号两两互关，便于验证「仅互关好友可见」。
+        if ($users->count() >= 3) {
+            $pairs = [
+                [0, 1],
+                [0, 2],
+                [1, 2],
+            ];
+            foreach ($pairs as [$a, $b]) {
+                UserFollow::query()->updateOrCreate(
+                    ['follower_id' => $users[$a]->id, 'followee_id' => $users[$b]->id],
+                    []
+                );
+                UserFollow::query()->updateOrCreate(
+                    ['follower_id' => $users[$b]->id, 'followee_id' => $users[$a]->id],
+                    []
+                );
+            }
+        }
+
         $descriptions = [
             '图片为演示数据，适合首页图片流展示。', '偏清淡口味，适合晚餐。', '摆盘突出食材质感，适合收藏。',
             '一锅完成，适合下班后快速开饭。', '留出商品位，后续可挂锅具/食材包。',
@@ -70,6 +90,7 @@ class InspirationDemoSeeder extends Seeder
                     'cover_image' => $images[0],
                     'source_type' => $sourceType,
                     'publish_source' => $publishSource,
+                    'visibility' => 'public',
                     'topic' => $sourceType === 'ai_generated' ? 'AI生成' : '用户实拍',
                     'like_count' => random_int(5, 120),
                     'favorite_count' => random_int(2, 80),

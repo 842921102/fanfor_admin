@@ -17,8 +17,6 @@ class RecommendationHealthStatsWidget extends StatsOverviewWidget
 
     protected ?string $heading = '系统健康监控';
 
-    protected ?string $description = '今日 00:00 至当前 · 非零时请关注';
-
     protected int|array|null $columns = 4;
 
     /**
@@ -33,8 +31,8 @@ class RecommendationHealthStatsWidget extends StatsOverviewWidget
             ->color((int) ($h[$key] ?? 0) > 0 ? 'warning' : 'gray');
 
         return [
-            $mk('fallback_count', 'AI fallback', Heroicon::OutlinedExclamationTriangle),
-            $mk('error_count', '推荐失败 / error', Heroicon::OutlinedXCircle),
+            $mk('fallback_count', '智能推荐回退', Heroicon::OutlinedExclamationTriangle),
+            $mk('error_count', '推荐失败 / 错误', Heroicon::OutlinedXCircle),
             $mk('no_recipe_count', '无做法数据', Heroicon::OutlinedBookOpen),
             $mk('default_profile_count', '默认画像推荐', Heroicon::OutlinedUserCircle),
         ];

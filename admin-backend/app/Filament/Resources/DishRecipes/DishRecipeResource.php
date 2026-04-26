@@ -99,8 +99,7 @@ class DishRecipeResource extends Resource
                                 '中等' => '中等',
                                 '较难' => '较难',
                             ])
-                            ->native(false)
-                            ->placeholder('可选'),
+                            ->native(false),
                     ])
                     ->columns(2),
                 Section::make('小贴士')
@@ -118,7 +117,7 @@ class DishRecipeResource extends Resource
         return $table
             ->defaultSort('updated_at', 'desc')
             ->columns([
-                TextColumn::make('id')->label('ID')->sortable(),
+                TextColumn::make('id')->label('编号')->sortable(),
                 TextColumn::make('title')->label('菜名')->searchable()->limit(24),
                 TextColumn::make('dish_key')->label('匹配键')->toggleable()->limit(20),
                 IconColumn::make('is_active')->label('启用')->boolean(),

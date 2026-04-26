@@ -18,9 +18,9 @@ class CirclePostInfolist
             ->components([
                 Section::make('基础信息')
                     ->schema([
-                        TextEntry::make('id')->label('ID')->copyable(),
+                        TextEntry::make('id')->label('编号')->copyable(),
                         TextEntry::make('user.name')->label('发帖用户'),
-                        TextEntry::make('user_id')->label('用户 ID')->copyable(),
+                        TextEntry::make('user_id')->label('用户编号')->copyable(),
                         TextEntry::make('status')
                             ->label('状态')
                             ->formatStateUsing(fn (?string $state): string => CirclePostStatus::labels()[(string) $state] ?? (string) $state)
@@ -47,18 +47,18 @@ class CirclePostInfolist
                         TextEntry::make('source_type')
                             ->label('内容类型')
                             ->formatStateUsing(fn (?string $state): string => match ((string) $state) {
-                                'ai_generated' => 'AI生成',
+                                'ai_generated' => '智能生成',
                                 'user_uploaded' => '用户实拍',
                                 default => (string) $state,
                             }),
                         TextEntry::make('publish_source')
                             ->label('发布来源')
                             ->formatStateUsing(fn (?string $state): string => match ((string) $state) {
-                                'ai_result' => 'AI结果页',
+                                'ai_result' => '智能结果页',
                                 'manual_upload' => '手动上传',
                                 default => (string) $state,
                             }),
-                        TextEntry::make('related_product_id')->label('关联商品ID')->placeholder('未绑定'),
+                        TextEntry::make('related_product_id')->label('关联商品编号')->placeholder('未绑定'),
                         TextEntry::make('topic')->label('话题'),
                     ])
                     ->columns(2),
@@ -79,7 +79,7 @@ class CirclePostInfolist
                             ->placeholder('无')
                             ->columnSpanFull(),
                         TextEntry::make('images')
-                            ->label('全部图片 URL')
+                            ->label('全部图片地址')
                             ->formatStateUsing(function ($state): string {
                                 if (! is_array($state) || $state === []) {
                                     return '无';

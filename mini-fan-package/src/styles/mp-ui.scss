@@ -157,13 +157,15 @@ page {
 
 .mp-btn-danger-plain {
   margin: 0;
-  padding: 12rpx 24rpx;
+  min-width: 112rpx;
+  padding: 12rpx 22rpx;
   font-size: 24rpx;
-  font-weight: 600;
-  color: #b45309 !important;
-  background: #fff7ed !important;
-  border: 1rpx solid #fed7aa !important;
+  font-weight: 700;
+  color: $mp-accent-deep !important;
+  background: $mp-accent-soft !important;
+  border: 1rpx solid $mp-ring-accent !important;
   border-radius: 999rpx;
+  box-shadow: 0 4rpx 14rpx rgba(122, 87, 209, 0.1);
 }
 
 .mp-btn-danger-plain::after {

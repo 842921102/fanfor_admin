@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\AiModelConfig;
 use App\Models\FeatureDataRecord;
+use App\Support\AiOpenAiCompatibleImage;
 use App\Support\AiScene;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -355,39 +356,99 @@ final class MiniappGenerativeAiService
         if ($prompt === '') {
             throw new \InvalidArgumentException('prompt_missing');
         }
-        $runtime = $this->resolveEnabledRuntime(AiScene::RecipeImageGeneration->value);
+        $runtime = $this->resolveEnabledRuntime(AiScene::RecipeImageGeneration->value, 'image');
         if ($runtime === null) {
             throw new \RuntimeException('recipe_image_generation_not_configured');
         }
-        $baseUrl = rtrim((string) ($runtime['base_url'] ?? ''), '/');
-        $apiPath = ltrim((string) (($runtime['model']['api_path'] ?? '/images/generations')), '/');
+        $baseUrl = AiOpenAiCompatibleImage::normalizeRootBaseUrl(
+            rtrim((string) ($runtime['base_url'] ?? ''), '/'),
+            (string) ($runtime['provider_code'] ?? ''),
+        );
+        $apiPathRaw = (string) (($runtime['model']['api_path'] ?? '/images/generations'));
+        $apiPath = ltrim($apiPathRaw, '/');
         $modelCode = (string) ($runtime['model']['model_code'] ?? '');
         $apiKey = (string) ($runtime['api_key'] ?? '');
         $timeoutSec = max(8, (int) ceil(((int) ($runtime['timeout_ms'] ?? 120000)) / 1000));
-        $requestUrl = $baseUrl.'/'.$apiPath;
+        $isAzure = AiOpenAiCompatibleImage::isAzureOpenAiHost(
+            (string) ($runtime['base_url'] ?? ''),
+            (string) ($runtime['provider_code'] ?? ''),
+        );
+        $requestUrl = $isAzure
+            ? AiOpenAiCompatibleImage::buildAzureOpenAiRequestUrl($baseUrl, $apiPath, $modelCode)
+            : $baseUrl.'/'.$apiPath;
+
+        $misHint = AiOpenAiCompatibleImage::misconfiguredVolcVisualOpenAiImageHint(
+            (string) ($runtime['base_url'] ?? ''),
+            $apiPathRaw,
+        );
+        if ($misHint !== null) {
+            throw new \RuntimeException('recipe_image_misconfigured: '.$misHint);
+        }
+        // 图片生成可能超过 PHP 默认 30s 执行上限，避免请求中途被 fatal kill。
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(max(35, $timeoutSec + 5));
+        }
         $payload = [
-            'model' => $modelCode,
             'prompt' => $prompt,
-            'size' => $size !== null && trim($size) !== '' ? trim($size) : '1024x1024',
+            'size' => AiOpenAiCompatibleImage::normalizeImageSizeForModel(
+                $size !== null && trim($size) !== '' ? trim($size) : '1024x1024',
+                $modelCode,
+            ),
         ];
-        $resp = Http::timeout($timeoutSec)->acceptJson()->withToken($apiKey)->post($requestUrl, $payload);
+        if (! $isAzure) {
+            $payload['model'] = $modelCode;
+        }
+
+        $request = Http::timeout($timeoutSec)->acceptJson();
+        if ($isAzure) {
+            $request = $request->withHeaders(['api-key' => $apiKey]);
+        } else {
+            $request = $request->withToken($apiKey);
+        }
+
+        $resp = $request->post($requestUrl, $payload);
         if (! $resp->successful()) {
-            throw new \RuntimeException('recipe_image_http_'.$resp->status());
+            $body = Str::limit(trim((string) $resp->body()), 400);
+            throw new \RuntimeException('recipe_image_http_'.$resp->status().($body !== '' ? ': '.$body : ''));
         }
         $data = $resp->json();
-        $item = is_array($data['data'] ?? null) ? ($data['data'][0] ?? null) : null;
-        $url = '';
-        if (is_array($item)) {
-            $url = trim((string) ($item['url'] ?? $item['image_url'] ?? ''));
-        }
-        if ($url === '' && is_string($data['url'] ?? null)) {
-            $url = trim((string) $data['url']);
-        }
+        $url = self::extractOpenAiCompatibleImageUrl(is_array($data) ? $data : []);
         if ($url === '') {
             throw new \RuntimeException('image_url_missing');
         }
 
         return ['url' => $url, 'raw' => $data];
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    private static function extractOpenAiCompatibleImageUrl(array $data): string
+    {
+        $rows = $data['data'] ?? null;
+        if (is_array($rows)) {
+            foreach ($rows as $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+                $url = trim((string) ($row['url'] ?? $row['image_url'] ?? $row['imageUrl'] ?? ''));
+                if ($url !== '') {
+                    return $url;
+                }
+                if (isset($row['b64_json']) && is_string($row['b64_json']) && trim($row['b64_json']) !== '') {
+                    return 'data:image/png;base64,'.trim($row['b64_json']);
+                }
+            }
+        }
+
+        if (is_string($data['url'] ?? null)) {
+            $u = trim((string) $data['url']);
+            if ($u !== '') {
+                return $u;
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -623,16 +684,19 @@ final class MiniappGenerativeAiService
     /**
      * @return array<string, mixed>|null
      */
-    private function resolveEnabledRuntime(string $sceneCode): ?array
+    private function resolveEnabledRuntime(string $sceneCode, ?string $requiredModelType = null): ?array
     {
         /** @var AiModelConfig|null $config */
-        $config = AiModelConfig::query()
+        $query = AiModelConfig::query()
             ->with(['provider', 'model'])
             ->where('scene_code', $sceneCode)
-            ->where('is_enabled', true)
-            ->orderByDesc('is_default')
-            ->orderByDesc('id')
-            ->first();
+            ->where('is_enabled', true);
+
+        if ($requiredModelType !== null && $requiredModelType !== '') {
+            $query->whereHas('model', fn ($q) => $q->where('model_type', $requiredModelType));
+        }
+
+        $config = $query->orderByDesc('is_default')->orderByDesc('id')->first();
 
         if (! $config || ! $config->provider || ! $config->model) {
             return null;
@@ -643,6 +707,7 @@ final class MiniappGenerativeAiService
 
         return [
             'scene_code' => $sceneCode,
+            'provider_code' => $config->provider->provider_code,
             'model' => [
                 'model_code' => $config->model->model_code,
                 'api_path' => $config->model->api_path,

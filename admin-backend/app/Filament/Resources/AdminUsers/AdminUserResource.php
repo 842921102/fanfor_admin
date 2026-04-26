@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Resources\Users;
+namespace App\Filament\Resources\AdminUsers;
 
-use App\Filament\Resources\Users\Pages\CreateUser;
-use App\Filament\Resources\Users\Pages\EditUser;
-use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\AdminUsers\Pages\CreateAdminUser;
+use App\Filament\Resources\AdminUsers\Pages\EditAdminUser;
+use App\Filament\Resources\AdminUsers\Pages\ListAdminUsers;
 use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Resources\Users\Tables\UsersTable;
@@ -17,32 +17,27 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
 
-class UserResource extends Resource
+class AdminUserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationLabel = '用户列表（C端）';
+    protected static ?string $navigationLabel = '后台账号管理';
 
     protected static string|UnitEnum|null $navigationGroup = '用户管理';
 
-    protected static ?string $modelLabel = '用户';
+    protected static ?string $modelLabel = '后台账号';
 
-    protected static ?string $pluralModelLabel = '用户';
+    protected static ?string $pluralModelLabel = '后台账号';
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 11;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
-
-    public static function canCreate(): bool
-    {
-        return false;
-    }
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShieldCheck;
 
     public static function form(Schema $schema): Schema
     {
-        return UserForm::configure($schema, false);
+        return UserForm::configure($schema, true);
     }
 
     public static function infolist(Schema $schema): Schema
@@ -52,22 +47,20 @@ class UserResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return UsersTable::configure($table, false);
+        return UsersTable::configure($table, true);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'index' => ListAdminUsers::route('/'),
+            'create' => CreateAdminUser::route('/create'),
+            'edit' => EditAdminUser::route('/{record}/edit'),
         ];
     }
 
@@ -77,7 +70,7 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('role', 'user')
+            ->whereIn('role', ['viewer', 'operator', 'super_admin'])
             ->withCount('favorites')
             ->withCount('histories')
             ->with('profile');

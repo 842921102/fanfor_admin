@@ -1,16 +1,5 @@
 <template>
   <view class="mp-page gl has-bottom-nav">
-    <view class="mp-hero gl__hero">
-      <view class="gl__hero-inner">
-        <text class="mp-hero__kicker mp-kicker--on-dark">封神图鉴</text>
-        <text class="mp-hero__title gl__hero-title">美食图鉴</text>
-        <text class="mp-hero__sub gl__hero-sub">
-          浏览你保存的美食成品图，随时回看灵感与创作记录。
-        </text>
-        <view class="gl__hero-rule" />
-      </view>
-    </view>
-
     <view class="mp-card gl__head-card">
       <view class="gl__head-row">
         <view class="gl__head-ico">
@@ -28,7 +17,11 @@
     </view>
 
     <view v-if="items.length > 0" class="gl__toolbar mp-card">
-      <input v-model="searchQuery" class="gl__search" placeholder="搜索菜名、菜系或食材…" />
+      <view class="gl__search-wrap">
+        <text class="gl__search-ico">🔍</text>
+        <input v-model="searchQuery" class="gl__search" placeholder="搜索菜名、菜系或食材…" confirm-type="search" />
+        <text v-if="searchQuery.trim().length" class="gl__search-clear" @click="searchQuery = ''">✕</text>
+      </view>
       <view class="gl__filters">
         <picker mode="selector" :range="cuisinePickerLabels" :value="cuisinePickerIndex" @change="onCuisinePick">
           <view class="gl__pick-display">
@@ -59,7 +52,7 @@
             v-if="!imgFailed[img.id]"
             class="gl__thumb"
             :src="img.url"
-            mode="aspectFill"
+            mode="widthFix"
             @error="onImgError(img.id)"
           />
           <view v-else class="gl__thumb-fail">
@@ -412,32 +405,8 @@ function goHome() {
   padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
-.gl__hero-inner {
-  text-align: center;
-}
-
-.gl__hero-title {
-  max-width: 640rpx;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.gl__hero-sub {
-  max-width: 600rpx;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.gl__hero-rule {
-  width: 72rpx;
-  height: 6rpx;
-  margin: 28rpx auto 0;
-  border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.45);
-}
-
 .gl__head-card {
-  margin-bottom: 24rpx;
+  margin-bottom: 20rpx;
   padding: 28rpx;
   border-color: $mp-ring-accent;
   box-shadow: 0 8rpx 32rpx rgba(122, 87, 209, 0.1);
@@ -511,19 +480,45 @@ function goHome() {
 }
 
 .gl__toolbar {
-  margin-bottom: 24rpx;
+  margin-bottom: 20rpx;
   padding: 24rpx;
 }
 
+.gl__search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding: 0 18rpx;
+  border-radius: 999rpx;
+  background: #f8fafc;
+  border: 1rpx solid #dbe3ef;
+  margin-bottom: 18rpx;
+}
+
+.gl__search-ico {
+  font-size: 24rpx;
+  color: $mp-text-muted;
+}
+
 .gl__search {
-  width: 100%;
-  padding: 20rpx 22rpx;
-  border-radius: 14rpx;
-  background: #f5f6f8;
-  border: 1rpx solid $mp-border;
+  flex: 1;
+  min-width: 0;
+  height: 76rpx;
   font-size: 26rpx;
-  box-sizing: border-box;
-  margin-bottom: 20rpx;
+  color: $mp-text-primary;
+}
+
+.gl__search-clear {
+  width: 42rpx;
+  height: 42rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #64748b;
+  background: #e2e8f0;
 }
 
 .gl__filters {
@@ -580,33 +575,33 @@ function goHome() {
 }
 
 .gl__grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20rpx;
+  column-count: 2;
+  column-gap: 16rpx;
+  gap: 16rpx;
   padding-bottom: 48rpx;
 }
 
 .gl__cell {
-  width: calc(50% - 10rpx);
-  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 16rpx;
   padding: 0;
   overflow: hidden;
+  border-radius: 20rpx;
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
 }
 
 .gl__thumb-wrap {
   position: relative;
   width: 100%;
-  height: 280rpx;
   background: #e5e7eb;
 }
 
 .gl__thumb {
-  position: absolute;
-  left: 0;
-  top: 0;
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
 }
 
@@ -669,7 +664,7 @@ function goHome() {
 
 .gl__thumb-title {
   display: block;
-  font-size: 28rpx;
+  font-size: 26rpx;
   font-weight: 800;
   color: #fff;
   overflow: hidden;
@@ -686,7 +681,7 @@ function goHome() {
 
 .gl__thumb-cuisine,
 .gl__thumb-date {
-  font-size: 22rpx;
+  font-size: 20rpx;
   color: rgba(255, 255, 255, 0.88);
 }
 
@@ -698,7 +693,7 @@ function goHome() {
 }
 
 .gl__thumb-tag {
-  font-size: 20rpx;
+  font-size: 18rpx;
   color: #fff;
   padding: 4rpx 10rpx;
   border-radius: 8rpx;
@@ -707,12 +702,21 @@ function goHome() {
 }
 
 .gl__thumb-more {
-  font-size: 20rpx;
+  font-size: 18rpx;
   color: rgba(255, 255, 255, 0.75);
   padding: 4rpx 8rpx;
 }
 
+@media (min-width: 900rpx) {
+  .gl__grid {
+    column-count: 3;
+  }
+}
+
 .gl__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 56rpx 32rpx;
   text-align: center;
   margin-bottom: 32rpx;
@@ -724,6 +728,7 @@ function goHome() {
 
 .gl__empty-title {
   display: block;
+  width: 100%;
   margin-top: 16rpx;
   font-size: 32rpx;
   font-weight: 800;
@@ -732,6 +737,8 @@ function goHome() {
 
 .gl__empty-desc {
   display: block;
+  width: 100%;
+  box-sizing: border-box;
   margin-top: 12rpx;
   font-size: 26rpx;
   color: $mp-text-secondary;
@@ -742,6 +749,8 @@ function goHome() {
 .gl__empty-btn {
   margin-top: 32rpx;
   max-width: 400rpx;
+  width: auto !important;
+  align-self: center;
 }
 
 .gl__mask {

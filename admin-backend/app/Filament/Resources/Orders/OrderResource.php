@@ -47,7 +47,7 @@ class OrderResource extends Resource
                 Section::make('订单信息')
                     ->schema([
                         TextInput::make('order_no')->label('订单号')->disabled()->dehydrated(false),
-                        TextInput::make('user_id')->label('用户ID')->disabled()->dehydrated(false),
+                        TextInput::make('user_id')->label('用户编号')->disabled()->dehydrated(false),
                         TextInput::make('user.name')->label('用户昵称')->disabled()->dehydrated(false),
                         TextInput::make('product_name')->label('商品名称')->disabled()->dehydrated(false),
                         TextInput::make('product_price')->label('商品单价（分）')->disabled()->dehydrated(false),

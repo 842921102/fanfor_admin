@@ -14,6 +14,7 @@ export type MeThemedIconName =
   | 'agreement'
   | 'privacy'
   | 'chat'
+  | 'feedback'
   | 'chevronRight'
 
 const ICON_SRC: Record<MeThemedIconName, string> = {
@@ -29,6 +30,7 @@ const ICON_SRC: Record<MeThemedIconName, string> = {
   agreement: '/static/me-icons/agreement.svg',
   privacy: '/static/me-icons/privacy.svg',
   chat: '/static/me-icons/chat.svg',
+  feedback: '/static/me-icons/feedback.svg',
   chevronRight: '/static/me-icons/chevron-right.svg',
 }
 

@@ -17,8 +17,6 @@ class RecommendationRerollRateChartWidget extends ChartWidget
 
     protected ?string $heading = '最近 7 天 · 换推荐率';
 
-    protected ?string $description = '换推荐事件次数 / 当日推荐次数';
-
     protected ?string $maxHeight = '240px';
 
     protected function getType(): string

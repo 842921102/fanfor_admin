@@ -20,7 +20,7 @@ class EffectReasonStyleTableWidget extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading('推荐理由 reason_style')
+            ->heading('推荐理由风格')
             ->records(function (): Collection {
                 $list = $this->analytics()->copyStylePerformance($this->now(), 7)['reason_style'] ?? [];
 

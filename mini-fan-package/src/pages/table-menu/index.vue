@@ -3,14 +3,10 @@
     <!-- 表单 -->
     <scroll-view v-if="phase === 'idle'" class="tm__scroll-idle" scroll-y>
       <view class="mp-card tm__panel tm__panel--idle">
-        <view class="tm__panel-badge">
-          <text class="tm__panel-badge-txt">主操作区</text>
-        </view>
         <view class="tm__hero-icon">
           <text class="tm__hero-icon-emoji">🍽️</text>
         </view>
         <text class="tm__panel-title">设计一桌菜</text>
-        <text class="tm__panel-desc">先选模式与菜品，再按需调整口味与场景（均可选）。</text>
 
         <view class="tm__step-tag">
           <text class="tm__step-tag-txt">1 · 菜品配置</text>
@@ -714,19 +710,6 @@ function goLogin() {
   background: linear-gradient(90deg, #9575e8 0%, #7a57d1 50%, #6743bf 100%);
 }
 
-.tm__panel-badge {
-  align-self: flex-start;
-  margin-bottom: 8rpx;
-}
-
-.tm__panel-badge-txt {
-  font-size: 22rpx;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: $mp-accent;
-}
-
 .tm__hero-icon {
   width: 120rpx;
   height: 120rpx;
@@ -753,16 +736,6 @@ function goLogin() {
   color: $mp-text-primary;
 }
 
-.tm__panel-desc {
-  display: block;
-  margin-top: 12rpx;
-  text-align: center;
-  font-size: 26rpx;
-  color: $mp-text-secondary;
-  line-height: 1.55;
-  padding: 0 8rpx;
-}
-
 .tm__step-tag {
   margin-top: 32rpx;
   align-self: flex-start;
@@ -783,14 +756,16 @@ function goLogin() {
 }
 
 .tm__mode-row {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16rpx;
   margin-top: 16rpx;
 }
 
 .tm__mode-card {
-  flex: 1;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 20rpx 16rpx;
   border-radius: 20rpx;
   background: #f5f6f8;
@@ -833,13 +808,19 @@ function goLogin() {
 }
 
 .tm__chips {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12rpx;
 }
 
 .tm__chip {
-  padding: 12rpx 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 76rpx;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12rpx 16rpx;
   border-radius: 12rpx;
   background: #fff;
   border: 1rpx solid $mp-border;
@@ -940,6 +921,7 @@ function goLogin() {
 
 .tm__input--grow {
   flex: 1;
+  min-width: 0;
 }
 
 .tm__add-btn {
@@ -1019,19 +1001,23 @@ function goLogin() {
 }
 
 .tm__pill-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12rpx;
 }
 
-.tm__pill-grid--4 .tm__pill {
-  width: calc(50% - 6rpx);
-  box-sizing: border-box;
-  justify-content: center;
+.tm__pill-grid--4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .tm__pill {
-  padding: 14rpx 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 76rpx;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14rpx 12rpx;
   border-radius: 12rpx;
   background: #f5f6f8;
   border: 1rpx solid $mp-border;
@@ -1046,6 +1032,8 @@ function goLogin() {
   font-size: 24rpx;
   font-weight: 600;
   color: $mp-text-primary;
+  text-align: center;
+  line-height: 1.35;
 }
 
 .tm__textarea {

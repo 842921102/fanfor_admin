@@ -6,6 +6,8 @@ use App\Filament\Resources\AiModelConfigs\AiModelConfigResource;
 use App\Models\AiModel;
 use App\Models\AiProvider;
 use App\Support\AdminActionLogger;
+use App\Support\AiOpenAiCompatibleImage;
+use App\Support\AiScene;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Str;
@@ -26,6 +28,20 @@ class EditAiModelConfig extends EditRecord
     {
         $data = $this->resolveProviderAndModelIds($data);
 
+        $model = AiModel::query()->find((int) ($data['model_id'] ?? 0));
+        if ($model) {
+            $sceneCode = (string) $this->record->scene_code;
+            $expected = AiScene::modelTypeFor($sceneCode);
+            if ((string) $model->model_type !== $expected) {
+                $need = $expected === 'image' ? '图片' : '文本';
+                throw ValidationException::withMessages([
+                    'model_id' => "该场景需要 {$need} 类模型，当前所选模型类型为：{$model->model_type}。请在「模型」中选择与场景匹配的记录，或在供应商后台将该模型的类型改为 {$expected}。",
+                ]);
+            }
+
+            $this->assertImageGatewayCompatible($data, $model);
+        }
+
         if (empty($data['api_key'])) {
             unset($data['api_key']); // 留空不覆盖原 key
         }
@@ -39,6 +55,8 @@ class EditAiModelConfig extends EditRecord
     {
         $manualProviderName = trim((string) ($data['provider_name_manual'] ?? ''));
         $manualModelName = trim((string) ($data['model_name_manual'] ?? ''));
+        $sceneCode = (string) $this->record->scene_code;
+        $expectedModelType = AiScene::modelTypeFor($sceneCode);
 
         if ($manualProviderName !== '') {
             $provider = AiProvider::query()->firstOrCreate(
@@ -64,10 +82,10 @@ class EditAiModelConfig extends EditRecord
                 [
                     'provider_id' => (int) $data['provider_id'],
                     'model_name' => $manualModelName,
+                    'model_type' => $expectedModelType,
                 ],
                 [
                     'model_code' => $this->makeUniqueModelCode((int) $data['provider_id'], $manualModelName),
-                    'model_type' => 'text',
                     'is_enabled' => true,
                     'is_default' => false,
                     'supports_temperature' => true,
@@ -109,6 +127,30 @@ class EditAiModelConfig extends EditRecord
         }
 
         return $code;
+    }
+
+    private function assertImageGatewayCompatible(array $data, AiModel $model): void
+    {
+        if ((string) $model->model_type !== 'image') {
+            return;
+        }
+
+        $provider = AiProvider::query()->find((int) ($data['provider_id'] ?? 0));
+        if (! $provider) {
+            return;
+        }
+
+        $baseUrl = (string) ($data['base_url_override'] ?? $provider->base_url ?? '');
+        $apiPath = (string) ($model->api_path ?: '/images/generations');
+        $misHint = AiOpenAiCompatibleImage::misconfiguredVolcVisualOpenAiImageHint($baseUrl, $apiPath);
+        if ($misHint === null) {
+            return;
+        }
+
+        throw ValidationException::withMessages([
+            'provider_id' => $misHint,
+            'base_url_override' => '当前地址与图片接口协议不匹配，请改用火山方舟 方舟地址。',
+        ]);
     }
 
     private function makeUniqueModelCode(int $providerId, string $fallbackName): string

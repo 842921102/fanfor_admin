@@ -2,6 +2,7 @@ export type InspirationFeedTab = 'recommend' | 'latest' | 'ai_generated' | 'user
 
 export type InspirationSourceType = 'ai_generated' | 'user_uploaded'
 export type InspirationPublishSource = 'ai_result' | 'manual_upload'
+export type InspirationVisibility = 'public' | 'friends' | 'private'
 
 export interface InspirationItem {
   id: string
@@ -14,6 +15,7 @@ export interface InspirationItem {
   coverImage: string
   sourceType: InspirationSourceType
   publishSource: InspirationPublishSource
+  visibility?: InspirationVisibility
   favoriteCount: number
   likeCount: number
   commentCount: number
@@ -52,5 +54,6 @@ export interface CreateInspirationPayload {
   images: string[]
   sourceType: InspirationSourceType
   publishSource: InspirationPublishSource
+  visibility?: InspirationVisibility
   relatedProductId?: string | null
 }

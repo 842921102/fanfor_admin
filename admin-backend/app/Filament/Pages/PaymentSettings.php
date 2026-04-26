@@ -22,6 +22,8 @@ class PaymentSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    protected static ?string $title = '支付设置';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCreditCard;
 
     protected static ?string $navigationLabel = '支付设置';
@@ -50,7 +52,7 @@ class PaymentSettings extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Section::make('微信小程序支付（JSAPI）')
+                Section::make('微信小程序支付')
                     ->schema([
                         Toggle::make('is_enabled')->label('启用微信支付'),
                         TextInput::make('order_expire_minutes')
@@ -59,17 +61,17 @@ class PaymentSettings extends Page implements HasForms
                             ->minValue(1)
                             ->maxValue(120)
                             ->default(15),
-                        TextInput::make('wx_mini_appid')->label('小程序 AppID')->required()->maxLength(64),
-                        TextInput::make('wx_pay_mchid')->label('商户号 MchID')->required()->maxLength(64),
-                        TextInput::make('wx_pay_serial_no')->label('商户证书序列号 SerialNo')->required()->maxLength(128),
+                        TextInput::make('wx_mini_appid')->label('小程序应用编号')->required()->maxLength(64),
+                        TextInput::make('wx_pay_mchid')->label('商户号')->required()->maxLength(64),
+                        TextInput::make('wx_pay_serial_no')->label('商户证书序列号')->required()->maxLength(128),
                         TextInput::make('wx_pay_notify_url')
-                            ->label('支付回调地址 Notify URL')
+                            ->label('支付回调地址')
                             ->required()
                             ->url()
                             ->maxLength(512)
                             ->columnSpanFull(),
                         TextInput::make('wx_pay_api_v3_key')
-                            ->label('API v3 Key')
+                            ->label('接口密钥（版本3）')
                             ->password()
                             ->revealable()
                             ->required()
@@ -80,7 +82,7 @@ class PaymentSettings extends Page implements HasForms
                 Section::make('商户证书（推荐：上传至服务器）')
                     ->schema([
                         FileUpload::make('upload_private_key_pem')
-                            ->label('上传商户私钥 apiclient_key.pem')
+                            ->label('上传商户私钥文件')
                             ->disk('local')
                             ->directory('private/wechat-pay')
                             ->visibility('private')
@@ -91,13 +93,13 @@ class PaymentSettings extends Page implements HasForms
                             ->getUploadedFileNameForStorageUsing(fn () => 'apiclient_key.pem')
                             ->columnSpanFull(),
                         Textarea::make('wx_pay_private_key_content')
-                            ->label('或直接粘贴商户私钥 PEM')
-                            ->placeholder('-----BEGIN PRIVATE KEY----- ...')
+                            ->label('或直接粘贴商户私钥内容')
+                            ->placeholder('请粘贴商户私钥内容')
                             ->rows(6)
                             ->columnSpanFull(),
 
                         FileUpload::make('upload_platform_public_key_pem')
-                            ->label('上传微信平台公钥 wechatpay_platform.pem')
+                            ->label('上传微信平台公钥文件')
                             ->disk('local')
                             ->directory('private/wechat-pay')
                             ->visibility('private')
@@ -108,8 +110,8 @@ class PaymentSettings extends Page implements HasForms
                             ->getUploadedFileNameForStorageUsing(fn () => 'wechatpay_platform.pem')
                             ->columnSpanFull(),
                         Textarea::make('wx_pay_platform_public_key_content')
-                            ->label('或直接粘贴微信平台公钥 PEM')
-                            ->placeholder('-----BEGIN PUBLIC KEY----- ...')
+                            ->label('或直接粘贴微信平台公钥内容')
+                            ->placeholder('请粘贴微信平台公钥内容')
                             ->rows(6)
                             ->columnSpanFull(),
                     ]),

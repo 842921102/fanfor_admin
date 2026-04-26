@@ -129,13 +129,7 @@
         </view>
 
         <view class="te__taste-profile" @click="goTasteProfile">
-          <view class="te__taste-profile-ico-wrap" aria-hidden="true">
-            <image
-              class="te__taste-profile-ico"
-              src="/static/me-icons/taste-profile.svg"
-              mode="aspectFit"
-            />
-          </view>
+          <text class="te__taste-profile-ico" aria-hidden="true">✨</text>
           <view class="te__taste-profile-copy">
             <text class="te__taste-profile-title">我的口味画像</text>
             <text class="te__taste-profile-sub">推荐更懂你的偏好与忌口</text>
@@ -1906,18 +1900,10 @@ $te-topbar-h: 88rpx;
   box-shadow: 0 8rpx 24rpx rgba(123, 87, 228, 0.08);
 }
 
-.te__taste-profile-ico-wrap {
-  width: 72rpx;
-  height: 72rpx;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .te__taste-profile-ico {
-  width: 52rpx;
-  height: 52rpx;
+  font-size: 40rpx;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .te__taste-profile-copy {

@@ -208,7 +208,7 @@
                 <view class="me__list-rule" />
                 <view class="me__list-row" hover-class="me__list-row--hover" :hover-stay-time="80" @click="goMenu('/pages/me/requirement-feedback')">
                   <view class="me__list-ico">
-                    <MeThemedIcon name="chat" :size-rpx="36" />
+                    <MeThemedIcon name="feedback" :size-rpx="36" />
                   </view>
                   <view class="me__list-mid">
                     <text class="me__list-title">需求反馈</text>

@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
     'cover_image',
     'source_type',
     'publish_source',
+    'visibility',
     'topic',
     'like_count',
     'favorite_count',

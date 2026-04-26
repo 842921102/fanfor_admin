@@ -1,12 +1,34 @@
 import { request } from '@/api/http'
 import type { TodayEatRequestBody, TodayEatResult } from '@/types/ai'
 
+const MAX_TASTE_LEN = 200
+const MAX_AVOID_LEN = 400
+
+function normalizePreferenceText(v: unknown, max: number): string | undefined {
+  if (typeof v !== 'string') return undefined
+  const s = v.trim()
+  if (!s) return undefined
+  return s.slice(0, max)
+}
+
+function normalizePreferences(input: TodayEatRequestBody['preferences']): Record<string, unknown> {
+  const out: Record<string, unknown> = {}
+  const taste = normalizePreferenceText(input?.taste, MAX_TASTE_LEN)
+  const avoid = normalizePreferenceText(input?.avoid, MAX_AVOID_LEN)
+  if (taste) out.taste = taste
+  if (avoid) out.avoid = avoid
+  if (typeof input?.people === 'number' && Number.isFinite(input.people) && input.people > 0) {
+    out.people = Math.round(input.people)
+  }
+  return out
+}
+
 /**
  * 「今日菜单」：请求 Laravel `POST /api/me/today-eat*`（模型中心 + 推荐管线）。
  */
 export async function requestTodayEat(body: TodayEatRequestBody): Promise<TodayEatResult> {
   const payload: Record<string, unknown> = {
-    preferences: body.preferences,
+    preferences: normalizePreferences(body.preferences),
     locale: body.locale ?? 'zh-CN',
   }
   if (body.context_tags?.length) {
@@ -30,7 +52,7 @@ export async function requestTodayEatReroll(body: {
 }): Promise<TodayEatResult> {
   const payload: Record<string, unknown> = {
     recommendation_session_id: body.recommendation_session_id,
-    preferences: body.preferences,
+    preferences: normalizePreferences(body.preferences),
     locale: body.locale ?? 'zh-CN',
     realtime_context: body.realtime_context,
   }
@@ -51,7 +73,7 @@ export async function requestTodayEatSelectAlternative(body: {
   const payload: Record<string, unknown> = {
     recommendation_session_id: body.recommendation_session_id,
     selected_dish: body.selected_dish,
-    preferences: body.preferences,
+    preferences: normalizePreferences(body.preferences),
     locale: body.locale ?? 'zh-CN',
     realtime_context: body.realtime_context,
   }

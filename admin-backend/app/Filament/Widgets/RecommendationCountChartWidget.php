@@ -15,8 +15,6 @@ class RecommendationCountChartWidget extends ChartWidget
 
     protected ?string $heading = '最近 7 天 · 推荐次数';
 
-    protected ?string $description = '历史日为完整自然日，今日截止到当前时刻';
-
     protected ?string $maxHeight = '240px';
 
     protected function getType(): string

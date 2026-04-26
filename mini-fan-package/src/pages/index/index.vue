@@ -31,10 +31,16 @@
           <text class="home__wizard-step-num">1</text>
           <view class="home__wizard-body">
             <text class="home__wizard-title">添加食材</text>
-            <input v-model="currentIngredient" class="home__wizard-input" placeholder="输入食材，回车添加" @confirm="addIngredient" />
-            <button class="mp-btn-ghost home__wizard-photo" :disabled="photoLoading" @click="pickIngredientPhoto">
-              {{ photoLoading ? '识别中…' : '上传照片识别食材' }}
-            </button>
+            <input
+              v-model="currentIngredient"
+              class="home__wizard-input"
+              type="text"
+              confirm-type="done"
+              :cursor-spacing="24"
+              placeholder="输入食材，如西红柿、鸡蛋"
+              placeholder-class="home__wizard-input-ph"
+              @confirm="addIngredient"
+            />
             <view v-if="recognizedCandidates.length" class="home__recognized">
               <view class="home__recognized-head">
                 <text class="home__wizard-picker-title">识别候选（可勾选后加入）</text>
@@ -46,7 +52,7 @@
               <checkbox-group class="home__recognized-list" @change="onRecognizedChange">
                 <label v-for="item in recognizedCandidates" :key="item" class="home__recognized-item">
                   <template v-if="editingCandidate !== item">
-                    <checkbox :value="item" :checked="recognizedSelected.includes(item)" color="#7c4dff" />
+                    <checkbox :value="item" :checked="recognizedSelected.includes(item)" color="#7a57d1" />
                     <text class="home__recognized-txt">{{ item }}</text>
                     <text class="home__recognized-edit" @click.stop.prevent="startEditCandidate(item)">编辑</text>
                   </template>
@@ -99,7 +105,9 @@
               v-model="customPrompt"
               class="home__wizard-textarea"
               maxlength="200"
+              :show-confirm-bar="false"
               placeholder="例如：想吃清淡、少油、适合晚餐的一道菜"
+              placeholder-class="home__wizard-textarea-ph"
             />
             <view class="home__wizard-presets">
               <text class="home__wizard-picker-title">场景预设</text>
@@ -694,7 +702,7 @@ async function generateWizardImage() {
   font-size: 38rpx;
   line-height: 1.3;
   font-weight: 700;
-  color: #2f234f;
+  color: $mp-text-primary;
   letter-spacing: 0.01em;
 }
 
@@ -702,7 +710,7 @@ async function generateWizardImage() {
   margin-top: 16rpx;
   font-size: 26rpx;
   line-height: 1.6;
-  color: #7d7299;
+  color: $mp-text-secondary;
 }
 
 .home__ai-loading-full .home__wizard-progress-track {
@@ -741,13 +749,36 @@ async function generateWizardImage() {
 }
 
 .home__wizard-card {
-  border: 1rpx solid $mp-border;
+  position: relative;
+  overflow: hidden;
+  padding-top: 34rpx;
+  border-color: $mp-ring-accent;
+  box-shadow: 0 12rpx 40rpx rgba(122, 87, 209, 0.1);
+}
+
+.home__wizard-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 8rpx;
+  background: linear-gradient(90deg, #9575e8 0%, #7a57d1 50%, #6743bf 100%);
 }
 
 .home__wizard-step {
   display: flex;
-  gap: 14rpx;
-  padding: 14rpx 0;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 22rpx 0;
+}
+
+.home__wizard-step:first-child {
+  padding-top: 12rpx;
+}
+
+.home__wizard-step:last-child {
+  padding-bottom: 12rpx;
 }
 
 .home__wizard-step + .home__wizard-step {
@@ -755,51 +786,70 @@ async function generateWizardImage() {
 }
 
 .home__wizard-step-num {
-  width: 42rpx;
-  height: 42rpx;
-  line-height: 42rpx;
+  width: 44rpx;
+  height: 44rpx;
+  line-height: 44rpx;
   text-align: center;
   border-radius: 999rpx;
   font-size: 22rpx;
   font-weight: 800;
-  color: $mp-accent;
-  background: #fff;
-  border: 1rpx solid #dccdf7;
+  color: $mp-accent-deep;
+  background: $mp-accent-soft;
+  border: 1rpx solid $mp-ring-accent;
+  box-shadow: 0 4rpx 12rpx rgba(122, 87, 209, 0.08);
   flex-shrink: 0;
+  margin-top: 4rpx;
 }
 
 .home__wizard-body {
   flex: 1;
+  min-width: 0;
 }
 
 .home__wizard-title {
   display: block;
+  font-size: 30rpx;
+  font-weight: 800;
+  color: $mp-text-primary;
+  letter-spacing: -0.02em;
+}
+
+.home__wizard-input {
+  margin-top: 14rpx;
+  display: block;
+  width: 100%;
+  min-height: 88rpx;
+  box-sizing: border-box;
+  line-height: 1.45;
+  padding: 22rpx 24rpx;
+  border: 1rpx solid $mp-border;
+  border-radius: 20rpx;
+  background: $mp-surface;
   font-size: 28rpx;
-  font-weight: 700;
   color: $mp-text-primary;
 }
 
-.home__wizard-input,
 .home__wizard-textarea {
-  margin-top: 10rpx;
+  margin-top: 14rpx;
   width: 100%;
+  min-height: 200rpx;
+  box-sizing: border-box;
+  padding: 20rpx 24rpx;
+  line-height: 1.55;
   border: 1rpx solid $mp-border;
-  border-radius: 14rpx;
-  background: #fafbfc;
-  padding: 16rpx;
-  font-size: 24rpx;
-}
-
-.home__wizard-photo {
-  margin-top: 10rpx;
+  border-radius: 20rpx;
+  background: $mp-surface;
+  font-size: 28rpx;
+  color: $mp-text-primary;
 }
 
 .home__recognized {
   margin-top: 14rpx;
   padding: 16rpx;
-  border-radius: 12rpx;
-  background: #f5f1ff;
-  border: 1rpx solid #e5dbff;
+  border-radius: 20rpx;
+  background: $mp-accent-soft;
+  border: 1rpx solid $mp-ring-accent;
+  box-shadow: 0 4rpx 16rpx rgba(122, 87, 209, 0.06);
 }
 
 .home__recognized-head {
@@ -815,7 +865,8 @@ async function generateWizardImage() {
 
 .home__recognized-link {
   font-size: 22rpx;
-  color: #7c4dff;
+  color: $mp-accent;
+  font-weight: 600;
 }
 
 .home__recognized-list {
@@ -844,11 +895,13 @@ async function generateWizardImage() {
 .home__recognized-edit {
   margin-left: auto;
   font-size: 22rpx;
-  color: #7c4dff;
+  color: $mp-accent;
+  font-weight: 600;
 }
 
 .home__recognized-edit--muted {
-  color: #8a8a9b;
+  color: $mp-text-muted;
+  font-weight: 500;
 }
 
 .home__recognized-input {
@@ -864,52 +917,66 @@ async function generateWizardImage() {
 }
 
 .home__wizard-picker {
-  margin-top: 12rpx;
-  padding: 12rpx;
-  border-radius: 14rpx;
-  border: 1rpx solid $mp-border;
-  background: #fff;
+  margin-top: 14rpx;
+  padding: 16rpx;
+  border-radius: 20rpx;
+  border: 1rpx solid $mp-ring-accent;
+  background: $mp-surface;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.03);
 }
 
 .home__wizard-picker-title {
   display: block;
   font-size: 22rpx;
   font-weight: 700;
-  color: $mp-text-muted;
+  color: $mp-accent-deep;
   margin-bottom: 8rpx;
 }
 
 .home__wizard-picker-groups {
   display: flex;
   flex-direction: column;
-  gap: 10rpx;
+  gap: 18rpx;
+}
+
+.home__wizard-picker-group {
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid $mp-border;
+}
+
+.home__wizard-picker-group:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .home__wizard-picker-k {
-  font-size: 22rpx;
-  color: $mp-text-secondary;
+  display: block;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: $mp-text-primary;
 }
 
 .home__wizard-picker-items {
-  margin-top: 6rpx;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8rpx;
-}
-
-.home__wizard-pick {
-  font-size: 21rpx;
-  padding: 6rpx 12rpx;
-  border-radius: 999rpx;
-  background: #fafbfc;
-  border: 1rpx solid $mp-border;
-}
-
-.home__wizard-tags {
   margin-top: 10rpx;
   display: flex;
   flex-wrap: wrap;
   gap: 10rpx;
+}
+
+.home__wizard-pick {
+  font-size: 24rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  background: #fafbfc;
+  border: 1rpx solid $mp-border;
+  color: $mp-text-primary;
+}
+
+.home__wizard-tags {
+  margin-top: 16rpx;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
 }
 
 .home__wizard-tag {
@@ -922,47 +989,56 @@ async function generateWizardImage() {
 }
 
 .home__wizard-cuisines {
-  margin-top: 10rpx;
+  margin-top: 14rpx;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10rpx;
+  gap: 12rpx;
 }
 
 .home__wizard-cuisine {
   border: 1rpx solid $mp-border;
-  border-radius: 12rpx;
+  border-radius: 20rpx;
   background: #fafbfc;
-  font-size: 22rpx;
+  font-size: 24rpx;
   text-align: center;
-  padding: 10rpx 8rpx;
+  padding: 14rpx 10rpx;
+  color: $mp-text-primary;
 }
 
 .home__wizard-cuisine--on {
-  background: $mp-accent;
+  background: linear-gradient(135deg, #9575e8 0%, #7a57d1 48%, #6743bf 100%);
   color: #fff;
-  border-color: $mp-accent;
+  border-color: transparent;
+  box-shadow: 0 8rpx 24rpx rgba(122, 87, 209, 0.28);
 }
 
 .home__wizard-rand {
-  margin-top: 10rpx;
+  margin-top: 18rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .home__wizard-presets {
-  margin-top: 10rpx;
+  margin-top: 16rpx;
+}
+
+.home__wizard-presets .home__wizard-picker-title:not(:first-child) {
+  margin-top: 20rpx;
 }
 
 .home__wizard-preset-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8rpx;
-  margin-bottom: 8rpx;
+  gap: 10rpx;
+  margin-bottom: 4rpx;
 }
 
 .home__wizard-preset {
-  font-size: 21rpx;
-  padding: 6rpx 12rpx;
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
   border-radius: 999rpx;
-  color: $mp-accent;
+  color: $mp-accent-deep;
+  font-weight: 600;
   background: $mp-accent-soft;
   border: 1rpx solid $mp-ring-accent;
 }
@@ -981,7 +1057,9 @@ async function generateWizardImage() {
 }
 
 .home__wizard-go {
-  margin-top: 10rpx;
+  margin-top: 16rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .home__ai-core {
@@ -1048,7 +1126,7 @@ async function generateWizardImage() {
   width: 100%;
   height: 14rpx;
   border-radius: 999rpx;
-  background: #eceff4;
+  background: $mp-border;
   overflow: hidden;
 }
 
@@ -1093,10 +1171,11 @@ async function generateWizardImage() {
 
 .home__wizard-result {
   margin-top: 10rpx;
-  border: 1rpx solid $mp-border;
+  border: 1rpx solid $mp-ring-accent;
   background: #fafbfc;
-  border-radius: 14rpx;
-  padding: 14rpx;
+  border-radius: 20rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(122, 87, 209, 0.05);
 }
 
 .home__wizard-r-title {
@@ -1158,5 +1237,14 @@ async function generateWizardImage() {
   width: 100%;
   border-radius: 12rpx;
   border: 1rpx solid $mp-border;
+}
+</style>
+
+<style lang="scss">
+/* placeholder-class 不能 scoped，否则微信真机占位符样式不生效 */
+.home__wizard-input-ph,
+.home__wizard-textarea-ph {
+  color: #8a8f99;
+  font-size: 26rpx;
 }
 </style>

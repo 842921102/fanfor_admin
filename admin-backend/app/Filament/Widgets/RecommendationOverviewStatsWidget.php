@@ -17,8 +17,6 @@ class RecommendationOverviewStatsWidget extends StatsOverviewWidget
 
     protected ?string $heading = '核心概览';
 
-    protected ?string $description = '今日 00:00 至当前 · 登录用户 · 库内统计';
-
     protected int|array|null $columns = 3;
 
     /**

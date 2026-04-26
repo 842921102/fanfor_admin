@@ -29,7 +29,7 @@ class UserInfolist
                             ,
                         TextEntry::make('avatar_url')
                             ->label('头像地址')
-                            ->placeholder('未在服务端存储（小程序选择头像多为本地临时路径，未回传时可空）'),
+                            ->placeholder('—'),
                         TextEntry::make('phone')
                             ->label('手机号')
                             ->placeholder('—'),

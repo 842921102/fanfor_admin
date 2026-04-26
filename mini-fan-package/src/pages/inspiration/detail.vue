@@ -18,16 +18,6 @@
       </view>
 
       <view class="mp-card">
-        <text class="mp-kicker mp-kicker--accent">关联商品（预留）</text>
-        <ProductCard
-          v-if="item.relatedProduct"
-          :product="item.relatedProduct"
-          @view="onViewProduct"
-        />
-        <text v-else class="idt__muted">当前内容未绑定商品</text>
-      </view>
-
-      <view class="mp-card">
         <text class="mp-kicker mp-kicker--accent">评论 {{ comments.length }}</text>
         <CommentItem v-for="c in comments" :key="c.id" :comment="c" />
         <text v-if="comments.length === 0" class="idt__muted">还没有评论，来抢沙发吧</text>
@@ -46,7 +36,6 @@ import { ref } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { createInspirationComment, favoriteInspiration, getInspirationComments, getInspirationDetail, likeInspiration } from '@/api/inspiration'
 import CommentItem from '@/components/inspiration/CommentItem.vue'
-import ProductCard from '@/components/inspiration/ProductCard.vue'
 import type { InspirationComment, InspirationItem } from '@/types/inspiration'
 import { formatListTime } from '@/utils/dateFormat'
 
@@ -85,11 +74,6 @@ async function sendComment() {
   if (!c) return
   comments.value = comments.value.concat(c)
   draft.value = ''
-}
-function onViewProduct() {
-  const productId = item.value?.relatedProduct?.id
-  if (!productId) return
-  uni.navigateTo({ url: `/pages/mall/product-detail?id=${encodeURIComponent(productId)}` })
 }
 </script>
 

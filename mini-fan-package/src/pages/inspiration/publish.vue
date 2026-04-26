@@ -24,7 +24,14 @@
       <input v-model="title" class="ipb__input" maxlength="80" placeholder="一句话标题（选填）" />
       <text class="mp-kicker mp-kicker--accent">描述</text>
       <textarea v-model="description" class="ipb__textarea" maxlength="1000" placeholder="补充一点灵感说明..." />
-      <text class="ipb__muted">预留字段：related_product_id（商品挂载）</text>
+    </view>
+
+    <view class="mp-card ipb__vis" @click="pickVisibility">
+      <text class="ipb__vis-label">可见范围</text>
+      <view class="ipb__vis-value">
+        <text>{{ visibilityLabel }}</text>
+        <text class="ipb__vis-arrow">></text>
+      </view>
     </view>
 
     <button class="mp-btn-primary" :disabled="submitting" @click="submit">{{ submitting ? '发布中...' : '发布到灵感' }}</button>
@@ -32,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { createInspiration } from '@/api/inspiration'
-import type { InspirationPublishSource, InspirationSourceType } from '@/types/inspiration'
+import type { InspirationPublishSource, InspirationSourceType, InspirationVisibility } from '@/types/inspiration'
 
 const title = ref('')
 const description = ref('')
@@ -43,6 +50,15 @@ const images = ref<string[]>([])
 const sourceType = ref<InspirationSourceType>('user_uploaded')
 const publishSource = ref<InspirationPublishSource>('manual_upload')
 const submitting = ref(false)
+const visibility = ref<InspirationVisibility>('public')
+const VISIBILITY_OPTIONS: Array<{ label: string; value: InspirationVisibility }> = [
+  { label: '公开可见', value: 'public' },
+  { label: '仅互关好友可见', value: 'friends' },
+  { label: '仅自己可见', value: 'private' },
+]
+const visibilityLabel = computed(
+  () => VISIBILITY_OPTIONS.find((item) => item.value === visibility.value)?.label || '公开可见',
+)
 
 onLoad((query) => {
   const preset = typeof query?.images === 'string' ? decodeURIComponent(query.images) : ''
@@ -69,6 +85,20 @@ async function pickImage() {
 }
 function removeImage(i: number) { images.value = images.value.filter((_, idx) => idx !== i) }
 
+async function pickVisibility() {
+  try {
+    const res = await uni.showActionSheet({
+      itemList: VISIBILITY_OPTIONS.map((item) => item.label),
+      itemColor: '#2f2f33',
+      alertText: '谁可以看到这条灵感',
+    })
+    const next = VISIBILITY_OPTIONS[res.tapIndex]
+    if (next) visibility.value = next.value
+  } catch {
+    // ignore cancel
+  }
+}
+
 async function submit() {
   if (!images.value.length) return uni.showToast({ title: '请至少上传1张图片', icon: 'none' })
   if (!description.value.trim() && !title.value.trim()) return uni.showToast({ title: '请填写标题或描述', icon: 'none' })
@@ -80,6 +110,7 @@ async function submit() {
       images: [...images.value],
       sourceType: sourceType.value,
       publishSource: publishSource.value,
+      visibility: visibility.value,
       relatedProductId: null,
     })
     uni.showToast({ title: '发布成功', icon: 'success' })
@@ -104,5 +135,8 @@ async function submit() {
 .ipb__add{width:200rpx;height:200rpx;border-radius:12rpx;border:1rpx dashed $mp-border;background:#fafbfc;display:flex;align-items:center;justify-content:center;font-size:56rpx;color:$mp-text-muted}
 .ipb__input{margin-top:10rpx;padding:12rpx 0;font-size:26rpx;border-bottom:1rpx solid #f3f4f6}
 .ipb__textarea{margin-top:10rpx;min-height:220rpx;font-size:26rpx;line-height:1.55}
-.ipb__muted{display:block;margin-top:8rpx;font-size:22rpx;color:$mp-text-muted}
+.ipb__vis{display:flex;align-items:center;justify-content:space-between}
+.ipb__vis-label{font-size:28rpx;color:$mp-text-primary}
+.ipb__vis-value{display:flex;align-items:center;gap:10rpx;font-size:26rpx;color:$mp-text-secondary}
+.ipb__vis-arrow{font-size:26rpx;color:$mp-text-muted}
 </style>

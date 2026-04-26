@@ -48,6 +48,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(CircleComment::class);
     }
 
+    public function followingRelations(): HasMany
+    {
+        return $this->hasMany(UserFollow::class, 'follower_id');
+    }
+
+    public function followerRelations(): HasMany
+    {
+        return $this->hasMany(UserFollow::class, 'followee_id');
+    }
+
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);

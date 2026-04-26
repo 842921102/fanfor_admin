@@ -21,6 +21,8 @@ class WeatherSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
+    protected static ?string $title = '天气接口配置';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCloud;
 
     protected static ?string $navigationLabel = '天气接口配置';
@@ -61,17 +63,17 @@ class WeatherSettings extends Page implements HasForms
                             ->native(false)
                             ->default('qweather'),
                         TextInput::make('masked_api_key')
-                            ->label('当前 API Key（掩码）')
+                            ->label('当前接口密钥（掩码）')
                             ->disabled()
                             ->dehydrated(false),
                         TextInput::make('api_key_update')
-                            ->label('更新 API Key（留空不修改）')
+                            ->label('更新接口密钥（留空不修改）')
                             ->password()
                             ->revealable(),
                         TextInput::make('default_city')->label('默认城市')->required()->maxLength(64),
-                        TextInput::make('default_location_id')->label('默认 Location ID（可选）')->maxLength(64),
-                        TextInput::make('geo_base_url')->label('Geo API Base URL')->required()->url()->maxLength(255),
-                        TextInput::make('weather_base_url')->label('Weather API Base URL')->required()->url()->maxLength(255),
+                        TextInput::make('default_location_id')->label('默认地点编号（可选）')->maxLength(64),
+                        TextInput::make('geo_base_url')->label('地理接口基础地址')->required()->url()->maxLength(255),
+                        TextInput::make('weather_base_url')->label('天气接口基础地址')->required()->url()->maxLength(255),
                         TextInput::make('request_timeout_sec')
                             ->label('请求超时秒数')
                             ->numeric()
@@ -109,7 +111,7 @@ class WeatherSettings extends Page implements HasForms
         $debug = is_array($result['debug'] ?? null) ? $result['debug'] : [];
         $ok = (bool) ($debug['ok'] ?? false);
         $fallback = (bool) ($debug['fallback'] ?? true);
-        $reason = (string) ($debug['reason'] ?? 'unknown');
+        $reason = (string) ($debug['reason'] ?? '未知');
         $geoHttp = isset($debug['geo_lookup_http']) ? (string) $debug['geo_lookup_http'] : '-';
         $weatherHttp = isset($debug['weather_http']) ? (string) $debug['weather_http'] : '-';
         $amapStatus = (string) ($debug['amap_status'] ?? '');
@@ -117,18 +119,18 @@ class WeatherSettings extends Page implements HasForms
         $amapInfocode = (string) ($debug['amap_infocode'] ?? '');
         $err = (string) ($debug['error'] ?? '');
         $body = sprintf(
-            "%s · %s %s\n状态: %s\n原因: %s\ngeo_http: %s, weather_http: %s%s%s",
+            "%s · %s %s\n状态: %s\n原因: %s\n地理接口响应: %s，天气接口响应: %s%s%s",
             $ambient['city_name'],
             $ambient['weather_icon_emoji'],
             $ambient['weather_text'],
-            ($ok && ! $fallback) ? 'success' : 'fallback',
+            ($ok && ! $fallback) ? '成功' : '回退',
             $reason,
             $geoHttp,
             $weatherHttp,
             $amapStatus !== '' || $amapInfo !== '' || $amapInfocode !== ''
-                ? sprintf("\namap_status: %s, info: %s, infocode: %s", $amapStatus ?: '-', $amapInfo ?: '-', $amapInfocode ?: '-')
+                ? sprintf("\n高德状态: %s，说明: %s，编码: %s", $amapStatus ?: '-', $amapInfo ?: '-', $amapInfocode ?: '-')
                 : '',
-            $err !== '' ? "\nerror: {$err}" : ''
+            $err !== '' ? "\n错误: {$err}" : ''
         );
         $notification = Notification::make()
             ->title(($ok && ! $fallback) ? '测试成功' : '测试完成（已回退）')

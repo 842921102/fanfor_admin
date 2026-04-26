@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\MiniappGenerativeAiService;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -68,8 +69,24 @@ final class MiniappGenerativeAiController extends Controller
             return response()->json($service->recipeImage($validated['prompt'], $validated['size'] ?? null));
         } catch (\InvalidArgumentException $e) {
             return response()->json(['message' => $e->getMessage()], 400);
+        } catch (RequestException $e) {
+            $status = $e->response?->status() ?? 502;
+            $message = trim((string) $e->getMessage());
+            if ($message === '') {
+                $message = 'recipe_image_upstream_error';
+            }
+
+            return response()->json(['error' => ['message' => $message]], $status);
         } catch (\Throwable $e) {
-            return response()->json(['error' => ['message' => $e->getMessage()]], 502);
+            $message = trim((string) $e->getMessage());
+            if (preg_match('/^recipe_image_http_(\d{3})$/', $message, $m) === 1) {
+                $status = (int) $m[1];
+                if ($status >= 400 && $status <= 599) {
+                    return response()->json(['error' => ['message' => $message]], $status);
+                }
+            }
+
+            return response()->json(['error' => ['message' => $message !== '' ? $message : 'recipe_image_failed']], 502);
         }
     }
 

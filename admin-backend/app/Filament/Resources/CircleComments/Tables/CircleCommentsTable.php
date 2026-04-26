@@ -30,11 +30,11 @@ class CircleCommentsTable
             ->defaultSort('id', 'desc')
             ->columns([
                 TextColumn::make('id')
-                    ->label('评论 ID')
+                    ->label('评论编号')
                     ->sortable()
                     ->copyable(),
                 TextColumn::make('post_id')
-                    ->label('帖子 ID')
+                    ->label('帖子编号')
                     ->sortable()
                     ->copyable(),
                 TextColumn::make('post.title')
@@ -83,9 +83,9 @@ class CircleCommentsTable
                     ->label('状态')
                     ->options($statusLabels),
                 Filter::make('post_id')
-                    ->label('帖子 ID')
+                    ->label('帖子编号')
                     ->schema([
-                        TextInput::make('post_id')->numeric()->label('精确 ID'),
+                        TextInput::make('post_id')->numeric()->label('精确编号'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(

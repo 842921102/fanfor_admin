@@ -289,7 +289,5 @@ function onDelete(item: FavoriteRow) {
   align-self: center;
   flex-shrink: 0;
   margin: 0;
-  padding: 0 12rpx;
-  font-size: 26rpx;
 }
 </style>

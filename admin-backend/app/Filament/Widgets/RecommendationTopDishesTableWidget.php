@@ -22,7 +22,7 @@ class RecommendationTopDishesTableWidget extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading('今日最受欢迎推荐菜 TOP5')
+            ->heading('今日最受欢迎推荐菜前五')
             ->records(function (): Collection {
                 $rows = $this->dashboard()->rankings($this->now())['top_dishes'] ?? [];
 

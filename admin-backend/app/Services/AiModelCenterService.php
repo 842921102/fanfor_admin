@@ -6,6 +6,7 @@ use App\Models\AiConnectionTestLog;
 use App\Models\AiModel;
 use App\Models\AiModelConfig;
 use App\Models\AiProvider;
+use App\Support\AiOpenAiCompatibleImage;
 use App\Support\AiScene;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,16 @@ final class AiModelCenterService
 
             if ((int) $model->provider_id !== (int) $provider->id) {
                 abort(422, 'provider_id 与 model_id 不匹配。');
+            }
+
+            AiScene::assertModelTypeMatchesScene($sceneCode, (string) $model->model_type);
+            $this->assertLikelyEndpointCode((string) $provider->base_url, (string) $provider->provider_code, (string) $model->model_code);
+
+            $apiPath = (string) ($model->api_path ?: ((string) $model->model_type === 'image' ? '/images/generations' : '/chat/completions'));
+            $baseUrl = (string) (($payload['base_url_override'] ?? null) ?: $provider->base_url);
+            $misHint = AiOpenAiCompatibleImage::misconfiguredVolcVisualOpenAiImageHint($baseUrl, $apiPath);
+            if ($misHint !== null) {
+                abort(422, $misHint);
             }
 
             $id = isset($payload['id']) ? (int) $payload['id'] : 0;
@@ -96,7 +107,8 @@ final class AiModelCenterService
      *   request_payload: array<string,mixed>,
      *   response_payload: array<string,mixed>|null,
      *   error_message: string|null,
-     *   error_detail: array<string,string>|null
+     *   error_detail: array<string,string>|null,
+     *   error_code?: string|null
      * }
      */
     public function testConnection(AiModelConfig $config, int $testerId): array
@@ -108,18 +120,60 @@ final class AiModelCenterService
         if (! $provider || ! $model) {
             abort(422, '配置缺少 provider 或 model。');
         }
+        $this->assertLikelyEndpointCode((string) ($config->base_url_override ?: $provider->base_url), (string) $provider->provider_code, (string) $model->model_code);
 
-        $baseUrl = rtrim((string) ($config->base_url_override ?: $provider->base_url), '/');
-        $apiPath = (string) ($model->api_path ?? '');
-        $requestUrl = $baseUrl.($apiPath !== '' ? '/'.ltrim($apiPath, '/') : '');
+        $baseUrl = AiOpenAiCompatibleImage::normalizeRootBaseUrl(
+            rtrim((string) ($config->base_url_override ?: $provider->base_url), '/'),
+            (string) $provider->provider_code,
+        );
+        $defaultApiPath = $model->model_type === 'image' ? '/images/generations' : '/chat/completions';
+        $apiPath = (string) ($model->api_path ?: $defaultApiPath);
+        $isAzure = AiOpenAiCompatibleImage::isAzureOpenAiHost((string) ($config->base_url_override ?: $provider->base_url), (string) $provider->provider_code);
+        $requestUrl = $isAzure
+            ? AiOpenAiCompatibleImage::buildAzureOpenAiRequestUrl($baseUrl, $apiPath, (string) $model->model_code)
+            : $baseUrl.($apiPath !== '' ? '/'.ltrim($apiPath, '/') : '');
 
-        $payload = [
-            'model' => $model->model_code,
-        ];
+        $misHint = AiOpenAiCompatibleImage::misconfiguredVolcVisualOpenAiImageHint(
+            (string) ($config->base_url_override ?: $provider->base_url),
+            $apiPath,
+        );
+        if ($misHint !== null) {
+            $payload = ['model' => $model->model_code];
+            if ($model->model_type === 'image') {
+                $payload['prompt'] = '（未发送：配置与网关不匹配）';
+            }
+
+            AiConnectionTestLog::query()->create([
+                'scene_code' => $config->scene_code,
+                'provider_id' => $provider->id,
+                'model_id' => $model->id,
+                'request_url' => $requestUrl,
+                'request_payload' => $payload,
+                'response_payload' => null,
+                'status' => 'failed',
+                'error_message' => '[visual_host_openai_path_mismatch] '.$misHint,
+                'tested_by' => $testerId,
+            ]);
+
+            return [
+                'status' => 'failed',
+                'request_url' => $requestUrl,
+                'request_payload' => $payload,
+                'response_payload' => null,
+                'error_message' => $misHint,
+                'error_detail' => null,
+                'error_code' => 'visual_host_openai_path_mismatch',
+            ];
+        }
+
+        $payload = [];
+        if (! $isAzure) {
+            $payload['model'] = $model->model_code;
+        }
 
         if ($model->model_type === 'image') {
             $payload['prompt'] = '连接测试：请返回一张简单菜品插画';
-            $payload['size'] = '1024x1024';
+            $payload['size'] = AiOpenAiCompatibleImage::normalizeImageSizeForModel('1024x1024', (string) $model->model_code);
         } else {
             $payload['messages'] = [
                 ['role' => 'user', 'content' => '连接测试，请回复：ok'],
@@ -129,17 +183,24 @@ final class AiModelCenterService
             }
         }
 
-        $timeoutSec = max(3, (int) ceil(((int) ($config->timeout_ms ?? 12000)) / 1000));
+        $defaultTimeoutMs = $model->model_type === 'image' ? 90000 : 12000;
+        $timeoutSec = max(3, (int) ceil(((int) ($config->timeout_ms ?? $defaultTimeoutMs)) / 1000));
         $status = 'failed';
         $errorMessage = null;
         $responsePayload = null;
         $errorDetail = null;
 
         try {
-            $resp = Http::timeout($timeoutSec)
-                ->acceptJson()
-                ->withToken((string) $config->getAttribute('api_key'))
-                ->post($requestUrl, $payload);
+            $request = Http::timeout($timeoutSec)->acceptJson();
+            if ($isAzure) {
+                $request = $request->withHeaders([
+                    'api-key' => (string) $config->getAttribute('api_key'),
+                ]);
+            } else {
+                $request = $request->withToken((string) $config->getAttribute('api_key'));
+            }
+
+            $resp = $request->post($requestUrl, $payload);
 
             $responsePayload = $resp->json() ?: ['raw' => mb_substr((string) $resp->body(), 0, 1200)];
             if ($resp->successful()) {
@@ -147,6 +208,13 @@ final class AiModelCenterService
             } else {
                 $errorMessage = 'http_'.$resp->status();
                 $errorDetail = $this->extractUpstreamErrorDetail($responsePayload);
+                if (
+                    $model->model_type === 'image'
+                    && (($errorDetail['code'] ?? '') === 'InvalidParameter')
+                    && str_contains(strtolower((string) ($errorDetail['message'] ?? '')), 'image generation is only supported')
+                ) {
+                    $errorMessage .= ' 当前 model_code 不是图片生成模型/接入点。请改用火山方舟图片接入点 ID（通常为 ep-xxxx），并确认该接入点能力为文生图。';
+                }
                 $summary = $this->formatErrorDetailSummary($errorDetail);
                 if ($summary !== '') {
                     $errorMessage .= ' '.$summary;
@@ -175,6 +243,7 @@ final class AiModelCenterService
             'response_payload' => $responsePayload,
             'error_message' => $errorMessage,
             'error_detail' => $errorDetail,
+            'error_code' => null,
         ];
     }
 
@@ -225,6 +294,23 @@ final class AiModelCenterService
         }
 
         return mb_substr(implode(' | ', $parts), 0, 500);
+    }
+
+    private function assertLikelyEndpointCode(string $baseUrl, string $providerCode, string $modelCode): void
+    {
+        if (! AiOpenAiCompatibleImage::isAzureOpenAiHost($baseUrl, $providerCode)
+            && ! str_contains(strtolower($baseUrl), 'ark.')) {
+            return;
+        }
+
+        $code = strtolower(trim($modelCode));
+        if ($code === '') {
+            abort(422, 'model_code 不能为空，请填写模型/接入点 ID。');
+        }
+
+        if (str_starts_with($code, 'api-key-') || str_contains($code, 'sk-')) {
+            abort(422, '当前 model_code 看起来像密钥（api-key/sk），请填写模型/接入点 ID（例如火山方舟通常为 ep-xxxx）。');
+        }
     }
 
     /**

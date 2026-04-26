@@ -15,13 +15,13 @@ class CircleCommentInfolist
             ->components([
                 Section::make('评论信息')
                     ->schema([
-                        TextEntry::make('id')->label('评论 ID')->copyable(),
-                        TextEntry::make('post_id')->label('帖子 ID')->copyable(),
+                        TextEntry::make('id')->label('评论编号')->copyable(),
+                        TextEntry::make('post_id')->label('帖子编号')->copyable(),
                         TextEntry::make('post.title')
                             ->label('帖子标题')
                             ->placeholder('（无标题）'),
                         TextEntry::make('user.name')->label('用户昵称'),
-                        TextEntry::make('user_id')->label('用户 ID')->copyable(),
+                        TextEntry::make('user_id')->label('用户编号')->copyable(),
                         TextEntry::make('status')
                             ->label('状态')
                             ->formatStateUsing(fn (?string $state): string => CircleCommentStatus::labels()[(string) $state] ?? (string) $state)

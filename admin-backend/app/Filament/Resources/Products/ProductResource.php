@@ -90,7 +90,7 @@ class ProductResource extends Resource
             ->modifyQueryUsing(fn (Builder $query): Builder => $query->whereNull('deleted_at'))
             ->defaultSort('sort')
             ->columns([
-                TextColumn::make('id')->label('ID')->sortable()->copyable(),
+                TextColumn::make('id')->label('编号')->sortable()->copyable(),
                 ImageColumn::make('cover_image')->label('商品主图')->disk('public')->square()->imageSize(42),
                 TextColumn::make('name')->label('商品名称')->searchable()->limit(26),
                 TextColumn::make('price')->label('售价')->formatStateUsing(fn (int $state): string => '¥'.number_format($state / 100, 2)),

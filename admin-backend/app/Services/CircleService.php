@@ -10,15 +10,26 @@ use App\Models\Product;
 use App\Models\User;
 use App\Support\CircleCommentStatus;
 use App\Support\CirclePostStatus;
+use App\Support\CirclePostVisibility;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 final class CircleService
 {
+    private function hasVisibilityColumn(): bool
+    {
+        return Schema::hasColumn('circle_posts', 'visibility');
+    }
+
     private function hasProductsTable(): bool
     {
         return Schema::hasTable('products');
+    }
+
+    private function hasUserFollowsTable(): bool
+    {
+        return Schema::hasTable('user_follows');
     }
 
     /**
@@ -35,6 +46,8 @@ final class CircleService
         $query = CirclePost::query()
             ->publishedVisible()
             ->with('user');
+
+        $this->applyVisibilityForViewer($query, $viewer);
 
         if ($this->hasProductsTable()) {
             $query->with('relatedProduct');
@@ -59,8 +72,14 @@ final class CircleService
         } elseif ($tab === 'user_uploaded') {
             $query->where('source_type', 'user_uploaded')->orderByDesc('published_at');
         } elseif ($tab === 'following') {
-            // 一期：未接关注表时，关注流为空（小程序可后续对接）
-            return ['items' => [], 'has_more' => false];
+            if (! $viewer || ! $this->hasUserFollowsTable()) {
+                return ['items' => [], 'has_more' => false];
+            }
+            $query->whereIn('user_id', function ($sub) use ($viewer): void {
+                $sub->select('followee_id')
+                    ->from('user_follows')
+                    ->where('follower_id', $viewer->id);
+            })->orderByDesc('published_at');
         } else {
             $query->orderByDesc('published_at');
         }
@@ -119,6 +138,7 @@ final class CircleService
             'coverImage' => (string) ($post->cover_image ?? ($images[0] ?? '')),
             'sourceType' => (string) ($post->source_type ?? 'user_uploaded'),
             'publishSource' => (string) ($post->publish_source ?? 'manual_upload'),
+            'visibility' => (string) ($post->visibility ?? CirclePostVisibility::Public),
             'topic' => (string) $post->topic,
             'favoriteCount' => (int) $post->favorite_count,
             'likeCount' => (int) $post->like_count,
@@ -140,7 +160,7 @@ final class CircleService
     public function findVisibleForPublic(int $id, ?User $viewer): ?CirclePost
     {
         $post = CirclePost::query()->publishedVisible()->whereKey($id)->first();
-        if ($post) {
+        if ($post && $this->canViewerSeePost($post, $viewer)) {
             return $post;
         }
         // 自己的下架帖仍可读
@@ -157,11 +177,11 @@ final class CircleService
     }
 
     /**
-     * @param  array{title?: string, description?: string, content?: string, topic?: string, images: array<int, string>, sourceType?: string, publishSource?: string, relatedProductId?: int|string|null}  $data
+     * @param  array{title?: string, description?: string, content?: string, topic?: string, images: array<int, string>, sourceType?: string, publishSource?: string, visibility?: string, relatedProductId?: int|string|null}  $data
      */
     public function createByUser(User $user, array $data): CirclePost
     {
-        return CirclePost::query()->create([
+        $payload = [
             'user_id' => $user->id,
             'title' => $data['title'] ?? '',
             'description' => $data['description'] ?? '',
@@ -179,7 +199,13 @@ final class CircleService
             'is_recommended' => false,
             'is_pinned' => false,
             'published_at' => now(),
-        ]);
+        ];
+
+        if ($this->hasVisibilityColumn()) {
+            $payload['visibility'] = $data['visibility'] ?? CirclePostVisibility::Public;
+        }
+
+        return CirclePost::query()->create($payload);
     }
 
     public function toggleLike(User $user, CirclePost $post): CirclePost
@@ -298,5 +324,92 @@ final class CircleService
             ->get()
             ->map(fn (CirclePost $p) => $this->postToApiArray($p, (int) $user->id))
             ->all();
+    }
+
+    private function canViewerSeePost(CirclePost $post, ?User $viewer): bool
+    {
+        if (! $this->hasVisibilityColumn()) {
+            return true;
+        }
+
+        $visibility = (string) ($post->visibility ?? CirclePostVisibility::Public);
+        if ($visibility === CirclePostVisibility::Public) {
+            return true;
+        }
+
+        if (! $viewer) {
+            return false;
+        }
+
+        if ((int) $viewer->id === (int) $post->user_id) {
+            return true;
+        }
+
+        if ($visibility === CirclePostVisibility::Private) {
+            return false;
+        }
+
+        if ($visibility === CirclePostVisibility::Friends) {
+            return $this->isMutualFollow((int) $viewer->id, (int) $post->user_id);
+        }
+
+        return true;
+    }
+
+    private function applyVisibilityForViewer(Builder $query, ?User $viewer): void
+    {
+        if (! $this->hasVisibilityColumn()) {
+            return;
+        }
+
+        if (! $viewer) {
+            $query->where('visibility', CirclePostVisibility::Public);
+
+            return;
+        }
+
+        $query->where(function (Builder $scope) use ($viewer): void {
+            $scope->where('visibility', CirclePostVisibility::Public)
+                ->orWhere('user_id', $viewer->id);
+
+            if ($this->hasUserFollowsTable()) {
+                $scope->orWhere(function (Builder $friends) use ($viewer): void {
+                    $friends->where('visibility', CirclePostVisibility::Friends)
+                        ->where('user_id', '!=', $viewer->id)
+                        ->whereExists(function ($sub) use ($viewer): void {
+                            $sub->selectRaw('1')
+                                ->from('user_follows as uf_out')
+                                ->where('uf_out.follower_id', $viewer->id)
+                                ->whereColumn('uf_out.followee_id', 'circle_posts.user_id');
+                        })
+                        ->whereExists(function ($sub) use ($viewer): void {
+                            $sub->selectRaw('1')
+                                ->from('user_follows as uf_in')
+                                ->where('uf_in.followee_id', $viewer->id)
+                                ->whereColumn('uf_in.follower_id', 'circle_posts.user_id');
+                        });
+                });
+            }
+        });
+    }
+
+    private function isMutualFollow(int $viewerId, int $authorId): bool
+    {
+        if ($viewerId <= 0 || $authorId <= 0 || $viewerId === $authorId || ! $this->hasUserFollowsTable()) {
+            return false;
+        }
+
+        $viewerFollowedAuthor = DB::table('user_follows')
+            ->where('follower_id', $viewerId)
+            ->where('followee_id', $authorId)
+            ->exists();
+        if (! $viewerFollowedAuthor) {
+            return false;
+        }
+
+        return DB::table('user_follows')
+            ->where('follower_id', $authorId)
+            ->where('followee_id', $viewerId)
+            ->exists();
     }
 }

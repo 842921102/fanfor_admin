@@ -43,7 +43,7 @@ class PaymentOrderResource extends Resource
         return $schema->components([
             Section::make('流水详情')->schema([
                 TextInput::make('order_no')->label('订单号')->disabled()->dehydrated(false),
-                TextInput::make('user_id')->label('用户ID')->disabled()->dehydrated(false),
+                TextInput::make('user_id')->label('用户编号')->disabled()->dehydrated(false),
                 TextInput::make('user.name')->label('用户昵称')->disabled()->dehydrated(false),
                 TextInput::make('title')->label('标题')->disabled()->dehydrated(false),
                 TextInput::make('business_type')
@@ -51,7 +51,7 @@ class PaymentOrderResource extends Resource
                     ->disabled()
                     ->dehydrated(false)
                     ->formatStateUsing(fn (?string $state): string => static::businessTypeLabel($state)),
-                TextInput::make('business_id')->label('业务ID')->disabled()->dehydrated(false),
+                TextInput::make('business_id')->label('业务编号')->disabled()->dehydrated(false),
                 TextInput::make('amount_fen')->label('金额(分)')->disabled()->dehydrated(false),
                 TextInput::make('status')
                     ->label('支付状态')

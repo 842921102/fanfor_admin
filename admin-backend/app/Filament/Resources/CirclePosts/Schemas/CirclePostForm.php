@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CirclePosts\Schemas;
 
 use App\Support\CirclePostStatus;
+use App\Support\CirclePostVisibility;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -43,7 +44,7 @@ class CirclePostForm
                             ->rows(12)
                             ->columnSpanFull(),
                         Repeater::make('images')
-                            ->label('图片 URL 列表')
+                            ->label('图片地址列表')
                             ->schema([
                                 TextInput::make('url')
                                     ->label('图片地址')
@@ -61,7 +62,7 @@ class CirclePostForm
                         Select::make('source_type')
                             ->label('内容类型')
                             ->options([
-                                'ai_generated' => 'AI生成',
+                                'ai_generated' => '智能生成',
                                 'user_uploaded' => '用户实拍',
                             ])
                             ->required()
@@ -69,10 +70,16 @@ class CirclePostForm
                         Select::make('publish_source')
                             ->label('发布来源')
                             ->options([
-                                'ai_result' => 'AI结果页',
+                                'ai_result' => '智能结果页',
                                 'manual_upload' => '手动上传',
                             ])
                             ->required()
+                            ->native(false),
+                        Select::make('visibility')
+                            ->label('可见范围')
+                            ->options(CirclePostVisibility::labels())
+                            ->required()
+                            ->default(CirclePostVisibility::Public)
                             ->native(false),
                         Select::make('related_product_id')
                             ->label('关联商品')

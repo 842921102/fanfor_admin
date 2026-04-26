@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserForm
 {
-    public static function configure(Schema $schema): Schema
+    public static function configure(Schema $schema, bool $adminMode = false): Schema
     {
         $allRoleOptions = collect(AppRole::VALUES)
             ->mapWithKeys(fn (string $value) => [$value => AppRole::labelCn($value)])
@@ -39,13 +39,11 @@ class UserForm
                 TextInput::make('phone')
                     ->label('手机号')
                     ->tel()
-                    ->maxLength(32)
-                    ->placeholder('可选'),
+                    ->maxLength(32),
                 TextInput::make('avatar_url')
                     ->label('头像地址')
                     ->url()
-                    ->maxLength(2048)
-                    ->placeholder('可选：服务端存储的公开头像地址'),
+                    ->maxLength(2048),
                 TextInput::make('wechat_openid')
                     ->label('微信开放标识')
                     ->disabled()
@@ -77,14 +75,17 @@ class UserForm
                         }
 
                         return ! $actor->can('create', User::class);
-                    }),
+                    })
+                    ->visible($adminMode),
                 Toggle::make('is_sponsor')
                     ->label('赞助用户')
-                    ->default(false),
+                    ->default(false)
+                    ->visible(! $adminMode),
                 DateTimePicker::make('sponsor_until')
                     ->label('赞助有效期至')
                     ->seconds(false)
-                    ->native(false),
+                    ->native(false)
+                    ->visible(! $adminMode),
                 Toggle::make('is_active')
                     ->label('账号启用')
                     ->default(true)
@@ -99,10 +100,7 @@ class UserForm
                         }
 
                         return ! $actor->can('update', $record);
-                    })
-                    ->hint(fn (?Model $record): ?string => $record instanceof User && (int) auth()->id() === (int) $record->id
-                        ? '不能禁用自己的账号。'
-                        : null),
+                    }),
                 DateTimePicker::make('email_verified_at')
                     ->label('邮箱验证时间'),
                 TextInput::make('password')
@@ -115,6 +113,7 @@ class UserForm
                 Section::make('饮食与推荐档案')
                     ->relationship('profile')
                     ->visibleOn('edit')
+                    ->visible(! $adminMode)
                     ->schema([
                         DatePicker::make('birthday')
                             ->label('生日')
@@ -129,21 +128,20 @@ class UserForm
                             ])
                             ->native(false),
                         TextInput::make('height_cm')
-                            ->label('身高（cm）')
+                            ->label('身高（厘米）')
                             ->numeric()
                             ->minValue(50)
                             ->maxValue(260),
                         TextInput::make('weight_kg')
-                            ->label('体重（kg）')
+                            ->label('体重（千克）')
                             ->numeric()
                             ->step(0.1),
                         TextInput::make('target_weight_kg')
-                            ->label('目标体重（kg）')
+                            ->label('目标体重（千克）')
                             ->numeric()
                             ->step(0.1),
                         TagsInput::make('flavor_preferences')
-                            ->label('口味偏好')
-                            ->placeholder('回车添加标签'),
+                            ->label('口味偏好'),
                         TagsInput::make('taboo_ingredients')
                             ->label('忌口食材'),
                         TagsInput::make('dislike_ingredients')
@@ -157,18 +155,17 @@ class UserForm
                         TagsInput::make('lifestyle_tags')
                             ->label('生活习惯标签'),
                         TextInput::make('cooking_frequency')
-                            ->label('做饭频率（often/sometimes/rarely/takeout）')
+                            ->label('做饭频率（经常/偶尔/很少/外卖）')
                             ->maxLength(32),
                         TextInput::make('family_size')
-                            ->label('用餐场景（single/couple/family3/family5）')
+                            ->label('用餐场景（独居/两人/三口之家/五口之家）')
                             ->maxLength(32),
                         TextInput::make('health_goal')
                             ->label('饮食 / 健康目标')
                             ->maxLength(255),
                         TextInput::make('recommendation_style')
                             ->label('推荐风格')
-                            ->maxLength(64)
-                            ->placeholder('如：清淡优先'),
+                            ->maxLength(64),
                         Toggle::make('destiny_mode_enabled')
                             ->label('食命推荐'),
                         Toggle::make('period_feature_enabled')

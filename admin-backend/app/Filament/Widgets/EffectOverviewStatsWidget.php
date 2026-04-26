@@ -19,8 +19,6 @@ class EffectOverviewStatsWidget extends StatsOverviewWidget
 
     protected ?string $heading = '概览（今日）';
 
-    protected ?string $description = '基于 recommendation_events 埋点；比率见下方「转化与反馈率」卡片（分母为今日推荐曝光）。';
-
     protected int|array|null $columns = 3;
 
     /**

@@ -763,14 +763,13 @@ function goLogin() {
 }
 
 .fc__type-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16rpx;
 }
 
 .fc__type-card {
-  width: calc(50% - 8rpx);
+  width: 100%;
   box-sizing: border-box;
   padding: 24rpx 16rpx;
   border-radius: 20rpx;
@@ -836,14 +835,13 @@ function goLogin() {
 }
 
 .fc__grid-3 {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12rpx;
 }
 
 .fc__pick {
-  width: calc(33.33% - 8rpx);
+  width: 100%;
   box-sizing: border-box;
   padding: 16rpx 8rpx;
   border-radius: 14rpx;
@@ -877,14 +875,13 @@ function goLogin() {
 }
 
 .fc__mood-grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12rpx;
 }
 
 .fc__mood {
-  width: calc(25% - 9rpx);
+  width: 100%;
   box-sizing: border-box;
   padding: 16rpx 8rpx;
   border-radius: 14rpx;

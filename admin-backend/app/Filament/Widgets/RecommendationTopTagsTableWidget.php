@@ -22,7 +22,7 @@ class RecommendationTopTagsTableWidget extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading('今日高表现标签 TOP5')
+            ->heading('今日高表现标签前五')
             ->records(function (): Collection {
                 $rows = $this->dashboard()->rankings($this->now())['top_tags'] ?? [];
 

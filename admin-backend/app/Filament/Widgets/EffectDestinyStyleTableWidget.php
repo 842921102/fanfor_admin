@@ -20,7 +20,7 @@ class EffectDestinyStyleTableWidget extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->heading('食命文案 destiny_style')
+            ->heading('食命文案风格')
             ->records(function (): Collection {
                 $list = $this->analytics()->copyStylePerformance($this->now(), 7)['destiny_style'] ?? [];
 

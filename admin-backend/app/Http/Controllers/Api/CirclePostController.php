@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\CirclePost;
 use App\Services\CircleService;
+use App\Support\CirclePostVisibility;
 use App\Support\LaravelAccessToken;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -54,6 +55,7 @@ final class CirclePostController extends Controller
             'topic' => ['nullable', 'string', 'max:64'],
             'sourceType' => ['nullable', 'string', 'in:ai_generated,user_uploaded'],
             'publishSource' => ['nullable', 'string', 'in:ai_result,manual_upload'],
+            'visibility' => ['nullable', 'string', 'in:'.implode(',', CirclePostVisibility::values())],
             'relatedProductId' => ['nullable', 'integer', 'min:1'],
             'images' => ['nullable', 'array', 'max:9'],
             'images.*' => ['string', 'max:2048'],
@@ -66,6 +68,7 @@ final class CirclePostController extends Controller
             'topic' => isset($validated['topic']) ? (string) $validated['topic'] : '',
             'sourceType' => isset($validated['sourceType']) ? (string) $validated['sourceType'] : null,
             'publishSource' => isset($validated['publishSource']) ? (string) $validated['publishSource'] : null,
+            'visibility' => isset($validated['visibility']) ? (string) $validated['visibility'] : null,
             'relatedProductId' => $validated['relatedProductId'] ?? null,
             'images' => array_values($validated['images'] ?? []),
         ]);

@@ -5,13 +5,15 @@ namespace App\Filament\Resources\AiModelConfigs\Schemas;
 use App\Models\AiModel;
 use App\Models\AiProvider;
 use App\Support\AiScene;
-use Filament\Forms\Get;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AiModelConfigForm
 {
@@ -22,6 +24,8 @@ class AiModelConfigForm
                 ->label('场景')
                 ->options(AiScene::options())
                 ->required()
+                ->live()
+                ->afterStateUpdated(fn (Set $set) => $set('model_id', null))
                 ->native(false),
             Select::make('provider_id')
                 ->label('供应商')
@@ -34,11 +38,9 @@ class AiModelConfigForm
                         ->maxLength(128),
                     TextInput::make('provider_code')
                         ->label('供应商编码（可选）')
-                        ->helperText('不填写时自动生成')
                         ->maxLength(64),
                     TextInput::make('base_url')
                         ->label('基础地址（可选）')
-                        ->helperText('可先留空，后续在供应商管理中补充')
                         ->maxLength(512),
                 ])
                 ->createOptionUsing(function (array $data): int {
@@ -54,17 +56,24 @@ class AiModelConfigForm
 
                     return (int) $provider->getKey();
                 })
-                ->helperText('可下拉选择；若没有可在下方“手动填写供应商”输入')
-                ->requiredWithout('provider_name_manual')
+                                ->requiredWithout('provider_name_manual')
                 ->native(false),
             TextInput::make('provider_name_manual')
                 ->label('手动填写供应商')
-                ->placeholder('没有可选项时可直接填写')
                 ->maxLength(128)
                 ->requiredWithout('provider_id'),
             Select::make('model_id')
                 ->label('模型')
-                ->options(fn () => AiModel::query()->orderBy('model_name')->pluck('model_name', 'id'))
+                ->options(function (Get $get): array {
+                    $scene = (string) ($get('scene_code') ?? '');
+                    $query = AiModel::query()->orderBy('model_name');
+                    if ($scene !== '') {
+                        $query->where('model_type', AiScene::modelTypeFor($scene));
+                    }
+
+                    return $query->pluck('model_name', 'id')->all();
+                })
+                ->disabled(fn (Get $get): bool => blank($get('scene_code')))
                 ->searchable()
                 ->createOptionForm([
                     Select::make('provider_id')
@@ -80,17 +89,24 @@ class AiModelConfigForm
                         ->maxLength(160),
                     TextInput::make('model_code')
                         ->label('模型编码（可选）')
-                        ->helperText('不填写时自动生成')
                         ->maxLength(96),
                 ])
-                ->createOptionUsing(function (array $data): int {
+                ->createOptionUsing(function (array $data, $livewire): int {
+                    $sceneCode = (string) (($livewire->data ?? [])['scene_code'] ?? '');
+                    if ($sceneCode === '') {
+                        throw ValidationException::withMessages([
+                            'scene_code' => '请先在表单中选择场景，再通过此处创建模型。',
+                        ]);
+                    }
+
+                    $modelType = AiScene::modelTypeFor($sceneCode);
                     $modelCode = self::makeUniqueModelCode((int) $data['provider_id'], $data['model_code'] ?? null, $data['model_name']);
 
                     $model = AiModel::query()->create([
                         'provider_id' => (int) $data['provider_id'],
                         'model_name' => $data['model_name'],
                         'model_code' => $modelCode,
-                        'model_type' => 'text',
+                        'model_type' => $modelType,
                         'is_enabled' => true,
                         'is_default' => false,
                         'supports_temperature' => true,
@@ -99,12 +115,10 @@ class AiModelConfigForm
 
                     return (int) $model->getKey();
                 })
-                ->helperText('可下拉选择；若没有可在下方“手动填写模型”输入')
-                ->requiredWithout('model_name_manual')
+                                ->requiredWithout('model_name_manual')
                 ->native(false),
             TextInput::make('model_name_manual')
                 ->label('手动填写模型')
-                ->placeholder('没有可选项时可直接填写')
                 ->maxLength(160)
                 ->requiredWithout('model_id'),
             TextInput::make('api_key')

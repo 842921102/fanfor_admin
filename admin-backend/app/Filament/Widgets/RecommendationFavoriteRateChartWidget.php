@@ -15,8 +15,6 @@ class RecommendationFavoriteRateChartWidget extends ChartWidget
 
     protected ?string $heading = '最近 7 天 · 收藏率';
 
-    protected ?string $description = '全站收藏次数 / 当日推荐次数';
-
     protected ?string $maxHeight = '240px';
 
     protected function getType(): string

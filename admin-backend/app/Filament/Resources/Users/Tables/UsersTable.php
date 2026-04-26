@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class UsersTable
 {
-    public static function configure(Table $table): Table
+    public static function configure(Table $table, bool $adminMode = false): Table
     {
         $roleOptions = collect(AppRole::VALUES)
             ->mapWithKeys(fn (string $value) => [$value => AppRole::labelCn($value)])
@@ -79,20 +79,24 @@ class UsersTable
                         }
 
                         return implode('、', array_slice(array_map(strval(...), $state), 0, 12));
-                    }),
+                    })
+                    ->visible(! $adminMode),
                 TextColumn::make('profile.health_goal')
                     ->label('饮食目标')
                     ->placeholder('—')
                     ->limit(24)
-                    ->tooltip(fn (?string $state): ?string => $state),
+                    ->tooltip(fn (?string $state): ?string => $state)
+                    ->visible(! $adminMode),
                 IconColumn::make('profile.destiny_mode_enabled')
                     ->label('食命推荐')
                     ->boolean()
-                    ->placeholder('—'),
+                    ->placeholder('—')
+                    ->visible(! $adminMode),
                 IconColumn::make('profile.period_feature_enabled')
                     ->label('特殊时期推荐')
                     ->boolean()
-                    ->placeholder('—'),
+                    ->placeholder('—')
+                    ->visible(! $adminMode),
                 TextColumn::make('role')
                     ->label('角色')
                     ->formatStateUsing(fn (?string $state): string => AppRole::labelCn((string) $state))
@@ -104,7 +108,8 @@ class UsersTable
                         default => 'gray',
                     })
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visible($adminMode),
                 IconColumn::make('is_sponsor')
                     ->label('赞助')
                     ->boolean()
@@ -113,7 +118,8 @@ class UsersTable
                     ->trueColor('warning')
                     ->falseColor('gray')
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->visible(! $adminMode),
                 IconColumn::make('is_active')
                     ->label('账号启用')
                     ->boolean()
@@ -138,12 +144,14 @@ class UsersTable
                     ->label('收藏数')
                     ->sortable()
                     ->alignCenter()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visible(! $adminMode),
                 TextColumn::make('histories_count')
                     ->label('历史数')
                     ->badge()
                     ->alignCenter()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->visible(! $adminMode),
                 ImageColumn::make('avatar_url')
                     ->label('头像')
                     ->circular()
@@ -181,8 +189,7 @@ class UsersTable
                     ->label('手机号')
                     ->schema([
                         TextInput::make('value')
-                            ->label('包含匹配')
-                            ->placeholder('后四位或完整号码'),
+                            ->label('包含匹配'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         $v = isset($data['value']) ? trim((string) $data['value']) : '';
@@ -195,13 +202,15 @@ class UsersTable
                 SelectFilter::make('role')
                     ->label('角色')
                     ->options($roleOptions)
-                    ->attribute('role'),
+                    ->attribute('role')
+                    ->visible($adminMode),
                 TernaryFilter::make('is_sponsor')
                     ->label('赞助用户')
                     ->attribute('is_sponsor')
                     ->boolean()
                     ->trueLabel('是')
-                    ->falseLabel('否'),
+                    ->falseLabel('否')
+                    ->visible(! $adminMode),
                 TernaryFilter::make('is_active')
                     ->label('账号状态')
                     ->attribute('is_active')
@@ -241,7 +250,6 @@ class UsersTable
                     ->color(fn (User $record): string => $record->is_active ? 'danger' : 'success')
                     ->requiresConfirmation()
                     ->modalHeading(fn (User $record): string => $record->is_active ? '确认禁用该用户？' : '确认启用该用户？')
-                    ->modalDescription('禁用后该账号将无法使用小程序微信登录态（若后续接入服务端校验）；当前仅记录状态字段。')
                     ->visible(fn (User $record): bool => auth()->user()?->can('toggleActive', $record) ?? false)
                     ->action(function (User $record): void {
                         if (! auth()->user()?->can('toggleActive', $record)) {

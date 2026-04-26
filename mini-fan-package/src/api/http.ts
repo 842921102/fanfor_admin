@@ -96,6 +96,12 @@ function parseErrorMessage(data: unknown, fallback: string, statusCode: number):
   if (data && typeof data === 'object') {
     const o = data as Record<string, unknown>
     const topMessage = typeof o.message === 'string' ? o.message.trim() : ''
+    if (topMessage.startsWith('ai_scene_not_configured:')) {
+      return '当前 AI 场景未配置，请在后台为该场景启用模型配置后重试。'
+    }
+    if (topMessage === 'bigmodel_response_not_json') {
+      return 'AI 服务返回了非 JSON 结果，请稍后重试或联系管理员检查模型兼容性。'
+    }
     if (topMessage === 'scene_config_disabled') {
       return '当前推荐模型配置已被停用，请联系管理员在后台启用“今日菜单”场景模型配置。'
     }
@@ -106,6 +112,15 @@ function parseErrorMessage(data: unknown, fallback: string, statusCode: number):
     if (err && typeof err === 'object') {
       const er = err as Record<string, unknown>
       const m = er.message
+      if (m === 'recipe_image_http_402') {
+        return '图片生成服务余额不足或计费受限（402），请联系管理员充值或更换可用网关后重试。'
+      }
+      if (m === 'recipe_image_http_401') {
+        return '图片生成服务鉴权失败（401），请检查 API Key 是否正确。'
+      }
+      if (m === 'recipe_image_http_403') {
+        return '图片生成服务无权限（403），请确认当前密钥有图片模型调用权限。'
+      }
       if (m === 'scene_config_disabled') {
         return '当前推荐模型配置已被停用，请联系管理员在后台启用“今日菜单”场景模型配置。'
       }

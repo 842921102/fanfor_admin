@@ -19,8 +19,6 @@ class EffectRateStatsWidget extends StatsOverviewWidget
 
     protected ?string $heading = '转化与反馈率（今日）';
 
-    protected ?string $description = '分母：今日 recommendation_view 曝光次数。';
-
     protected int|array|null $columns = 3;
 
     /**
