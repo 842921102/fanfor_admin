@@ -81,6 +81,9 @@ onLoad((options) => {
       redirectPath.value = ''
     }
   }
+
+  // 登录入口统一落到「我的」页内联登录卡片，避免跳到旧独立登录页。
+  uni.switchTab({ url: '/pages/me/index' })
 })
 
 function toastFromError(e: unknown): string {

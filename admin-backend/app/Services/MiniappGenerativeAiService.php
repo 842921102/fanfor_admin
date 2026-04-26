@@ -84,6 +84,21 @@ final class MiniappGenerativeAiService
 
             return ['result' => $result, 'history_saved' => false];
         } catch (\Throwable $e) {
+            if ($this->shouldUseAiFallback($e)) {
+                $result = $this->fallbackFortuneResult($fortuneType, $locale);
+                $this->logFeature(
+                    'fortune_cooking',
+                    $fortuneType,
+                    'success',
+                    $userId,
+                    $payload,
+                    $result['dishName'],
+                    Str::limit((string) $result['description'], 200),
+                    'fallback: '.Str::limit($e->getMessage(), 300)
+                );
+
+                return ['result' => $result, 'history_saved' => false];
+            }
             $this->logFeature('fortune_cooking', $fortuneType, 'failed', $userId, $payload, null, null, Str::limit($e->getMessage(), 500));
             throw $e;
         }
@@ -134,6 +149,23 @@ final class MiniappGenerativeAiService
 
             return ['recommendations' => $recs];
         } catch (\Throwable $e) {
+            if ($this->shouldUseAiFallback($e)) {
+                $recs = $this->fallbackSauceRecommendations($preferences);
+                $title = '酱料推荐（降级）';
+                $summary = Str::limit(implode('、', array_slice($recs, 0, 8)), 200);
+                $this->logFeature(
+                    'sauce_design',
+                    'recommend',
+                    'success',
+                    $userId,
+                    $input,
+                    $title,
+                    $summary,
+                    'fallback: '.Str::limit($e->getMessage(), 300)
+                );
+
+                return ['recommendations' => $recs];
+            }
             $this->logFeature('sauce_design', 'recommend', 'failed', $userId, $input, null, null, Str::limit($e->getMessage(), 500));
             throw $e;
         }
@@ -201,6 +233,22 @@ final class MiniappGenerativeAiService
 
             return ['recipe' => $recipe, 'history_saved' => false];
         } catch (\Throwable $e) {
+            if ($this->shouldUseAiFallback($e)) {
+                $recipe = $this->fallbackSauceRecipe($name);
+                $summary = Str::limit((string) ($recipe['description'] ?? ''), 200);
+                $this->logFeature(
+                    'sauce_design',
+                    'recipe',
+                    'success',
+                    $userId,
+                    $input,
+                    (string) ($recipe['name'] ?? $name),
+                    $summary,
+                    'fallback: '.Str::limit($e->getMessage(), 300)
+                );
+
+                return ['recipe' => $recipe, 'history_saved' => false];
+            }
             $this->logFeature('sauce_design', 'recipe', 'failed', $userId, $input, $name, null, Str::limit($e->getMessage(), 500));
             throw $e;
         }
@@ -286,6 +334,24 @@ final class MiniappGenerativeAiService
 
             return ['dishes' => $dishes, 'history_saved' => false];
         } catch (\Throwable $e) {
+            if ($this->shouldUseAiFallback($e)) {
+                $dishes = $this->fallbackTableMenuDishes($count, $tastes, $cuisineStyle);
+                $n = count($dishes);
+                $title = "家常好菜（降级，{$n}道）";
+                $summary = Str::limit(implode('、', array_map(fn ($x) => (string) ($x['name'] ?? ''), array_slice($dishes, 0, 4))), 200);
+                $this->logFeature(
+                    'table_menu',
+                    'generate',
+                    'success',
+                    $userId,
+                    $input,
+                    $title,
+                    $summary,
+                    'fallback: '.Str::limit($e->getMessage(), 300)
+                );
+
+                return ['dishes' => $dishes, 'history_saved' => false];
+            }
             $this->logFeature('table_menu', 'generate', 'failed', $userId, $input, null, null, Str::limit($e->getMessage(), 500));
             throw $e;
         }
@@ -342,6 +408,22 @@ final class MiniappGenerativeAiService
 
             return $out;
         } catch (\Throwable $e) {
+            if ($this->shouldUseAiFallback($e)) {
+                $out = $this->fallbackTableDishRecipe($name, $cat);
+                $summary = Str::limit(implode('、', array_slice($out['ingredients'], 0, 8)), 200);
+                $this->logFeature(
+                    'table_menu',
+                    'dish_recipe',
+                    'success',
+                    $userId,
+                    $input,
+                    (string) ($out['name'] ?? $name),
+                    $summary,
+                    'fallback: '.Str::limit($e->getMessage(), 300)
+                );
+
+                return $out;
+            }
             $this->logFeature('table_menu', 'dish_recipe', 'failed', $userId, $input, $name, null, Str::limit($e->getMessage(), 500));
             throw $e;
         }
@@ -735,6 +817,153 @@ final class MiniappGenerativeAiService
         }
 
         return $out;
+    }
+
+    private function shouldUseAiFallback(\Throwable $e): bool
+    {
+        $msg = trim($e->getMessage());
+        if ($msg === '') {
+            return true;
+        }
+        $m = strtolower($msg);
+
+        if (str_contains($m, 'ai_scene_not_configured')) {
+            return true;
+        }
+        if (str_contains($m, 'bigmodel_response_not_json')) {
+            return true;
+        }
+        if (str_contains($m, 'timed out') || str_contains($m, 'timeout')) {
+            return true;
+        }
+        if (str_contains($m, 'connection') || str_contains($m, 'network')) {
+            return true;
+        }
+        if (str_contains($m, 'resolve host') || str_contains($m, 'ssl')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function fallbackFortuneResult(string $fortuneType, string $locale): array
+    {
+        $dishNameMap = [
+            'daily' => '顺势开运蔬食碗',
+            'mood' => '情绪疗愈番茄汤',
+            'couple' => '双人默契香煎拼盘',
+            'number' => '幸运数字暖心焖饭',
+        ];
+        $dishName = $dishNameMap[$fortuneType] ?? '今日好运家常菜';
+        $date = now()->toDateString();
+
+        return [
+            'id' => 'fortune-fallback-'.time(),
+            'type' => $fortuneType,
+            'date' => $date,
+            'dishName' => $dishName,
+            'reason' => '当前网络波动，已为你启用稳定推荐模式。',
+            'luckyIndex' => 7,
+            'description' => '虽然占卜引擎暂时繁忙，但今天依然适合选择清爽、温和、易上手的家常组合，先让身体和心情都稳稳落地。',
+            'tips' => [
+                '先做一锅热汤再做主食，节奏更稳。',
+                '优先使用现有食材，减少决策压力。',
+                '今日建议少油少辣，口味以温和为主。',
+            ],
+            'difficulty' => 'easy',
+            'cookingTime' => 25,
+            'mysticalMessage' => $locale === 'zh-CN'
+                ? '灶火有灵，慢火即好运。'
+                : 'Trust steady steps; calm cooking brings good luck.',
+            'ingredients' => ['番茄', '鸡蛋', '青菜', '米饭', '蒜末', '食盐'],
+            'steps' => ['准备食材并清洗切配', '先做热汤打底', '主菜快炒保持口感', '搭配米饭即可上桌'],
+        ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $preferences
+     * @return list<string>
+     */
+    private function fallbackSauceRecommendations(array $preferences): array
+    {
+        $spice = $this->clampInt($preferences['spiceLevel'] ?? null, 1, 5, 3);
+        if ($spice >= 4) {
+            return ['蒜蓉辣酱', '香辣豆豉酱', '韩式甜辣酱', '青椒蘸酱', '孜然辣椒粉蘸料'];
+        }
+
+        return ['蒜香酱油汁', '清爽油醋汁', '香菇蚝油汁', '芝麻花生酱', '番茄罗勒调味汁'];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function fallbackSauceRecipe(string $name): array
+    {
+        return [
+            'id' => 'sauce-fallback-'.time(),
+            'name' => $name !== '' ? $name : '家常万能酱',
+            'category' => 'complex',
+            'ingredients' => ['生抽 2 勺', '陈醋 1 勺', '蒜末 1 勺', '白糖 半勺', '香油 少许', '清水 2 勺'],
+            'steps' => [
+                '将蒜末、生抽、陈醋、白糖加入碗中。',
+                '加入清水搅匀，尝味后按口味微调。',
+                '最后滴入少许香油，静置 3 分钟即可。',
+            ],
+            'makingTime' => 8,
+            'difficulty' => 'easy',
+            'tips' => ['拌凉菜可多加陈醋', '蘸饺子可增加蒜末', '做热菜收汁可少加清水'],
+            'storage' => ['method' => '密封冷藏', 'duration' => '2-3天', 'temperature' => '0-4°C'],
+            'pairings' => ['白灼蔬菜', '凉拌鸡丝', '煎豆腐'],
+            'tags' => ['家常', '快手', '万能蘸料'],
+            'description' => 'AI 服务繁忙时启用的稳定版家常配方，适合多数日常场景。',
+        ];
+    }
+
+    /**
+     * @param  list<string>  $tastes
+     * @return list<array{name: string, description: string, category: string, tags: list<string>}>
+     */
+    private function fallbackTableMenuDishes(int $count, array $tastes, string $cuisineStyle): array
+    {
+        $pool = [
+            ['name' => '番茄炒蛋', 'description' => '酸甜开胃，家常稳妥', 'category' => '家常', 'tags' => ['快手', '下饭']],
+            ['name' => '清炒时蔬', 'description' => '清爽解腻，补充纤维', 'category' => '家常', 'tags' => ['清淡', '低负担']],
+            ['name' => '土豆烧鸡块', 'description' => '软糯入味，饱腹感强', 'category' => '家常', 'tags' => ['下饭', '热菜']],
+            ['name' => '蒜蓉蒸豆腐', 'description' => '嫩滑易做，口感温和', 'category' => '家常', 'tags' => ['蒸菜', '低脂']],
+            ['name' => '紫菜蛋花汤', 'description' => '轻快收尾，暖胃顺口', 'category' => '汤羹', 'tags' => ['汤', '快手']],
+            ['name' => '香菇青菜', 'description' => '鲜香不腻，平衡口味', 'category' => '家常', 'tags' => ['蔬菜', '清爽']],
+        ];
+        if ($cuisineStyle !== '' || $tastes !== []) {
+            $pool[0]['tags'][] = $cuisineStyle !== '' ? $cuisineStyle : '口味平衡';
+        }
+
+        return array_slice($pool, 0, max(2, min(10, $count)));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function fallbackTableDishRecipe(string $name, string $cat): array
+    {
+        $dishName = $name !== '' ? $name : '家常快手菜';
+
+        return [
+            'name' => $dishName,
+            'cuisine' => $cat !== '' ? $cat : '家常',
+            'ingredients' => ['主食材 300g', '蒜末 10g', '生抽 1 勺', '食盐 适量', '食用油 适量', '葱花 少许'],
+            'steps' => [
+                ['step' => 1, 'description' => '食材处理干净后切成均匀小块。'],
+                ['step' => 2, 'description' => '热锅冷油，下蒜末爆香。'],
+                ['step' => 3, 'description' => '加入主食材翻炒至断生。'],
+                ['step' => 4, 'description' => '加调味料翻匀，出锅前撒葱花。'],
+            ],
+            'cookingTime' => 20,
+            'difficulty' => 'easy',
+            'tips' => ['先备菜再开火效率更高', '口味可按家庭偏好微调'],
+        ];
     }
 
     /**
