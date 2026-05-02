@@ -103,10 +103,10 @@ function parseErrorMessage(data: unknown, fallback: string, statusCode: number):
       return 'AI 服务返回了非 JSON 结果，请稍后重试或联系管理员检查模型兼容性。'
     }
     if (topMessage === 'scene_config_disabled') {
-      return '当前推荐模型配置已被停用，请联系管理员在后台启用“今日菜单”场景模型配置。'
+      return '当前推荐模型配置已被停用，请联系管理员在后台启用“此刻想吃”场景模型配置。'
     }
     if (topMessage === 'scene_config_not_found') {
-      return '当前推荐模型尚未配置，请联系管理员在后台新增“今日菜单”场景模型配置。'
+      return '当前推荐模型尚未配置，请联系管理员在后台新增“此刻想吃”场景模型配置。'
     }
     const err = o.error
     if (err && typeof err === 'object') {
@@ -122,10 +122,10 @@ function parseErrorMessage(data: unknown, fallback: string, statusCode: number):
         return '图片生成服务无权限（403），请确认当前密钥有图片模型调用权限。'
       }
       if (m === 'scene_config_disabled') {
-        return '当前推荐模型配置已被停用，请联系管理员在后台启用“今日菜单”场景模型配置。'
+        return '当前推荐模型配置已被停用，请联系管理员在后台启用“此刻想吃”场景模型配置。'
       }
       if (m === 'scene_config_not_found') {
-        return '当前推荐模型尚未配置，请联系管理员在后台新增“今日菜单”场景模型配置。'
+        return '当前推荐模型尚未配置，请联系管理员在后台新增“此刻想吃”场景模型配置。'
       }
       const detailStr = stringifyDetail(er.detail)
       const hintStr = stringifyDetail(er.hint)

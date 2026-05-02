@@ -3,7 +3,7 @@
 namespace App\Support;
 
 /**
- * 今日状态 MVP 枚举（与小程序「今日状态」弹层一致）。
+ * 今日状态 MVP 枚举（与小程序「此刻状态」弹层一致）。
  */
 final class UserDailyStatusMvp
 {

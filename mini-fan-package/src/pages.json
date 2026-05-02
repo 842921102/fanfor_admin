@@ -3,9 +3,17 @@
     {
       "path": "pages/today-eat/index",
       "style": {
-        "navigationBarTitleText": "",
+        "navigationBarTitleText": "此刻推荐",
         "navigationStyle": "custom",
         "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/today-eat/result",
+      "style": {
+        "navigationBarTitleText": "此刻推荐",
+        "navigationBarBackgroundColor": "#f5f6fa",
+        "navigationBarTextStyle": "black"
       }
     },
     {
@@ -202,6 +210,25 @@
           "path": "index",
           "style": {
             "navigationBarTitleText": "家常好菜"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages/help-choose",
+      "pages": [
+        {
+          "path": "index",
+          "style": {
+            "navigationBarTitleText": "帮忙选择",
+            "navigationBarBackgroundColor": "#F5F5F7"
+          }
+        },
+        {
+          "path": "pick",
+          "style": {
+            "navigationBarTitleText": "帮忙选择",
+            "navigationBarBackgroundColor": "#F5F5F7"
           }
         }
       ]

@@ -21,6 +21,7 @@ import { onShow } from '@dcloudio/uni-app'
 import { fetchMeProfile, putMeProfile } from '@/api/me'
 import { HttpError } from '@/api/http'
 import type { UserProfileDto } from '@/types/profile'
+import { goLoginGate } from '@/lib/loginNav'
 import { useAuth } from '@/composables/useAuth'
 
 const { isLoggedIn, syncAuthFromSupabase } = useAuth()
@@ -43,7 +44,7 @@ const genderIndex = computed(() => {
 
 async function load() {
   if (!isLoggedIn.value) {
-    uni.navigateTo({ url: '/pages/login/index?redirect=/pages/me/basic-profile' })
+    goLoginGate('/pages/me/basic-profile')
     return
   }
   await syncAuthFromSupabase()

@@ -90,7 +90,7 @@ export async function postUserProfileOnboarding(
   })
 }
 
-/** GET：当日写入的今日状态 + 当前推荐上下文标签（不写库） */
+/** GET：当日写入的用餐状态（此刻状态）+ 当前推荐上下文标签（不写库） */
 export async function fetchMeDailyToday(): Promise<{
   today_status: UserDailyStatusDto | null
   recommendation_context_tags: string[]

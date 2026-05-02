@@ -68,6 +68,22 @@ export interface AppConfig {
   common_empty_title: string
   common_empty_subtitle: string
   common_empty_button_text: string
+
+  /** 帮忙选择（首页 Tab / 二级页；可由远端运营配置覆盖，便于接入「AI 文案」投放） */
+  help_choose_landing_title: string
+  help_choose_landing_subtitle: string
+  help_choose_landing_cta: string
+  help_choose_dishes_placeholder: string
+  help_choose_min_dishes_toast: string
+  help_choose_primary_pick_btn: string
+  help_choose_result_today_label: string
+  help_choose_result_reason_label: string
+  help_choose_result_alternatives_label: string
+  help_choose_btn_reroll: string
+  help_choose_btn_reset: string
+  help_choose_btn_save: string
+  help_choose_btn_share: string
+  help_choose_share_title_prefix: string
 }
 
 export const APP_CONFIG_STRING_KEYS: (keyof AppConfig)[] = [
@@ -108,6 +124,20 @@ export const APP_CONFIG_STRING_KEYS: (keyof AppConfig)[] = [
   'common_empty_title',
   'common_empty_subtitle',
   'common_empty_button_text',
+  'help_choose_landing_title',
+  'help_choose_landing_subtitle',
+  'help_choose_landing_cta',
+  'help_choose_dishes_placeholder',
+  'help_choose_min_dishes_toast',
+  'help_choose_primary_pick_btn',
+  'help_choose_result_today_label',
+  'help_choose_result_reason_label',
+  'help_choose_result_alternatives_label',
+  'help_choose_btn_reroll',
+  'help_choose_btn_reset',
+  'help_choose_btn_save',
+  'help_choose_btn_share',
+  'help_choose_share_title_prefix',
 ]
 
 export const APP_CONFIG_BOOLEAN_KEYS: (keyof AppConfig)[] = [
@@ -120,9 +150,9 @@ export const APP_CONFIG_BOOLEAN_KEYS: (keyof AppConfig)[] = [
 
 export const APP_CONFIG_DEFAULT: AppConfig = {
   home_title: '饭否',
-  home_subtitle: '今日菜单，让 AI 帮你出主意',
+  home_subtitle: '此刻想吃，让 AI 帮你出主意',
 
-  home_banner_title: '今日灵感',
+  home_banner_title: '此刻灵感',
   home_banner_subtitle: '用 AI 搭配一顿好饭',
   show_home_banner: true,
 
@@ -145,14 +175,14 @@ export const APP_CONFIG_DEFAULT: AppConfig = {
   favorites_title: '收藏',
   favorites_subtitle: '收藏已同步至饭否服务器，可与管理后台联查',
   favorites_empty_title: '暂无收藏',
-  favorites_empty_subtitle: '在今日菜单、家常好菜等结果页加入收藏后会显示在这里',
-  favorites_empty_button_text: '去今日菜单',
+  favorites_empty_subtitle: '在此刻想吃、家常好菜等结果页加入收藏后会显示在这里',
+  favorites_empty_button_text: '去此刻想吃',
 
   histories_title: '历史',
   histories_subtitle: '与 Web 同步的生成记录',
   histories_empty_title: '暂无历史',
   histories_empty_subtitle: '在 Web 端生成菜谱后会写入历史',
-  histories_empty_button_text: '去今日菜单',
+  histories_empty_button_text: '去此刻想吃',
 
   show_recent_favorites: true,
   show_recent_histories: true,
@@ -172,6 +202,21 @@ export const APP_CONFIG_DEFAULT: AppConfig = {
   common_empty_title: '暂无内容',
   common_empty_subtitle: '登录后可同步云端收藏与历史',
   common_empty_button_text: '去登录',
+
+  help_choose_landing_title: '帮忙选择',
+  help_choose_landing_subtitle: '几个都想吃？怎么选',
+  help_choose_landing_cta: '来帮你拍板',
+  help_choose_dishes_placeholder: '例如：火锅、烤肉、酸菜鱼、麻辣烫、日料',
+  help_choose_min_dishes_toast: '至少输入 2 个菜，饭否才好帮你选。',
+  help_choose_primary_pick_btn: '帮我选一个',
+  help_choose_result_today_label: '今日推荐',
+  help_choose_result_reason_label: '推荐理由',
+  help_choose_result_alternatives_label: '备选推荐',
+  help_choose_btn_reroll: '再选一次',
+  help_choose_btn_reset: '清空重填',
+  help_choose_btn_save: '保存结果',
+  help_choose_btn_share: '分享给朋友',
+  help_choose_share_title_prefix: '今日推荐：',
 }
 
 /** 与 `APP_CONFIG_DEFAULT` 等价的可变副本（含 plaza_entries 逐项拷贝） */

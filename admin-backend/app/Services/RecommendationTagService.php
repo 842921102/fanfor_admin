@@ -119,7 +119,7 @@ final class RecommendationTagService
     }
 
     /**
-     * 今日状态 MVP：面向用户的短标签（与枚举一一对应，供推荐解释引用）。
+     * 今日状态 MVP（小程序「此刻状态」）：面向用户的短标签（与枚举一一对应，供推荐解释引用）。
      *
      * @param  array<string, mixed>  $daily
      * @return list<string>

@@ -299,6 +299,7 @@ import { useAppConfig } from '@/composables/useAppConfig'
 import { useAppMessages } from '@/composables/useAppMessages'
 import { insertRecipeHistoryFromTodayEat, isFavoriteRecipe, toggleFavoriteRecipe, BIZ_UNAUTHORIZED, BIZ_NEED_LARAVEL_AUTH } from '@/api/biz'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
+import { goLoginGate } from '@/lib/loginNav'
 import type { FortuneType, FortuneResult, FortuneRequestBody } from '@/types/fortune'
 import {
   FORTUNE_TYPE_CARDS,
@@ -685,8 +686,7 @@ function resetIdle() {
 }
 
 function goLogin() {
-  const redirect = encodeURIComponent('/pages/fortune-cooking/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate('/pages/fortune-cooking/index')
 }
 </script>
 
@@ -697,7 +697,7 @@ function goLogin() {
   padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
 }
 
-/* 生成中：与「今日菜单」一致，整屏垂直居中，不用顶格白卡片 */
+/* 生成中：与「此刻想吃」一致，整屏垂直居中，不用顶格白卡片 */
 .fc--loading-phase {
   padding: 0 !important;
   padding-bottom: calc(120rpx + env(safe-area-inset-bottom)) !important;

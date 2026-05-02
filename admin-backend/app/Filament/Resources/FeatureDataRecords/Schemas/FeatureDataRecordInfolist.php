@@ -86,6 +86,40 @@ class FeatureDataRecordInfolist
         ]);
     }
 
+    public static function configureHelpChoose(Schema $schema): Schema
+    {
+        return $schema->components([
+            self::baseSection(),
+            Section::make('业务详情')->schema([
+                TextEntry::make('scene_id')
+                    ->label('就餐场景')
+                    ->state(fn (FeatureDataRecord $record): string => (string) data_get($record->input_payload, 'scene_id', '—')),
+                TextEntry::make('dish_list')
+                    ->label('候选菜名')
+                    ->state(fn (FeatureDataRecord $record): string => implode('、', array_map('strval', data_get($record->input_payload, 'dishes', []) ?: [])))
+                    ->placeholder('—')
+                    ->columnSpanFull(),
+                TextEntry::make('preferences')
+                    ->label('偏好标签')
+                    ->state(fn (FeatureDataRecord $record): string => implode('、', array_map('strval', data_get($record->input_payload, 'preferences', []) ?: [])))
+                    ->placeholder('—'),
+                TextEntry::make('picked')
+                    ->label('今日推荐')
+                    ->state(fn (FeatureDataRecord $record): string => (string) data_get($record->result_payload, 'picked', $record->title ?? '—')),
+                TextEntry::make('alternatives')
+                    ->label('备选')
+                    ->state(fn (FeatureDataRecord $record): string => implode('、', array_map('strval', data_get($record->result_payload, 'alternatives', []) ?: [])))
+                    ->placeholder('—')
+                    ->columnSpanFull(),
+                TextEntry::make('reason')
+                    ->label('推荐理由')
+                    ->state(fn (FeatureDataRecord $record): string => (string) data_get($record->result_payload, 'reason', '—'))
+                    ->columnSpanFull(),
+            ])->columns(2),
+            self::rawSection(),
+        ]);
+    }
+
     public static function configureCustomCuisine(Schema $schema): Schema
     {
         return $schema->components([

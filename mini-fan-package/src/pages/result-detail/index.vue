@@ -71,6 +71,7 @@ import { isFavoriteRecipe, toggleFavoriteRecipe } from '@/api/biz'
 import { requestRecipeImage } from '@/api/ai'
 import { upsertLocalGalleryItem } from '@/api/gallery'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
+import { goLoginGate } from '@/lib/loginNav'
 import { parseRecipeDetailDisplay, stripEmbeddedIngredientsLine } from '@/lib/recipeContentDisplay'
 
 const msg = useAppMessages()
@@ -170,8 +171,7 @@ async function onToggleFavorite() {
     const target = detailKey.value
       ? `/pages/result-detail/index?key=${encodeURIComponent(detailKey.value)}`
       : '/pages/result-detail/index'
-    const redirect = encodeURIComponent(target)
-    uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+    goLoginGate(target)
     return
   }
   if (favoriteLoading.value) return
@@ -256,8 +256,7 @@ function onPublishToInspiration() {
     const target = detailKey.value
       ? `/pages/result-detail/index?key=${encodeURIComponent(detailKey.value)}`
       : '/pages/result-detail/index'
-    const redirect = encodeURIComponent(target)
-    uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+    goLoginGate(target)
     return
   }
   if (!detail.value.image_url) {

@@ -105,6 +105,7 @@ import { useAppMessages } from '@/composables/useAppMessages'
 import { useAuth } from '@/composables/useAuth'
 import type { RecommendationRecordDetail } from '@/types/recommendationHistory'
 import { parseRecipeDetailDisplay, stripEmbeddedIngredientsLine } from '@/lib/recipeContentDisplay'
+import { goLoginGate } from '@/lib/loginNav'
 
 const msg = useAppMessages()
 const { isLoggedIn } = useAuth()
@@ -292,8 +293,7 @@ async function onToggleRecipeFavorite() {
   const d = detail.value
   if (dr == null || !Number.isFinite(dr) || !d || recipeFavoriteLoading.value) return
   if (!isLoggedIn.value) {
-    const redirect = encodeURIComponent(`/pages/recommendation-history/detail?id=${recordId.value ?? ''}`)
-    uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+    goLoginGate(`/pages/recommendation-history/detail?id=${recordId.value ?? ''}`)
     return
   }
   recipeFavoriteLoading.value = true

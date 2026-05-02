@@ -326,6 +326,7 @@ import {
   BIZ_NEED_LARAVEL_AUTH,
 } from '@/api/biz'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
+import { goLoginGate } from '@/lib/loginNav'
 import type { TableMenuConfigPayload, TableMenuDishItem, TableDishRecipeResponse } from '@/types/tableMenu'
 import {
   TABLE_MENU_TASTE_OPTIONS,
@@ -651,8 +652,7 @@ function closeRecipe() {
 }
 
 function goLogin() {
-  const redirect = encodeURIComponent('/pages/table-menu/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate('/pages/table-menu/index')
 }
 </script>
 

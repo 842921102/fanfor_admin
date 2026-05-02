@@ -83,6 +83,28 @@ class FeatureDataRecordsTable
         ]);
     }
 
+    public static function configureHelpChoose(Table $table): Table
+    {
+        return self::base($table)->columns([
+            TextColumn::make('id')->label('编号')->sortable()->copyable(),
+            TextColumn::make('title')->label('推荐菜')->searchable()->wrap()->placeholder('—')->limit(40)->tooltip(fn (?string $state): ?string => $state),
+            TextColumn::make('scene_id')
+                ->label('场景')
+                ->state(fn (FeatureDataRecord $record): string => (string) data_get($record->input_payload, 'scene_id', '—')),
+            TextColumn::make('dish_count')
+                ->label('候选数')
+                ->state(fn (FeatureDataRecord $record): int => count(data_get($record->input_payload, 'dishes', []) ?: [])),
+            TextColumn::make('result_summary')
+                ->label('理由摘要')
+                ->limit(48)
+                ->tooltip(fn (?string $state): ?string => $state)
+                ->placeholder('—'),
+            TextColumn::make('user_id')->label('用户')->sortable(),
+            TextColumn::make('status')->label('状态')->badge()->color(fn (?string $state): string => $state === 'success' ? 'success' : ($state === 'failed' ? 'danger' : 'gray')),
+            TextColumn::make('created_at')->label('创建时间')->dateTime()->sortable(),
+        ]);
+    }
+
     public static function configureCustomCuisine(Table $table): Table
     {
         return self::base($table)->columns([

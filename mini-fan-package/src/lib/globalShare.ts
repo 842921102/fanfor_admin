@@ -1,6 +1,6 @@
 /** 微信小程序全局分享：路径与标题默认值 */
 
-export const GLOBAL_SHARE_TITLE = '饭否 — 今日菜单'
+export const GLOBAL_SHARE_TITLE = '饭否 — 此刻想吃'
 
 const FALLBACK_PATH = '/pages/today-eat/index'
 

@@ -26,6 +26,7 @@ import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { fetchMeProfile, putMeProfile } from '@/api/me'
 import { HttpError } from '@/api/http'
+import { goLoginGate } from '@/lib/loginNav'
 import { patchCurrentUser, useAuth } from '@/composables/useAuth'
 
 const { isLoggedIn, syncAuthFromSupabase } = useAuth()
@@ -46,7 +47,7 @@ function onPeriodChange(e: unknown) {
 
 async function load() {
   if (!isLoggedIn.value) {
-    uni.navigateTo({ url: '/pages/login/index?redirect=/pages/me/recommend-settings' })
+    goLoginGate('/pages/me/recommend-settings')
     return
   }
   await syncAuthFromSupabase()

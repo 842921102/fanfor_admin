@@ -174,6 +174,7 @@ function extractGroupedFields(u: Record<string, unknown>): Record<string, unknow
 
   mergeToastsBlock(add, u.toasts ?? u.toast)
   mergeCommonEmptyBlock(add, u.common_empty ?? u.commonEmpty)
+  mergeHelpChooseBlock(add, u.help_choose ?? u.helpChoose)
 
   return add
 }
@@ -221,6 +222,33 @@ function mergeCommonEmptyBlock(add: Record<string, unknown>, node: unknown) {
   if (typeof o.subtitle === 'string') add.common_empty_subtitle = o.subtitle
   const b = o.button_text ?? o.buttonText
   if (typeof b === 'string') add.common_empty_button_text = b
+}
+
+/** 远端 `help_choose` / `helpChoose` 分组 → AppConfig 扁平字段（运营可投放 AI 生成文案） */
+function mergeHelpChooseBlock(add: Record<string, unknown>, node: unknown) {
+  if (!node || typeof node !== 'object' || Array.isArray(node)) return
+  const o = node as Record<string, unknown>
+  const pairs: [string, keyof AppConfig][] = [
+    ['landing_title', 'help_choose_landing_title'],
+    ['landing_subtitle', 'help_choose_landing_subtitle'],
+    ['landing_cta', 'help_choose_landing_cta'],
+    ['dishes_placeholder', 'help_choose_dishes_placeholder'],
+    ['min_dishes_toast', 'help_choose_min_dishes_toast'],
+    ['primary_pick_btn', 'help_choose_primary_pick_btn'],
+    ['result_today_label', 'help_choose_result_today_label'],
+    ['result_reason_label', 'help_choose_result_reason_label'],
+    ['result_alternatives_label', 'help_choose_result_alternatives_label'],
+    ['btn_reroll', 'help_choose_btn_reroll'],
+    ['btn_reset', 'help_choose_btn_reset'],
+    ['btn_save', 'help_choose_btn_save'],
+    ['btn_share', 'help_choose_btn_share'],
+    ['share_title_prefix', 'help_choose_share_title_prefix'],
+  ]
+  for (const [snake, appKey] of pairs) {
+    const camel = snake.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+    const v = o[snake] ?? o[camel]
+    if (typeof v === 'string' && v.trim() !== '') add[appKey] = v.trim()
+  }
 }
 
 function mergeFavoritesLike(

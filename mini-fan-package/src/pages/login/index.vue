@@ -50,6 +50,7 @@ import { requestWeChatLoginCode } from '@/services/auth/wechatLoginSkeleton'
 import { loginWithWechatCode } from '@/api/auth'
 import { HttpError } from '@/api/http'
 import { shouldAutoOpenOnboardingForCurrentSession } from '@/composables/useOnboardingFlow'
+import { navigateAfterLogin } from '@/lib/loginNav'
 
 const { setToken, setCurrentUser } = useAuth()
 
@@ -81,9 +82,6 @@ onLoad((options) => {
       redirectPath.value = ''
     }
   }
-
-  // 登录入口统一落到「我的」页内联登录卡片，避免跳到旧独立登录页。
-  uni.switchTab({ url: '/pages/me/index' })
 })
 
 function toastFromError(e: unknown): string {
@@ -136,7 +134,7 @@ async function onWeChatLogin() {
           uni.redirectTo({ url: `/pages/onboarding/index?redirect=${r}` })
           return
         }
-        navigateAfterLogin()
+        navigateAfterLogin(redirectPath.value)
       }, 400)
     } else {
       uni.showToast({ title: '服务端未返回 token', icon: 'none' })
@@ -147,31 +145,6 @@ async function onWeChatLogin() {
   } finally {
     wxLoading.value = false
   }
-}
-
-const TAB_PATHS = [
-  '/pages/today-eat/index',
-  '/pages/index/index',
-  '/pages/plaza/index',
-  '/pages/inspiration/index',
-  '/pages/me/index',
-]
-
-function navigateAfterLogin() {
-  const target = redirectPath.value.trim()
-  if (target && target.startsWith('/pages/')) {
-    if (TAB_PATHS.includes(target)) {
-      uni.switchTab({ url: target })
-      return
-    }
-    uni.redirectTo({ url: target })
-    return
-  }
-  uni.navigateBack({
-    fail: () => {
-      uni.switchTab({ url: '/pages/me/index' })
-    },
-  })
 }
 
 function goBack() {

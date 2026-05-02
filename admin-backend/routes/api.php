@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\MeSponsorController;
 use App\Http\Controllers\Api\MiniappEatMemeController;
 use App\Http\Controllers\Api\MiniappFeatureDataController;
 use App\Http\Controllers\Api\MiniappGenerativeAiController;
+use App\Http\Controllers\Api\MiniappHelpChooseController;
 use App\Http\Controllers\Api\MiniappPublicController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\PaymentOrderController;
@@ -81,6 +82,7 @@ Route::middleware([AuthenticateLaravelAccessToken::class])->group(function (): v
     Route::post('/me/sauce-recommend', [MiniappGenerativeAiController::class, 'sauceRecommend']);
     Route::post('/me/sauce-recipe', [MiniappGenerativeAiController::class, 'sauceRecipe']);
     Route::post('/me/table-menu', [MiniappGenerativeAiController::class, 'tableMenu']);
+    Route::post('/me/help-choose', [MiniappHelpChooseController::class, 'store']);
     Route::post('/me/table-dish-recipe', [MiniappGenerativeAiController::class, 'tableDishRecipe']);
     Route::post('/me/recipe-image', [MiniappGenerativeAiController::class, 'recipeImage']);
     Route::post('/me/ingredients-recognize', [MiniappGenerativeAiController::class, 'ingredientsRecognize']);

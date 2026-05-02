@@ -103,6 +103,7 @@ import {
   type ResultSourceType,
 } from '@/lib/resultDetail'
 import type { HistorySourceTypeApi } from '@/api/histories'
+import { goLoginGate } from '@/lib/loginNav'
 import { formatListTime } from '@/utils/dateFormat'
 import type { HistoryRow } from '@/types/dto'
 import { API_BASE_URL } from '@/constants'
@@ -223,8 +224,7 @@ function goLogin() {
   if (filterSourceType.value) {
     path += `?source_type=${encodeURIComponent(filterSourceType.value)}`
   }
-  const redirect = encodeURIComponent(path)
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate(path)
 }
 
 function goEmptyCta() {

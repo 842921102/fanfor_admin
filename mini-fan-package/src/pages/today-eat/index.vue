@@ -18,8 +18,8 @@
           <text v-if="bannerTemperatureText" class="te__banner-meteo-w">{{ bannerTemperatureText }}</text>
         </view>
         <view class="te__banner-hero" :style="bannerHeroLayoutStyle">
-          <text class="te__banner-brand">饭否 · 今日灵感</text>
-          <text class="te__banner-title">今日吃什么？</text>
+          <text class="te__banner-brand">饭否 · 此刻灵感</text>
+          <text class="te__banner-title">此刻想吃什么？</text>
           <text class="te__banner-sub">不用纠结，给你一个刚刚好的答案</text>
         </view>
       </view>
@@ -87,7 +87,12 @@
           <view class="te__short-grid">
             <view v-for="s in HOME_SHORTCUTS" :key="s.id" class="te__short-item" @click="onShortcut(s)">
               <view class="te__short-ico-wrap">
-                <view v-if="s.id === 'custom'" class="te__glyph te__glyph--custom">
+                <view v-if="s.id === 'table'" class="te__glyph te__glyph--table">
+                  <view class="te__glyph-table-tray" />
+                  <view class="te__glyph-table-bowl te__glyph-table-bowl--l" />
+                  <view class="te__glyph-table-bowl te__glyph-table-bowl--r" />
+                </view>
+                <view v-else-if="s.id === 'custom'" class="te__glyph te__glyph--custom">
                   <view class="te__glyph-bar" />
                   <view class="te__glyph-bar te__glyph-bar--mid" />
                   <view class="te__glyph-bar te__glyph-bar--short" />
@@ -100,11 +105,6 @@
                   <view class="te__glyph-frame" />
                   <view class="te__glyph-sun" />
                   <view class="te__glyph-hill" />
-                </view>
-                <view v-else class="te__glyph te__glyph--fav">
-                  <view class="te__fav-circ te__fav-circ--l" />
-                  <view class="te__fav-circ te__fav-circ--r" />
-                  <view class="te__fav-v" />
                 </view>
               </view>
               <text class="te__short-label">{{ s.label }}</text>
@@ -134,122 +134,88 @@
       </view>
     </view>
 
-    <!-- loading -->
-    <view v-else-if="phase === 'loading'" class="te__phase-wrap te__phase-wrap--loading">
-      <view class="te__ai-loading" :class="{ 'te__ai-loading--active': phase === 'loading' }">
-        <view class="te__ai-core">
-          <view class="te__ai-orbit te__ai-orbit--a" />
-          <view class="te__ai-orbit te__ai-orbit--b" />
-          <view class="te__ai-glow te__ai-glow--inner" />
-          <view class="te__ai-glow te__ai-glow--outer" />
-          <view class="te__ai-dot te__ai-dot--1" />
-          <view class="te__ai-dot te__ai-dot--2" />
-          <view class="te__ai-dot te__ai-dot--3" />
-          <view class="te__ai-dot te__ai-dot--4" />
-        </view>
-        <view class="te__ai-copy">
-          <text class="te__ai-title">天时食运推衍中...</text>
-          <text class="te__ai-sub">以今日气运与口味为引，正为你卜得当下那一味</text>
-        </view>
-        <view class="te__ai-skeleton-wrap">
-          <view class="te__ai-skeleton-card">
-            <view class="te__ai-skeleton-line te__ai-skeleton-line--w70" />
-            <view class="te__ai-skeleton-line te__ai-skeleton-line--w92" />
-            <view class="te__ai-skeleton-line te__ai-skeleton-line--w82" />
-            <view class="te__ai-skeleton-line te__ai-skeleton-line--w56" />
+    <block v-else>
+      <!-- 非首页态：仿原生顶栏（左返回 + 中标题「此刻推荐」），与微信胶囊对齐 -->
+      <view class="te__nav-cap" :style="navCapFixedStyle">
+        <view class="te__nav-cap__row" :style="navCapRowStyle">
+          <view
+            class="te__nav-cap__back"
+            hover-class="te__nav-cap__back--hover"
+            :hover-stay-time="80"
+            @click="onNonIdleNavBack"
+          >
+            <text class="te__nav-cap__back-ico" aria-hidden="true">‹</text>
           </view>
-          <view class="te__ai-skeleton-card te__ai-skeleton-card--sub">
-            <view class="te__ai-skeleton-line te__ai-skeleton-line--w48" />
-            <view class="te__ai-skeleton-line te__ai-skeleton-line--w88" />
+          <view class="te__nav-cap__title-wrap" :style="navCapTitleWrapStyle">
+            <text class="te__nav-cap__title">此刻推荐</text>
           </view>
         </view>
       </view>
-    </view>
 
-    <!-- 错误 -->
-    <view v-else-if="phase === 'error'" class="te__phase-wrap">
-      <view class="mp-card te__panel te__panel--state te__panel--state-error">
-        <view class="te__state-head">
-          <text class="te__state-kicker te__state-kicker--danger">未成功</text>
-          <text class="te__state-title">本次生成失败</text>
-        </view>
-        <view class="mp-state-icon mp-state-icon--danger te__err-icon">!</view>
-        <view class="te__err-box">
-          <text class="te__err-box-label">原因说明</text>
-          <text class="te__err-msg">{{ errorMessage }}</text>
-        </view>
-        <view class="te__err-actions">
-          <button v-if="needLogin" class="mp-btn-primary te__stack-btn" @click="goLogin">
-            {{ config.common_empty_button_text }}
-          </button>
-          <button class="mp-btn-ghost te__stack-btn" @click="resetIdle">返回修改偏好</button>
-        </view>
-      </view>
-    </view>
-
-    <!-- 成功 -->
-    <scroll-view
-      v-else-if="phase === 'success' && result"
-      class="te__scroll te__scroll--padded"
-      scroll-y
-    >
-      <view class="mp-card te__result">
-        <view class="te__result-hero">
-          <text class="te__result-hero-k">推荐完成</text>
-          <text class="te__result-hero-title">你的今日灵感已就绪</text>
-          <text class="te__result-hero-sub">以下是依据你本次偏好生成的方案，可作为晚餐参考</text>
-        </view>
-
-        <TodayEatResultBody
-          class="te__result-body"
-          :cover-image="result.cover_image ?? null"
-          :recommended-dish="recommendedDishDisplay"
-          :main-tagline="mainTaglineDisplay"
-          :tags="displayTags"
-          :reason-text="reasonTextDisplay"
-          :destiny-text="destinyTextDisplay"
-          :alternatives="displayAlternatives"
-          :alternatives-interactive="false"
-          :cuisine="result.cuisine ?? null"
-          :ingredients-text="ingredientsText"
-          :recipe-content="result.content"
-        />
-
-        <view v-if="historyNote" class="te__history-banner">
-          <text class="te__history-note">{{ historyNote }}</text>
-        </view>
-
-        <view class="te__fav-row">
-          <button class="mp-btn-ghost te__fav-btn" :disabled="favoriteLoading" @click="onToggleFavorite">
-            <text>{{ isFavorited ? '取消收藏' : '加入收藏' }}</text>
-          </button>
-        </view>
-
-        <view class="te__recent">
-          <text class="te__recent-title">最近吃么么记录</text>
-          <view v-if="recentLoading" class="te__recent-empty">加载中…</view>
-          <view v-else-if="recentRecords.length === 0" class="te__recent-empty">暂无记录</view>
-          <view v-else class="te__recent-list">
-            <view v-for="row in recentRecords" :key="row.id" class="te__recent-item">
-              <view class="te__recent-main" @click="onReplayRecord(row.id)">
-                <text class="te__recent-name">{{ row.result_title || '未命名结果' }}</text>
-                <text class="te__recent-meta">{{ row.result_cuisine || '—' }} · {{ row.created_at || '' }}</text>
-              </view>
+      <!-- loading -->
+      <view
+        v-if="phase === 'loading'"
+        class="te__phase-wrap te__phase-wrap--loading"
+        :style="capsuleContentTopStyle"
+      >
+        <view class="te__ai-loading" :class="{ 'te__ai-loading--active': phase === 'loading' }">
+          <view class="te__ai-core">
+            <view class="te__ai-orbit te__ai-orbit--a" />
+            <view class="te__ai-orbit te__ai-orbit--b" />
+            <view class="te__ai-glow te__ai-glow--inner" />
+            <view class="te__ai-glow te__ai-glow--outer" />
+            <view class="te__ai-dot te__ai-dot--1" />
+            <view class="te__ai-dot te__ai-dot--2" />
+            <view class="te__ai-dot te__ai-dot--3" />
+            <view class="te__ai-dot te__ai-dot--4" />
+          </view>
+          <view class="te__ai-copy">
+            <text class="te__ai-title">天时食运推衍中...</text>
+            <text class="te__ai-sub">以当下气运与口味为引，正为你卜得这一味</text>
+          </view>
+          <view class="te__ai-skeleton-wrap">
+            <view class="te__ai-skeleton-card">
+              <view class="te__ai-skeleton-line te__ai-skeleton-line--w70" />
+              <view class="te__ai-skeleton-line te__ai-skeleton-line--w92" />
+              <view class="te__ai-skeleton-line te__ai-skeleton-line--w82" />
+              <view class="te__ai-skeleton-line te__ai-skeleton-line--w56" />
+            </view>
+            <view class="te__ai-skeleton-card te__ai-skeleton-card--sub">
+              <view class="te__ai-skeleton-line te__ai-skeleton-line--w48" />
+              <view class="te__ai-skeleton-line te__ai-skeleton-line--w88" />
             </view>
           </view>
         </view>
       </view>
-      <button class="mp-btn-primary te__again te__again--hero" @click="resetIdle">
-        <text class="te__again-txt">再生成一次</text>
-        <text class="te__again-go">→</text>
-      </button>
-    </scroll-view>
+
+      <!-- 错误 -->
+      <view v-else-if="phase === 'error'" class="te__phase-wrap" :style="capsuleContentTopStyle">
+        <view class="mp-card te__panel te__panel--state te__panel--state-error">
+          <view class="te__state-head">
+            <text class="te__state-kicker te__state-kicker--danger">未成功</text>
+            <text class="te__state-title">本次生成失败</text>
+          </view>
+          <view class="mp-state-icon mp-state-icon--danger te__err-icon">!</view>
+          <view class="te__err-box">
+            <text class="te__err-box-label">原因说明</text>
+            <text class="te__err-msg">{{ errorMessage }}</text>
+          </view>
+          <view class="te__err-actions">
+            <button v-if="needLogin" class="mp-btn-primary te__stack-btn" @click="goLogin">
+              {{ config.common_empty_button_text }}
+            </button>
+            <button class="mp-btn-ghost te__stack-btn" @click="resetIdle">返回修改偏好</button>
+          </view>
+        </view>
+      </view>
+
+    </block>
 
     <view v-if="statusSheetOpen" class="te__sheet-mask" @click="onStatusMaskTap">
       <view class="te__sheet" @click.stop>
         <view class="te__sheet-head">
-          <text class="te__sheet-title">今日状态</text>
-          <text class="te__sheet-sub">标签描述今天的你；口味与忌口点选即可（多选）。</text>
+          <text class="te__sheet-title">此刻状态</text>
+          <text class="te__sheet-sub">标签描述此刻的你；口味与忌口点选即可（多选）。</text>
         </view>
 
         <scroll-view scroll-y class="te__sheet-scroll" :show-scrollbar="false">
@@ -365,14 +331,16 @@ import { useAppMessages } from '@/composables/useAppMessages'
 import {
   insertRecipeHistoryFromTodayEat,
   isFavoriteRecipe,
-  toggleFavoriteRecipe,
   BIZ_UNAUTHORIZED,
   BIZ_NEED_LARAVEL_AUTH,
   BIZ_NOT_CONFIGURED,
 } from '@/api/biz'
-import { fetchEatMemeRecords, type EatMemeRecordItem } from '@/api/eatMeme'
-import TodayEatResultBody from '@/components/TodayEatResultBody.vue'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
+import {
+  TODAY_EAT_RESULT_STORAGE_KEY,
+  type TodayEatResultNavPayload,
+} from '@/lib/todayEatResultNav'
+import { goLoginGate } from '@/lib/loginNav'
 import type { TodayEatResult } from '@/types/ai'
 import { fetchMeProfile, fetchMeDailyToday, putMeDailyToday } from '@/api/me'
 import {
@@ -392,12 +360,12 @@ import {
   normalizeTabooTagsFromApi,
 } from '@/constants/mealPreferenceTags'
 
-type Phase = 'idle' | 'loading' | 'success' | 'error'
+type Phase = 'idle' | 'loading' | 'error'
 
-type HomeTabId = 'eat' | 'fortune' | 'table'
+type HomeTabId = 'eat' | 'fortune' | 'help'
 
 /**
- * 三个 Tab：插画区 + 单行说明 + 主按钮；「今日菜单」另有跳过链。
+ * 三个 Tab：插画区 + 单行说明 + 主按钮；「此刻想吃」另有跳过链。
  */
 type HomeTabPanel = {
   id: HomeTabId
@@ -415,17 +383,19 @@ type HomeTabPanel = {
 const HOME_TAB_HERO_SRC: Record<HomeTabId, string> = {
   eat: '/static/home/today-menu-panel.svg',
   fortune: '/static/home/fortune-kitchen-panel.svg',
-  table: '/static/home/table-menu-panel.svg',
+  help: '/static/home/table-menu-panel.svg',
 }
 
-const HOME_TAB_PANELS: HomeTabPanel[] = [
+const { config } = useAppConfig()
+
+const HOME_TAB_PANELS_BASE: HomeTabPanel[] = [
   {
     id: 'eat',
-    title: '今日菜单',
+    title: '此刻想吃',
     desc: '刚好的你往往不期而遇',
-    primaryLabel: '给我一个今天的答案',
+    primaryLabel: '给我一个此刻的答案',
     primaryLabelLoading: '准备中…',
-    linkLabel: '跳过写入今日状态，直接生成',
+    linkLabel: '跳过填写此刻状态，直接生成',
   },
   {
     id: 'fortune',
@@ -433,13 +403,18 @@ const HOME_TAB_PANELS: HomeTabPanel[] = [
     desc: '随机里藏着今日的小惊喜',
     primaryLabel: '进去逛逛',
   },
-  {
-    id: 'table',
-    title: '家常好菜',
-    desc: '一桌搭配，家宴聚餐都合适',
-    primaryLabel: '去搭配一桌',
-  },
 ]
+
+const HOME_TAB_PANELS = computed<HomeTabPanel[]>(() => [
+  HOME_TAB_PANELS_BASE[0]!,
+  HOME_TAB_PANELS_BASE[1]!,
+  {
+    id: 'help',
+    title: config.value.help_choose_landing_title,
+    desc: config.value.help_choose_landing_subtitle,
+    primaryLabel: config.value.help_choose_landing_cta,
+  },
+])
 
 function homeTabPrimaryLabel(panel: HomeTabPanel): string {
   if (panel.id === 'eat' && generateInFlight.value) {
@@ -457,7 +432,7 @@ function onHomeTabPrimary(id: HomeTabId) {
     goFortuneCooking()
     return
   }
-  goTableMenu()
+  goHelpChoose()
 }
 
 function onHomeTabLink(id: HomeTabId) {
@@ -466,26 +441,24 @@ function onHomeTabLink(id: HomeTabId) {
 }
 
 type HomeShortcut = {
-  id: 'custom' | 'sauce' | 'gallery' | 'fav'
+  id: 'table' | 'custom' | 'sauce' | 'gallery'
   label: string
   go: () => void
 }
 
-const { config } = useAppConfig()
 const msg = useAppMessages()
 const { syncAuthFromSupabase, isLoggedIn } = useAuth()
 
 const phase = ref<Phase>('idle')
+/** 生成会话：返回/重置后递增，丢弃仍在路上的接口结果 */
+const generateSessionId = ref(0)
 /** 防止连点重复请求 */
 const generateInFlight = ref(false)
 const result = ref<TodayEatResult | null>(null)
 const errorMessage = ref('')
 const needLogin = ref(false)
 const historyNote = ref('')
-const favoriteLoading = ref(false)
 const isFavorited = ref(false)
-const recentRecords = ref<EatMemeRecordItem[]>([])
-const recentLoading = ref(false)
 
 const periodFeatureEnabled = ref(false)
 const dailyMood = ref('')
@@ -501,7 +474,7 @@ const profileDietPreferences = ref<string[]>([])
 
 const homeTabIndex = ref(0)
 /** 当前首页 Tab 面板（仅用于模板展示与 :key 切换动效，业务仍以 homeTabIndex + HOME_TAB_PANELS 为准） */
-const activeHomePanel = computed(() => HOME_TAB_PANELS[homeTabIndex.value])
+const activeHomePanel = computed(() => HOME_TAB_PANELS.value[homeTabIndex.value])
 
 const STORAGE_HOME_BANNER_CITY = 'home_banner_city'
 const STORAGE_HOME_LOCATION_PROMPTED = 'home_location_prompted_v1'
@@ -515,14 +488,27 @@ const bannerTemperatureText = ref('')
 const bannerMeteoTopPx = ref(48)
 const bannerMeteoHeightPx = ref(32)
 const bannerHeroTopPx = ref(96)
+/** 固定顶栏高度（到胶囊行底），与内容区顶部留白联动 */
+const navBlockBottomPx = ref(88)
+const navMenuTopPx = ref(48)
+const navMenuHeightPx = ref(32)
+const navMenuLeftPx = ref(280)
+const navWindowWidthPx = ref(375)
+/** 内容区：顶栏占位 + 与正文的小间距（px） */
+const phaseSafeTopPx = ref(100)
 
 function syncBannerCapsuleAlign() {
   try {
     const sys = uni.getSystemInfoSync()
     const sb = Number(sys.statusBarHeight) || 20
+    const ww = Math.round(Number(sys.windowWidth) || 375)
     let meteoTop = sb + 6
     let meteoH = 32
     let heroTop = sb + 44 + 38
+    let navBottom = Math.round(sb + 44)
+    let menuTop = sb + 6
+    let menuH = 32
+    let menuLeft = Math.max(0, ww - 88)
 
     try {
       const mb = uni.getMenuButtonBoundingClientRect()
@@ -530,6 +516,12 @@ function syncBannerCapsuleAlign() {
         meteoTop = mb.top
         meteoH = mb.height
         heroTop = Math.round(mb.bottom + 38)
+        navBottom = Math.round(mb.bottom)
+        menuTop = mb.top
+        menuH = mb.height
+        if (typeof mb.left === 'number' && mb.left > 0) {
+          menuLeft = Math.round(mb.left)
+        }
       }
     } catch {
       /* 非微信端 */
@@ -538,10 +530,55 @@ function syncBannerCapsuleAlign() {
     bannerMeteoTopPx.value = meteoTop
     bannerMeteoHeightPx.value = meteoH
     bannerHeroTopPx.value = heroTop
+    navWindowWidthPx.value = ww
+    navBlockBottomPx.value = navBottom
+    navMenuTopPx.value = menuTop
+    navMenuHeightPx.value = menuH
+    navMenuLeftPx.value = menuLeft
+    phaseSafeTopPx.value = navBottom + 12
   } catch {
     /* 保持当前值 */
   }
 }
+
+const navCapFixedStyle = computed(() => ({
+  position: 'fixed' as const,
+  top: '0',
+  left: '0',
+  right: '0',
+  zIndex: 500,
+  height: `${navBlockBottomPx.value}px`,
+  backgroundColor: '#f5f6fa',
+  boxSizing: 'border-box' as const,
+  borderBottom: '1px solid rgba(0, 0, 0, 0.06)',
+}))
+
+const navCapRowStyle = computed(() => ({
+  position: 'absolute' as const,
+  left: '0',
+  top: `${navMenuTopPx.value}px`,
+  right: '0',
+  height: `${navMenuHeightPx.value}px`,
+  display: 'flex',
+  flexDirection: 'row' as const,
+  alignItems: 'center',
+}))
+
+const navCapTitleWrapStyle = computed(() => {
+  const reserve = Math.max(8, navWindowWidthPx.value - navMenuLeftPx.value + 8)
+  return {
+    flex: 1,
+    minWidth: 0,
+    paddingRight: `${reserve}px`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+})
+
+const capsuleContentTopStyle = computed(() => ({
+  paddingTop: `${phaseSafeTopPx.value}px`,
+}))
 
 const bannerMeteoLayoutStyle = computed(() => ({
   top: `${bannerMeteoTopPx.value}px`,
@@ -814,6 +851,13 @@ function onSkipWriteGenerate() {
 
 const HOME_SHORTCUTS: HomeShortcut[] = [
   {
+    id: 'table',
+    label: '家常好菜',
+    go: () => {
+      goTableMenu()
+    },
+  },
+  {
     id: 'custom',
     label: '自由搭配',
     go: () => {
@@ -834,13 +878,6 @@ const HOME_SHORTCUTS: HomeShortcut[] = [
       uni.navigateTo({ url: '/pages/gallery/index' })
     },
   },
-  {
-    id: 'fav',
-    label: '收藏',
-    go: () => {
-      uni.navigateTo({ url: '/pages/recipe-favorites/index' })
-    },
-  },
 ]
 
 function onShortcut(s: HomeShortcut) {
@@ -855,6 +892,10 @@ function goTableMenu() {
   uni.navigateTo({ url: '/pages/table-menu/index' })
 }
 
+function goHelpChoose() {
+  uni.navigateTo({ url: '/pages/help-choose/pick' })
+}
+
 function goRecommendationHistory() {
   uni.navigateTo({ url: '/pages/recommendation-history/index' })
 }
@@ -862,48 +903,6 @@ function goRecommendationHistory() {
 function goTasteProfile() {
   uni.navigateTo({ url: '/pages/me/recommendation-preferences' })
 }
-
-const ingredientsText = computed(() => {
-  const ing = result.value?.ingredients
-  if (!ing?.length) return '—'
-  return ing.join('、')
-})
-
-const displayTags = computed(() => {
-  const t = result.value?.tags
-  if (!Array.isArray(t)) return []
-  return t.filter((x) => typeof x === 'string' && x.trim()).slice(0, 4)
-})
-
-const displayAlternatives = computed(() => {
-  const a = result.value?.alternatives
-  if (!Array.isArray(a)) return []
-  return a.filter((x) => typeof x === 'string' && x.trim())
-})
-
-const recommendedDishDisplay = computed(() => {
-  const r = result.value?.recommended_dish
-  if (typeof r === 'string' && r.trim()) return r.trim()
-  return (result.value?.title || '').trim()
-})
-
-const mainTaglineDisplay = computed(() => {
-  const tag = displayTags.value[0]
-  if (tag) return `${tag}——今晚的主角就是它。`
-  return '和你今天选的口味与状态相称，下面是可以直接照做的参考。'
-})
-
-const reasonTextDisplay = computed(() => {
-  const s = result.value?.reason_text
-  const t = typeof s === 'string' ? s.trim() : ''
-  if (t) return t
-  return '本次结合你的偏好生成；具体步骤与用料见下方「制作参考」。'
-})
-
-const destinyTextDisplay = computed(() => {
-  const s = result.value?.destiny_text
-  return typeof s === 'string' ? s.trim() : ''
-})
 
 const realtimeContextForRecommend = computed(() => {
   const city = (bannerCityName.value || '').trim()
@@ -980,7 +979,12 @@ onShow(() => {
   syncBannerCapsuleAlign()
   void ensureLocationPromptAndFetchAmbient()
   void hydrateMeContext()
-  void loadRecentRecords()
+})
+
+watch(phase, () => {
+  nextTick(() => {
+    syncBannerCapsuleAlign()
+  })
 })
 
 function buildPreferences() {
@@ -1045,10 +1049,10 @@ async function runGenerate(saveDaily: boolean) {
   if (generateInFlight.value || phase.value === 'loading') {
     return
   }
+  const session = ++generateSessionId.value
   generateInFlight.value = true
   needLogin.value = false
   historyNote.value = ''
-  favoriteLoading.value = false
   isFavorited.value = false
   phase.value = 'loading'
   errorMessage.value = ''
@@ -1066,6 +1070,10 @@ async function runGenerate(saveDaily: boolean) {
       realtime_context: realtimeContextForRecommend.value,
     })
 
+    if (session !== generateSessionId.value) {
+      return
+    }
+
     if (!data || typeof data.content !== 'string' || !data.title) {
       throw new Error('接口返回格式异常')
     }
@@ -1079,10 +1087,16 @@ async function runGenerate(saveDaily: boolean) {
 
     await maybeSaveHistoryLocally(data, preferences)
     await syncFavoriteState()
-    await loadRecentRecords()
 
-    phase.value = 'success'
+    if (session !== generateSessionId.value) {
+      return
+    }
+
+    openTodayEatResultNavFromIndex()
   } catch (e: unknown) {
+    if (session !== generateSessionId.value) {
+      return
+    }
     if (e instanceof HttpError && e.statusCode === 401) {
       needLogin.value = true
       errorMessage.value = '需要登录后才能生成，或登录已过期'
@@ -1149,50 +1163,64 @@ async function syncFavoriteState() {
   }
 }
 
-async function onToggleFavorite() {
-  if (!result.value?.title || !result.value?.content) return
-  if (!isLoggedIn.value) {
-    goLogin()
+/** 默认导航结果页：原生返回；数据经本地缓存一次传入 */
+function openTodayEatResultNavFromIndex() {
+  if (!result.value?.title || !result.value?.content) {
+    errorMessage.value = '推荐数据异常'
+    phase.value = 'error'
+    result.value = null
     return
   }
-  if (favoriteLoading.value) return
-
-  favoriteLoading.value = true
+  let snapshot: TodayEatResult
   try {
-    const sid = favoriteContentDigest(result.value.title, result.value.content)
-    const { favorited } = await toggleFavoriteRecipe({
-      source_type: 'today_eat',
-      source_id: sid,
-      title: result.value.title,
-      cuisine: result.value.cuisine ?? null,
-      ingredients: result.value.ingredients ?? [],
-      recipe_content: result.value.content,
-      image_url: null,
-    })
-    isFavorited.value = favorited
-    if (favorited) msg.toastFavoriteSuccess()
-    else msg.toastFavoriteCancel()
-  } catch (e: unknown) {
-    const err = e as Error & { code?: string }
-    if (err.code === BIZ_NEED_LARAVEL_AUTH || err.message === BIZ_NEED_LARAVEL_AUTH) {
-      msg.toastSaveFailed('请先微信一键登录')
-    } else if (err.code === BIZ_NOT_CONFIGURED || err.message === BIZ_NOT_CONFIGURED) {
-      msg.toastSaveFailed('收藏功能暂不可用')
-    } else {
-      msg.toastSaveFailed(err.message || '收藏失败')
-    }
-  } finally {
-    favoriteLoading.value = false
+    snapshot = JSON.parse(JSON.stringify(result.value)) as TodayEatResult
+  } catch {
+    msg.toastSaveFailed('无法打开结果页')
+    phase.value = 'error'
+    errorMessage.value = '无法序列化推荐结果'
+    result.value = null
+    return
   }
+  const payload: TodayEatResultNavPayload = {
+    result: snapshot,
+    historyNote: historyNote.value,
+    isFavorited: isFavorited.value,
+  }
+  try {
+    uni.setStorageSync(TODAY_EAT_RESULT_STORAGE_KEY, JSON.stringify(payload))
+  } catch {
+    msg.toastSaveFailed('内容过多，无法打开结果页')
+    phase.value = 'error'
+    errorMessage.value = '无法打开结果页'
+    result.value = null
+    return
+  }
+  uni.navigateTo({
+    url: '/pages/today-eat/result',
+    success: () => {
+      resetIdle()
+    },
+    fail: () => {
+      try {
+        uni.removeStorageSync(TODAY_EAT_RESULT_STORAGE_KEY)
+      } catch {
+        /* ignore */
+      }
+      msg.toastSaveFailed('无法打开结果页')
+      phase.value = 'error'
+      errorMessage.value = '无法打开结果页'
+      result.value = null
+    },
+  })
 }
 
 function resetIdle() {
+  generateSessionId.value += 1
   phase.value = 'idle'
   result.value = null
   errorMessage.value = ''
   needLogin.value = false
   historyNote.value = ''
-  favoriteLoading.value = false
   isFavorited.value = false
   statusSheetOpen.value = false
   nextTick(() => {
@@ -1200,39 +1228,22 @@ function resetIdle() {
   })
 }
 
-function goLogin() {
-  const redirect = encodeURIComponent('/pages/today-eat/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
-}
-
-async function loadRecentRecords() {
-  recentLoading.value = true
+function onNonIdleNavBack() {
   try {
-    recentRecords.value = await fetchEatMemeRecords(1, 3)
+    const pages = getCurrentPages()
+    if (pages.length > 1) {
+      generateSessionId.value += 1
+      uni.navigateBack({ delta: 1 })
+      return
+    }
   } catch {
-    recentRecords.value = []
-  } finally {
-    recentLoading.value = false
+    /* ignore */
   }
+  resetIdle()
 }
 
-function onReplayRecord(id: number) {
-  const row = recentRecords.value.find((x) => x.id === id)
-  if (!row || !row.result_content || !row.result_title) return
-  result.value = {
-    title: row.result_title,
-    cuisine: row.result_cuisine ?? undefined,
-    ingredients: row.result_ingredients ?? [],
-    content: row.result_content,
-    history_saved: false,
-    tags: undefined,
-    reason_text: undefined,
-    destiny_text: undefined,
-    alternatives: undefined,
-    cover_image: undefined,
-    recommended_dish: undefined,
-  }
-  phase.value = 'success'
+function goLogin() {
+  goLoginGate('/pages/today-eat/index')
 }
 
 </script>
@@ -1483,7 +1494,7 @@ $te-primary-soft: #b8a3f0;
   align-items: stretch;
 }
 
-/* 三个 Tab 共用：与「今日菜单」同一套版式 */
+/* 三个 Tab 共用：与「此刻想吃」同一套版式 */
 .te__panel-body--tab {
   align-items: center;
   text-align: center;
@@ -1621,7 +1632,7 @@ $te-primary-soft: #b8a3f0;
   text-decoration: none;
 }
 
-/* 灵感厨房 / 家常好菜：主按钮下轻标签 + 辅助说明（纯展示） */
+/* 灵感厨房 / 帮忙选择：主按钮下轻标签 + 辅助说明（纯展示） */
 .te__home-tab-chips {
   display: flex;
   flex-direction: row;
@@ -1713,6 +1724,41 @@ $te-primary-soft: #b8a3f0;
   flex-shrink: 0;
 }
 
+/* 家常好菜：托盘 + 双碗 */
+.te__glyph--table {
+  width: 42rpx;
+  height: 40rpx;
+}
+
+.te__glyph-table-tray {
+  position: absolute;
+  left: 2rpx;
+  right: 2rpx;
+  bottom: 4rpx;
+  height: 10rpx;
+  border-radius: 5rpx;
+  background: linear-gradient(90deg, #966fec 0%, $te-primary 100%);
+}
+
+.te__glyph-table-bowl {
+  position: absolute;
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  bottom: 14rpx;
+  background: linear-gradient(160deg, #b8a3f0, $te-primary);
+  border: 2rpx solid rgba(255, 255, 255, 0.35);
+  box-sizing: border-box;
+}
+
+.te__glyph-table-bowl--l {
+  left: 4rpx;
+}
+
+.te__glyph-table-bowl--r {
+  right: 4rpx;
+}
+
 /* 自由搭配：三横滑条 */
 .te__glyph--custom {
   display: flex;
@@ -1801,40 +1847,6 @@ $te-primary-soft: #b8a3f0;
   border-left: 12rpx solid transparent;
   border-right: 12rpx solid transparent;
   border-bottom: 14rpx solid rgba(123, 87, 228, 0.55);
-}
-
-/* 收藏：心形 */
-.te__glyph--fav {
-  width: 42rpx;
-  height: 38rpx;
-}
-
-.te__fav-circ {
-  position: absolute;
-  width: 20rpx;
-  height: 20rpx;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #966fec, $te-primary);
-  top: 6rpx;
-}
-
-.te__fav-circ--l {
-  left: 4rpx;
-}
-
-.te__fav-circ--r {
-  right: 4rpx;
-}
-
-.te__fav-v {
-  position: absolute;
-  width: 20rpx;
-  height: 20rpx;
-  left: 11rpx;
-  top: 14rpx;
-  background: linear-gradient(145deg, #966fec, #6842cf);
-  transform: rotate(45deg);
-  border-radius: 4rpx;
 }
 
 .te__short-label {
@@ -1939,9 +1951,43 @@ $te-primary-soft: #b8a3f0;
   padding-left: 8rpx;
 }
 
+/* 非 idle：仿原生导航（返回 + 标题），与微信胶囊同排 */
+.te__nav-cap__back {
+  width: 72rpx;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4rpx;
+  flex-shrink: 0;
+}
+
+.te__nav-cap__back--hover {
+  opacity: 0.55;
+}
+
+.te__nav-cap__back-ico {
+  font-size: 44rpx;
+  line-height: 1;
+  font-weight: 600;
+  color: $te-title;
+}
+
+.te__nav-cap__title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: $te-title;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .te__phase-wrap {
-  /* 自定义导航：无系统标题栏；生成中/失败态避开状态栏与右侧系统按钮区 */
-  padding: calc(env(safe-area-inset-top) + 12rpx) 24rpx 32rpx;
+  /* 自定义导航：顶部留白由 capsuleContentTopStyle（胶囊 bottom）内联控制 */
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+  padding-bottom: 32rpx;
   box-sizing: border-box;
   min-height: 100vh;
   background: $te-bg;
@@ -2502,7 +2548,6 @@ $te-primary-soft: #b8a3f0;
 .te__scroll--padded {
   max-height: 100vh;
   box-sizing: border-box;
-  padding-top: calc(env(safe-area-inset-top) + 12rpx);
   padding-left: 24rpx;
   padding-right: 24rpx;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));

@@ -111,6 +111,7 @@ import { HttpError } from '@/api/http'
 import type { UserProfileDto } from '@/types/profile'
 import { useAuth } from '@/composables/useAuth'
 import { API_BASE_URL } from '@/constants'
+import { goLoginGate } from '@/lib/loginNav'
 
 const STORAGE_REGION = 'me_personal_region_v1'
 const STORAGE_PHONE = 'me_personal_phone_digits_v1'
@@ -253,7 +254,7 @@ async function loadRemoteProfile() {
 onShow(async () => {
   await syncAuthFromSupabase()
   if (!isLoggedIn.value) {
-    uni.navigateTo({ url: '/pages/login/index?redirect=/pages/me/personal-info' })
+    goLoginGate('/pages/me/personal-info')
     return
   }
   loadLocalExtras()

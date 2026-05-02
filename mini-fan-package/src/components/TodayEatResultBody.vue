@@ -8,7 +8,7 @@
         mode="aspectFill"
       />
       <view class="te-body__main-plate-inner">
-        <text class="te-body__main-kicker">今日专属</text>
+        <text class="te-body__main-kicker">此刻专属</text>
         <text class="te-body__main-dish">{{ recommendedDish }}</text>
         <text class="te-body__main-tagline">{{ mainTagline }}</text>
       </view>
@@ -29,7 +29,7 @@
     </view>
 
     <view v-if="destinyText.trim()" class="te-body__explain-block te-body__explain-block--destiny">
-      <text class="te-body__explain-title te-body__explain-title--destiny">今日食命</text>
+      <text class="te-body__explain-title te-body__explain-title--destiny">此刻食命</text>
       <view class="te-body__destiny-card">
         <text class="te-body__destiny-body">{{ destinyText }}</text>
       </view>

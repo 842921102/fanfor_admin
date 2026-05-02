@@ -67,8 +67,8 @@
         <view class="mp-empty">
           <view class="mp-empty__icon">📂</view>
           <text class="mp-empty__title">该分类暂无收藏</text>
-          <text class="mp-empty__sub">换个分类看看，或去「今日菜单」生成并收藏内容。</text>
-          <button class="mp-btn-primary" @click="goTodayEat">去今日菜单</button>
+          <text class="mp-empty__sub">换个分类看看，或去「此刻想吃」生成并收藏内容。</text>
+          <button class="mp-btn-primary" @click="goTodayEat">去此刻想吃</button>
         </view>
       </view>
 
@@ -133,6 +133,7 @@ import {
   BIZ_UNAUTHORIZED,
   BIZ_NEED_LARAVEL_AUTH,
 } from '@/api/biz'
+import { goLoginGate } from '@/lib/loginNav'
 import { normalizeSourceType, openResultDetail, toDetailPayloadFromFavorite } from '@/lib/resultDetail'
 import { formatListTime } from '@/utils/dateFormat'
 import type { FavoriteRow } from '@/types/dto'
@@ -156,7 +157,7 @@ type FavoriteTabKey =
 const activeTab = ref<FavoriteTabKey>('all')
 const tabs: ReadonlyArray<{ key: FavoriteTabKey; label: string }> = [
   { key: 'all', label: '全部' },
-  { key: 'today_eat', label: '今日菜单' },
+  { key: 'today_eat', label: '此刻想吃' },
   { key: 'custom_wizard', label: '自由搭配' },
   { key: 'fortune_cooking', label: '灵感厨房' },
   { key: 'table_design', label: '家常好菜' },
@@ -241,8 +242,7 @@ onPullDownRefresh(() => {
 })
 
 function goLogin() {
-  const redirect = encodeURIComponent('/pages/favorites/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate('/pages/favorites/index')
 }
 
 function goTodayEat() {

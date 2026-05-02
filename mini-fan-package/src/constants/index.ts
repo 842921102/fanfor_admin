@@ -6,6 +6,9 @@ export const STORAGE_ACCESS_TOKEN = 'wte_mp_access_token'
 /** 当前用户 JSON（AuthCurrentUser） */
 export const STORAGE_CURRENT_USER = 'wte_mp_current_user'
 
+/** 从业务页经「我的」登录后回跳的页面路径（不含域名，与 `navigateTo` url 一致） */
+export const STORAGE_POST_LOGIN_REDIRECT = 'wte_mp_post_login_redirect'
+
 /**
  * Laravel API 根地址（不要末尾 /）
  * 来源：`mini-fan-package/config/env/index.ts` 中的 `ENV_MODE`

@@ -131,6 +131,7 @@ import {
   BIZ_NEED_LARAVEL_AUTH,
   toggleFavoriteRecipe,
 } from '@/api/biz'
+import { goLoginGate } from '@/lib/loginNav'
 import { useAuth } from '@/composables/useAuth'
 import { useAppMessages } from '@/composables/useAppMessages'
 import type { RecommendationRecordDetail, RecipeDetailPayload } from '@/types/recommendationHistory'
@@ -164,7 +165,7 @@ const effectiveDishRecipeId = computed((): number | null => {
   return null
 })
 
-const heroKicker = computed(() => (dishRecipeIdParam.value != null ? '标准菜谱' : '今日推荐菜'))
+const heroKicker = computed(() => (dishRecipeIdParam.value != null ? '标准菜谱' : '此刻推荐菜'))
 
 const heroCover = computed(() => {
   /* 推荐快照暂无统一封面字段，后续可扩展 extra */
@@ -330,8 +331,7 @@ async function onToggleRecipeFavorite() {
   if (!isLoggedIn.value) {
     const q: string[] = [`dishRecipeId=${encodeURIComponent(String(id))}`]
     if (recordId.value != null) q.unshift(`recordId=${encodeURIComponent(String(recordId.value))}`)
-    const redirect = encodeURIComponent(`/pages/recipe/detail?${q.join('&')}`)
-    uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+    goLoginGate(`/pages/recipe/detail?${q.join('&')}`)
     return
   }
   recipeFavoriteLoading.value = true

@@ -47,6 +47,7 @@ import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { fetchMeProfile, putMeProfile } from '@/api/me'
 import { HttpError } from '@/api/http'
+import { goLoginGate } from '@/lib/loginNav'
 import { useAuth } from '@/composables/useAuth'
 
 const { isLoggedIn, syncAuthFromSupabase } = useAuth()
@@ -66,7 +67,7 @@ function splitTags(s: string): string[] {
 
 async function load() {
   if (!isLoggedIn.value) {
-    uni.navigateTo({ url: '/pages/login/index?redirect=/pages/me/diet-preferences' })
+    goLoginGate('/pages/me/diet-preferences')
     return
   }
   await syncAuthFromSupabase()

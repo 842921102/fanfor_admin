@@ -351,6 +351,7 @@ import { shouldAutoOpenOnboardingForCurrentSession } from '@/composables/useOnbo
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { API_BASE_URL } from '@/constants'
 import { requestWeChatLoginCode } from '@/services/auth/wechatLoginSkeleton'
+import { navigateAfterLogin, takePostLoginRedirect } from '@/lib/loginNav'
 import {
   LOGOUT_BUTTON,
   LOGOUT_CONFIRM_TITLE,
@@ -682,12 +683,21 @@ async function onWeChatLoginInline() {
           periodFeatureEnabled: wxUser.period_feature_enabled === true,
         })
       }
+      const postLoginTarget = takePostLoginRedirect()
       await syncAuthFromSupabase()
       await refresh()
       if (shouldAutoOpenOnboardingForCurrentSession()) {
+        const r = postLoginTarget
+          ? encodeURIComponent(postLoginTarget)
+          : encodeURIComponent('/pages/today-eat/index')
         uni.redirectTo({
-          url: `/pages/onboarding/index?redirect=${encodeURIComponent('/pages/me/index')}`,
+          url: `/pages/onboarding/index?redirect=${r}`,
         })
+        return
+      }
+      if (postLoginTarget) {
+        uni.showToast({ title: '登录成功', icon: 'success' })
+        setTimeout(() => navigateAfterLogin(postLoginTarget), 400)
         return
       }
       uni.showToast({ title: '登录成功', icon: 'success' })

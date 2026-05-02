@@ -178,7 +178,17 @@ export async function syncLaravelMeSummaryIfNeeded(): Promise<void> {
 }
 
 export async function logout() {
-  if (isSupabaseConfigured()) {
+  const laravelOnly =
+    accessToken.value?.startsWith(LARAVEL_ACCESS_TOKEN_PREFIX) ||
+    (function () {
+      try {
+        const t = uni.getStorageSync(STORAGE_ACCESS_TOKEN)
+        return typeof t === 'string' && t.startsWith(LARAVEL_ACCESS_TOKEN_PREFIX)
+      } catch {
+        return false
+      }
+    })()
+  if (isSupabaseConfigured() && !laravelOnly) {
     try {
       await supabase.auth.signOut()
     } catch (e) {

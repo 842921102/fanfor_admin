@@ -144,6 +144,7 @@ import OptionChipGroup from '@/components/onboarding/OptionChipGroup.vue'
 import OptionSingleCardGroup from '@/components/onboarding/OptionSingleCardGroup.vue'
 import { fetchMeProfile, putMeProfile } from '@/api/me'
 import { HttpError } from '@/api/http'
+import { goLoginGate } from '@/lib/loginNav'
 import { patchCurrentUser, useAuth } from '@/composables/useAuth'
 import {
   PROFILE_ALLERGY_OPTIONS,
@@ -295,9 +296,7 @@ function onDestinySwitch(e: { detail?: { value?: boolean } }) {
 
 async function load() {
   if (!isLoggedIn.value) {
-    uni.navigateTo({
-      url: '/pages/login/index?redirect=' + encodeURIComponent('/pages/me/recommendation-profile-edit'),
-    })
+    goLoginGate('/pages/me/recommendation-profile-edit')
     return
   }
   await syncAuthFromSupabase()

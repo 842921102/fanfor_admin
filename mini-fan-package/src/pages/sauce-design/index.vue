@@ -277,6 +277,7 @@ import {
   BIZ_NOT_CONFIGURED,
 } from '@/api/biz'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
+import { goLoginGate } from '@/lib/loginNav'
 import type { SaucePreference, SauceRecipe, SauceStep } from '@/types/sauce'
 import {
   SAUCE_USE_CASE_OPTIONS,
@@ -601,8 +602,7 @@ function clearHistory() {
 }
 
 function goLogin() {
-  const redirect = encodeURIComponent('/pages/sauce-design/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate('/pages/sauce-design/index')
 }
 </script>
 

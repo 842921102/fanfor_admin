@@ -33,7 +33,7 @@ npm run dev:mp-weixin
 
 API 根地址在 **`config/env/*.ts`**（见 `README_ENV.md`），与生产域名一并配置到微信 **request 合法域名**。
 
-「今日菜单」调用 **`POST {API_BASE_URL}/api/me/today-eat`**（需微信登录后的 Laravel Bearer token）。其它生成式能力为 `POST /api/me/fortune-cooking`、`/api/me/table-menu` 等，均由 **admin-backend** 模型中心驱动。
+「此刻想吃」调用 **`POST {API_BASE_URL}/api/me/today-eat`**（需微信登录后的 Laravel Bearer token）。其它生成式能力为 `POST /api/me/fortune-cooking`、`/api/me/table-menu` 等，均由 **admin-backend** 模型中心驱动。
 
 - **`history_saved: true`**：表示服务端已写入 `recipe_histories`，小程序不再补写。
 - 若为 **`false` 或省略** 且用户已登录：小程序可能用 Supabase 客户端补写历史（兜底）。

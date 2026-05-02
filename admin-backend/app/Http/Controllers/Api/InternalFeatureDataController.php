@@ -46,7 +46,7 @@ final class InternalFeatureDataController extends Controller
         $this->assertInternalToken($request);
 
         $validated = $request->validate([
-            'feature_type' => ['required', 'string', 'in:table_menu,fortune_cooking,sauce_design,gallery,custom_cuisine'],
+            'feature_type' => ['required', 'string', 'in:table_menu,fortune_cooking,sauce_design,gallery,custom_cuisine,help_choose'],
             'channel' => ['nullable', 'string', 'max:32'],
             'user_id' => ['nullable', 'integer', 'min:1'],
             'status' => ['required', 'string', 'in:success,failed'],

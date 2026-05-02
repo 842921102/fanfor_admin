@@ -34,8 +34,8 @@
       <view class="mp-empty">
         <view class="mp-empty__icon">📖</view>
         <text class="mp-empty__title">暂无菜谱收藏</text>
-        <text class="mp-empty__sub">在「今日菜单」推荐结果或做法详情页可收藏标准菜谱</text>
-        <button class="mp-btn-primary" @click="goTodayEat">去今日菜单</button>
+        <text class="mp-empty__sub">在「此刻想吃」推荐结果或做法详情页可收藏标准菜谱</text>
+        <button class="mp-btn-primary" @click="goTodayEat">去此刻想吃</button>
       </view>
     </view>
 
@@ -81,6 +81,7 @@ import {
   BIZ_UNAUTHORIZED,
   BIZ_NEED_LARAVEL_AUTH,
 } from '@/api/biz'
+import { goLoginGate } from '@/lib/loginNav'
 import { formatListTime } from '@/utils/dateFormat'
 import type { FavoriteRow } from '@/types/dto'
 
@@ -145,8 +146,7 @@ onPullDownRefresh(() => {
 })
 
 function goLogin() {
-  const redirect = encodeURIComponent('/pages/recipe-favorites/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate('/pages/recipe-favorites/index')
 }
 
 function goTodayEat() {

@@ -24,7 +24,7 @@ function normalizePreferences(input: TodayEatRequestBody['preferences']): Record
 }
 
 /**
- * 「今日菜单」：请求 Laravel `POST /api/me/today-eat*`（模型中心 + 推荐管线）。
+ * 「此刻想吃」：请求 Laravel `POST /api/me/today-eat*`（模型中心 + 推荐管线）。
  */
 export async function requestTodayEat(body: TodayEatRequestBody): Promise<TodayEatResult> {
   const payload: Record<string, unknown> = {

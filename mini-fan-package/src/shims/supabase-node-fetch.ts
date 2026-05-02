@@ -49,7 +49,10 @@ function flattenHeaders(h: any): Record<string, string> {
 }
 
 function installWebFetchOn(root: Record<string, any>): void {
-  if (typeof root.fetch === 'function') return
+  const priorFetch =
+    typeof root.fetch === 'function'
+      ? (root.fetch as (...args: any[]) => any).bind(root)
+      : null
 
   function _req(
     url: string,
@@ -105,6 +108,19 @@ function installWebFetchOn(root: Record<string, any>): void {
 
   root.fetch = function (input: any, init?: any) {
     init = init || {}
+    const gt = root as Record<string, any>
+    const uniApi = gt.uni
+    const wxApi = gt.wx
+    const hasMiniRequest =
+      (uniApi && typeof uniApi.request === 'function') ||
+      (wxApi && typeof wxApi.request === 'function')
+    /**
+     * 开发者工具常有 Chromium 自带 `fetch`，但在小程序里常报 `Failed to fetch`；
+     * 只要运行时已有 `uni.request` / `wx.request`，优先走小程序网络栈（与合法域名一致）。
+     */
+    if (!hasMiniRequest && priorFetch) {
+      return priorFetch(input, init)
+    }
     const u =
       typeof input === 'string' ? input : (input && (input as any).url) || ''
     const hdr = flattenHeaders(init.headers)

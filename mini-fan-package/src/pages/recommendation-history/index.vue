@@ -35,9 +35,9 @@
         <view class="mp-empty__icon">🍜</view>
         <text class="mp-empty__title">{{ keyword.trim() ? '暂无匹配记录' : '暂无推荐记录' }}</text>
         <text class="mp-empty__sub">
-          {{ keyword.trim() ? '换个关键词试试（支持菜名与推荐理由关键词）。' : '在「今日菜单」生成成功后，会按次保留最近推荐，便于回看与分析。' }}
+          {{ keyword.trim() ? '换个关键词试试（支持菜名与推荐理由关键词）。' : '在「此刻想吃」生成成功后，会按次保留最近推荐，便于回看与分析。' }}
         </text>
-        <button class="mp-btn-primary" @click="goTodayEat">去今日菜单</button>
+        <button class="mp-btn-primary" @click="goTodayEat">去此刻想吃</button>
       </view>
     </view>
 
@@ -103,6 +103,7 @@ import { useAppMessages } from '@/composables/useAppMessages'
 import { HttpError } from '@/api/http'
 import { apiListRecommendationRecords, apiSetRecommendationRecordFavorite } from '@/api/recommendationRecords'
 import type { RecommendationRecordListItem } from '@/types/recommendationHistory'
+import { goLoginGate } from '@/lib/loginNav'
 import { API_BASE_URL } from '@/constants'
 import { LARAVEL_ACCESS_TOKEN_PREFIX } from '@/composables/useAuth'
 
@@ -218,8 +219,7 @@ function onSearchClear() {
 }
 
 function goLogin() {
-  const redirect = encodeURIComponent('/pages/recommendation-history/index')
-  uni.navigateTo({ url: `/pages/login/index?redirect=${redirect}` })
+  goLoginGate('/pages/recommendation-history/index')
 }
 
 function goTodayEat() {

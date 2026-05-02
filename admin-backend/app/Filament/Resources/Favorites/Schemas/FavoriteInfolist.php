@@ -62,7 +62,7 @@ class FavoriteInfolist
         foreach (FavoriteSourceType::cases() as $case) {
             if ($case->value === $state) {
                 return match ($case) {
-                    FavoriteSourceType::TodayEat => '今日菜单',
+                    FavoriteSourceType::TodayEat => '此刻想吃',
                     FavoriteSourceType::CustomWizard => '自由搭配',
                     FavoriteSourceType::TableDesign => '家常好菜',
                     FavoriteSourceType::FortuneCooking => '灵感厨房',

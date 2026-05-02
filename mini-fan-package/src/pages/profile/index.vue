@@ -57,6 +57,7 @@ import { HttpError } from '@/api/http'
 import { useAuth } from '@/composables/useAuth'
 import { useAppConfig } from '@/composables/useAppConfig'
 import { API_BASE_URL } from '@/constants'
+import { goLoginGate } from '@/lib/loginNav'
 
 const { config } = useAppConfig()
 
@@ -89,7 +90,7 @@ watch(displayPrimary, (v) => {
 }, { immediate: true })
 
 function goLogin() {
-  uni.navigateTo({ url: '/pages/login/index?redirect=/pages/profile/index' })
+  goLoginGate('/pages/profile/index')
 }
 
 function onBack() {

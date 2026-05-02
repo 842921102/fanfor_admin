@@ -23,7 +23,7 @@ final class RecipeHistoriesTable
     public static function configure(Table $table): Table
     {
         $sourceLabels = [
-            FavoriteSourceType::TodayEat->value => '今日菜单',
+            FavoriteSourceType::TodayEat->value => '此刻想吃',
             FavoriteSourceType::CustomWizard->value => '自由搭配',
             FavoriteSourceType::TableDesign->value => '家常好菜',
             FavoriteSourceType::FortuneCooking->value => '灵感厨房',

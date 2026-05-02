@@ -186,6 +186,7 @@ import {
 } from '@/api/biz'
 import { upsertLocalGalleryItem } from '@/api/gallery'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
+import { goLoginGate } from '@/lib/loginNav'
 import type { TodayEatResult } from '@/types/ai'
 
 const msg = useAppMessages()
@@ -435,9 +436,7 @@ async function onToggleFavorite() {
   const r = wizardRecipe.value
   if (!r?.title || !r?.content) return
   if (!isLoggedIn.value) {
-    uni.navigateTo({
-      url: `/pages/login/index?redirect=${encodeURIComponent('/pages/index/index')}`,
-    })
+    goLoginGate('/pages/index/index')
     return
   }
   if (favoriteLoading.value) return

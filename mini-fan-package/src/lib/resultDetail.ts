@@ -128,7 +128,7 @@ export function getResultDetailByKey(key: string): ResultDetailPayload | null {
 export function sourceLabel(sourceType: ResultSourceType): string {
   switch (sourceType) {
     case 'today_eat':
-      return '今日菜单'
+      return '此刻想吃'
     case 'custom_wizard':
       return '自由搭配'
     case 'table_design':
