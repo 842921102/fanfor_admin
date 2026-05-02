@@ -105,12 +105,18 @@ Route::middleware([AuthenticateLaravelAccessToken::class])->group(function (): v
     Route::post('/circle/posts/{post}/comments', [CircleCommentController::class, 'store']);
     Route::get('/circle/me/posts', [CirclePostController::class, 'myPosts']);
     Route::get('/circle/my-posts', [CirclePostController::class, 'myPosts']);
+    Route::get('/circle/me/collected-posts', [CirclePostController::class, 'myCollectedPosts']);
+    Route::get('/circle/me/liked-posts', [CirclePostController::class, 'myLikedPosts']);
+    Route::get('/circle/me/comment-activity', [CirclePostController::class, 'myCommentActivity']);
     Route::post('/inspiration/posts', [CirclePostController::class, 'store']);
     Route::post('/inspiration/posts/{post}/like', [CirclePostController::class, 'toggleLike']);
     Route::post('/inspiration/posts/{post}/collect', [CirclePostController::class, 'toggleCollect']);
     Route::post('/inspiration/posts/{post}/comments', [CircleCommentController::class, 'store']);
     Route::get('/inspiration/me/posts', [CirclePostController::class, 'myPosts']);
     Route::get('/inspiration/my-posts', [CirclePostController::class, 'myPosts']);
+    Route::get('/inspiration/me/collected-posts', [CirclePostController::class, 'myCollectedPosts']);
+    Route::get('/inspiration/me/liked-posts', [CirclePostController::class, 'myLikedPosts']);
+    Route::get('/inspiration/me/comment-activity', [CirclePostController::class, 'myCommentActivity']);
     Route::get('/mall/orders', [OrderController::class, 'index']);
     Route::get('/mall/orders/{order}', [OrderController::class, 'show']);
     Route::post('/mall/orders', [OrderController::class, 'store']);

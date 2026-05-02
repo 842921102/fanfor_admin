@@ -23,6 +23,7 @@ const KNOWN_PAGE_ROUTES = new Set([
   '/pages/inspiration/index',
   '/pages/inspiration/publish',
   '/pages/inspiration/detail',
+  '/pages/inspiration/mine',
   '/pages/circle/index',
   '/pages/circle/publish',
   '/pages/circle/detail',

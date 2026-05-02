@@ -326,6 +326,194 @@ final class CircleService
             ->all();
     }
 
+    /**
+     * 当前用户在灵感流里「收藏」过的帖子（仍可浏览的），按收藏时间倒序。
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function myCollectedPosts(User $user): array
+    {
+        $postIds = CirclePostCollection::query()
+            ->where('user_id', $user->id)
+            ->orderByDesc('id')
+            ->limit(120)
+            ->pluck('post_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        return $this->mapPostsByIdsForViewer($postIds, $user);
+    }
+
+    /**
+     * 当前用户点过赞的灵感帖，按点赞时间倒序。
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function myLikedPosts(User $user): array
+    {
+        $postIds = CirclePostLike::query()
+            ->where('user_id', $user->id)
+            ->orderByDesc('id')
+            ->limit(120)
+            ->pluck('post_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        return $this->mapPostsByIdsForViewer($postIds, $user);
+    }
+
+    /**
+     * 评论动态：我发出的评论 + 他人对我帖子的评论，按时间合并倒序。
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public function myCommentActivity(User $user): array
+    {
+        $uid = (int) $user->id;
+
+        $sent = CircleComment::query()
+            ->where('user_id', $uid)
+            ->where('status', CircleCommentStatus::Normal)
+            ->with(['post.user'])
+            ->orderByDesc('created_at')
+            ->limit(80)
+            ->get();
+
+        $received = CircleComment::query()
+            ->where('user_id', '!=', $uid)
+            ->where('status', CircleCommentStatus::Normal)
+            ->whereHas('post', function (Builder $q) use ($uid): void {
+                $q->where('user_id', $uid)->whereNull('deleted_at');
+            })
+            ->with(['post.user', 'user'])
+            ->orderByDesc('created_at')
+            ->limit(80)
+            ->get();
+
+        $rows = [];
+        foreach ($sent as $c) {
+            $row = $this->commentActivityRowFromSent($c);
+            if ($row !== null) {
+                $rows[] = $row;
+            }
+        }
+        foreach ($received as $c) {
+            $row = $this->commentActivityRowFromReceived($c);
+            if ($row !== null) {
+                $rows[] = $row;
+            }
+        }
+
+        usort($rows, static fn (array $a, array $b): int => strcmp((string) $b['createdAt'], (string) $a['createdAt']));
+
+        return array_slice($rows, 0, 120);
+    }
+
+    /**
+     * @param  array<int, int>  $postIds
+     * @return array<int, array<string, mixed>>
+     */
+    private function mapPostsByIdsForViewer(array $postIds, User $viewer): array
+    {
+        if ($postIds === []) {
+            return [];
+        }
+
+        $uniqueIds = array_values(array_unique(array_filter($postIds, fn ($id) => $id > 0)));
+        if ($uniqueIds === []) {
+            return [];
+        }
+
+        $posts = CirclePost::query()
+            ->whereIn('id', $uniqueIds)
+            ->get()
+            ->keyBy('id');
+
+        $out = [];
+        $seen = [];
+        foreach ($postIds as $pid) {
+            $id = (int) $pid;
+            if ($id <= 0 || isset($seen[$id])) {
+                continue;
+            }
+            $p = $posts->get($id);
+            if (! $p instanceof CirclePost) {
+                continue;
+            }
+            $visible = $this->findVisibleForPublic($id, $viewer);
+            if ($visible === null) {
+                continue;
+            }
+            $seen[$id] = true;
+            $out[] = $this->postToApiArray($visible, (int) $viewer->id);
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function commentActivityRowFromSent(CircleComment $c): ?array
+    {
+        $post = $c->post;
+        if (! $post instanceof CirclePost) {
+            return null;
+        }
+
+        $author = $post->user;
+
+        return [
+            'id' => (string) $c->id,
+            'direction' => 'sent',
+            'postId' => (string) $post->id,
+            'postTitle' => (string) ($post->title ?? ''),
+            'postCoverImage' => (string) ($post->firstImageUrl() ?? ''),
+            'commentExcerpt' => $this->excerptText((string) $c->content, 160),
+            'counterpartNickname' => (string) ($author?->name ?? ''),
+            'createdAt' => $c->created_at->toIso8601String(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function commentActivityRowFromReceived(CircleComment $c): ?array
+    {
+        $post = $c->post;
+        if (! $post instanceof CirclePost) {
+            return null;
+        }
+
+        $commenter = $c->user;
+
+        return [
+            'id' => (string) $c->id,
+            'direction' => 'received',
+            'postId' => (string) $post->id,
+            'postTitle' => (string) ($post->title ?? ''),
+            'postCoverImage' => (string) ($post->firstImageUrl() ?? ''),
+            'commentExcerpt' => $this->excerptText((string) $c->content, 160),
+            'counterpartNickname' => (string) ($commenter?->name ?? ''),
+            'createdAt' => $c->created_at->toIso8601String(),
+        ];
+    }
+
+    private function excerptText(string $text, int $maxChars): string
+    {
+        $t = trim($text);
+        if ($t === '') {
+            return '';
+        }
+        if (function_exists('mb_substr')) {
+            $s = mb_substr($t, 0, $maxChars);
+
+            return mb_strlen($t) > $maxChars ? $s.'…' : $s;
+        }
+
+        return strlen($t) > $maxChars ? substr($t, 0, $maxChars).'…' : $t;
+    }
+
     private function canViewerSeePost(CirclePost $post, ?User $viewer): bool
     {
         if (! $this->hasVisibilityColumn()) {

@@ -125,6 +125,15 @@
       "style": {
         "navigationBarTitleText": "灵感详情"
       }
+    },
+    {
+      "path": "pages/inspiration/mine",
+      "style": {
+        "navigationBarTitleText": "我的灵感",
+        "navigationBarBackgroundColor": "#FDFDFE",
+        "backgroundColor": "#f5f5f6",
+        "enablePullDownRefresh": true
+      }
     }
   ],
   "globalStyle": {

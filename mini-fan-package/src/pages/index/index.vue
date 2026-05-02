@@ -1,5 +1,5 @@
 <template>
-  <view class="mp-page home">
+  <view class="mp-page home home--rail">
     <view v-if="wizardLoading" class="home__gen-overlay">
       <view class="home__phase-wrap home__phase-wrap--loading">
         <view class="home__ai-loading-full" :class="{ 'home__ai-loading-full--active': wizardLoading }">
@@ -594,6 +594,13 @@ async function generateWizardImage() {
 <style lang="scss" scoped>
 @import '@/uni.scss';
 
+/* 与 today-eat 主列、图鉴同宽 */
+.home--rail {
+  padding-left: $mp-inline-gutter !important;
+  padding-right: $mp-inline-gutter !important;
+  padding-top: 24rpx !important;
+}
+
 .home__gen-overlay {
   position: fixed;
   left: 0;
@@ -607,7 +614,7 @@ async function generateWizardImage() {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 24rpx;
+  padding: 24rpx $mp-inline-gutter;
 }
 
 .home__phase-wrap {

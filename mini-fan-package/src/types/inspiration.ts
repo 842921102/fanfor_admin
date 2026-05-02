@@ -41,6 +41,20 @@ export interface InspirationComment {
   createdAt: string
 }
 
+export type InspirationCommentActivityDirection = 'sent' | 'received'
+
+/** 「我的灵感 → 评论」：我发的评论 / 他人评我的帖，合并时间线 */
+export interface InspirationCommentActivity {
+  id: string
+  direction: InspirationCommentActivityDirection
+  postId: string
+  postTitle: string
+  postCoverImage: string
+  commentExcerpt: string
+  counterpartNickname: string
+  createdAt: string
+}
+
 export interface InspirationListParams {
   tab: InspirationFeedTab
   page: number

@@ -1,5 +1,5 @@
 <template>
-  <view class="mp-page tm has-bottom-nav" :class="{ 'tm--loading-phase': phase === 'loading' }">
+  <view class="mp-page tm mp-page--inline-body has-bottom-nav" :class="{ 'tm--loading-phase': phase === 'loading' }">
     <!-- 表单 -->
     <scroll-view v-if="phase === 'idle'" class="tm__scroll-idle" scroll-y>
       <view class="mp-card tm__panel tm__panel--idle">
@@ -688,7 +688,8 @@ function goLogin() {
 
 .tm__scroll-idle {
   max-height: calc(100vh - 120rpx);
-  padding-bottom: 48rpx;
+  padding: 0 $mp-inline-gutter 48rpx;
+  box-sizing: border-box;
 }
 
 .tm__panel--idle {
@@ -1096,6 +1097,8 @@ function goLogin() {
 .tm__panel--state {
   padding: 48rpx 32rpx;
   text-align: center;
+  margin-left: $mp-inline-gutter;
+  margin-right: $mp-inline-gutter;
 }
 
 .tm__ai-loading {

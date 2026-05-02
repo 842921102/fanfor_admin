@@ -135,8 +135,8 @@
     </view>
 
     <block v-else>
-      <!-- 非首页态：仿原生顶栏（左返回 + 中标题「此刻推荐」），与微信胶囊对齐 -->
-      <view class="te__nav-cap" :style="navCapFixedStyle">
+      <!-- 生成中不展示仿原生顶栏（仅留白与浮动返回，避免与微信右上角胶囊叠成「双条」） -->
+      <view v-if="phase !== 'loading'" class="te__nav-cap" :style="navCapFixedStyle">
         <view class="te__nav-cap__row" :style="navCapRowStyle">
           <view
             class="te__nav-cap__back"
@@ -150,6 +150,17 @@
             <text class="te__nav-cap__title">此刻推荐</text>
           </view>
         </view>
+      </view>
+
+      <view
+        v-if="phase === 'loading'"
+        class="te__loading-only-back"
+        hover-class="te__loading-only-back--hover"
+        :hover-stay-time="80"
+        :style="loadingOnlyBackStyle"
+        @click="onNonIdleNavBack"
+      >
+        <text class="te__loading-only-back-ico" aria-hidden="true">‹</text>
       </view>
 
       <!-- loading -->
@@ -578,6 +589,21 @@ const navCapTitleWrapStyle = computed(() => {
 
 const capsuleContentTopStyle = computed(() => ({
   paddingTop: `${phaseSafeTopPx.value}px`,
+}))
+
+/** 生成中无顶栏时：返回与胶囊同排对齐（仅左侧，不占整条仿原生栏） */
+const loadingOnlyBackStyle = computed(() => ({
+  position: 'fixed' as const,
+  top: `${navMenuTopPx.value}px`,
+  left: '0',
+  height: `${navMenuHeightPx.value}px`,
+  minWidth: '48px',
+  paddingLeft: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  zIndex: 600,
+  boxSizing: 'border-box' as const,
 }))
 
 const bannerMeteoLayoutStyle = computed(() => ({
@@ -1981,6 +2007,17 @@ $te-primary-soft: #b8a3f0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.te__loading-only-back--hover {
+  opacity: 0.55;
+}
+
+.te__loading-only-back-ico {
+  font-size: 44rpx;
+  line-height: 1;
+  font-weight: 600;
+  color: $te-title;
 }
 
 .te__phase-wrap {

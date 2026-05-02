@@ -2,6 +2,9 @@
 
 export const GLOBAL_SHARE_TITLE = '饭否 — 此刻想吃'
 
+/** 分享给朋友 / 朋友圈统一封面（小程序内静态资源路径，可替换 `static/share/share-cover.jpg`） */
+export const GLOBAL_SHARE_IMAGE_URL = '/static/share/share-cover.jpg'
+
 const FALLBACK_PATH = '/pages/today-eat/index'
 
 function currentPage(): Record<string, unknown> | undefined {
@@ -51,16 +54,18 @@ export function buildMpShareQuery(): string {
   return parts.join('&')
 }
 
-export function defaultShareAppMessage(): { title: string; path: string } {
+export function defaultShareAppMessage(): { title: string; path: string; imageUrl: string } {
   return {
     title: GLOBAL_SHARE_TITLE,
     path: buildMpSharePath(),
+    imageUrl: GLOBAL_SHARE_IMAGE_URL,
   }
 }
 
-export function defaultShareTimeline(): { title: string; query: string } {
+export function defaultShareTimeline(): { title: string; query: string; imageUrl: string } {
   return {
     title: GLOBAL_SHARE_TITLE,
     query: buildMpShareQuery(),
+    imageUrl: GLOBAL_SHARE_IMAGE_URL,
   }
 }

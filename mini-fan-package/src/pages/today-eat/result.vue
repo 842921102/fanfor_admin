@@ -6,12 +6,6 @@
     </view>
     <scroll-view v-else scroll-y class="te__scroll te__scroll--padded">
       <view class="mp-card te__result">
-        <view class="te__result-hero">
-          <text class="te__result-hero-k">推荐完成</text>
-          <text class="te__result-hero-title">你的此刻灵感已就绪</text>
-          <text class="te__result-hero-sub">以下是依据你本次偏好生成的方案，可作为晚餐参考</text>
-        </view>
-
         <TodayEatResultBody
           class="te__result-body"
           :cover-image="result.cover_image ?? null"
@@ -262,6 +256,7 @@ $te-bg: #f5f6fa;
 .ter {
   min-height: 100vh;
   background: $te-bg;
+  padding: 0;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 }
 
@@ -290,7 +285,7 @@ $te-bg: #f5f6fa;
 .te__scroll--padded {
   max-height: 100vh;
   box-sizing: border-box;
-  padding: 16rpx 24rpx 0;
+  padding: 12rpx 16rpx 0;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 }
 
@@ -299,44 +294,12 @@ $te-bg: #f5f6fa;
   overflow: hidden;
 }
 
-.te__result-hero {
-  padding: 36rpx 28rpx 32rpx;
-  text-align: center;
-  background: linear-gradient(180deg, rgba(243, 236, 255, 0.45) 0%, #fff 100%);
-  border-bottom: 1rpx solid $mp-border;
-}
-
-.te__result-hero-k {
-  font-size: 22rpx;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: $mp-accent;
-}
-
-.te__result-hero-title {
-  display: block;
-  margin-top: 12rpx;
-  font-size: 32rpx;
-  font-weight: 800;
-  color: $mp-text-primary;
-}
-
-.te__result-hero-sub {
-  display: block;
-  margin-top: 12rpx;
-  font-size: 26rpx;
-  line-height: 1.5;
-  color: $mp-text-secondary;
-  padding: 0 16rpx;
-}
-
 .te__result-body {
-  padding: 28rpx 28rpx 32rpx;
+  padding: 24rpx 20rpx 28rpx;
 }
 
 .te__history-banner {
-  padding: 20rpx 28rpx 28rpx;
+  padding: 20rpx 20rpx 28rpx;
   background: #fff;
 }
 
@@ -351,7 +314,7 @@ $te-bg: #f5f6fa;
 }
 
 .te__fav-row {
-  padding: 0 28rpx 24rpx;
+  padding: 0 20rpx 24rpx;
   background: #fff;
 }
 
@@ -360,7 +323,7 @@ $te-bg: #f5f6fa;
 }
 
 .te__recent {
-  margin: 4rpx 28rpx 22rpx;
+  margin: 4rpx 20rpx 22rpx;
   padding-top: 16rpx;
   border-top: 1rpx dashed $mp-border;
 }

@@ -15,3 +15,6 @@ $mp-radius-card: 24rpx;
 $mp-radius-hero: 24rpx;
 $mp-shadow-card: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
 $mp-shadow-soft: 0 4rpx 24rpx rgba(0, 0, 0, 0.04);
+
+/** 主内容区左右留白（与 today-eat .te__home-main、help-choose 一致） */
+$mp-inline-gutter: 16rpx;

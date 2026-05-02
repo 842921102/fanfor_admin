@@ -22,6 +22,16 @@ page {
   background: $mp-bg-page;
 }
 
+/**
+ * 列表/表单页：去掉 mp-page 默认左右 32rpx，避免与 scroll 内边距叠成双栏；
+ * 顶栏下留白与帮忙选择等页一致，左右用各页 scroll 的 $mp-inline-gutter。
+ */
+.mp-page--inline-body {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 24rpx !important;
+}
+
 /* —— 氛围头图（对齐 TodayEat / Plaza / Home Banner）—— */
 .mp-hero {
   position: relative;

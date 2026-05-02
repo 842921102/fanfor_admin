@@ -115,4 +115,28 @@ final class CirclePostController extends Controller
 
         return response()->json(['items' => $items]);
     }
+
+    public function myCollectedPosts(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $items = $this->circle->myCollectedPosts($user);
+
+        return response()->json(['items' => $items]);
+    }
+
+    public function myLikedPosts(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $items = $this->circle->myLikedPosts($user);
+
+        return response()->json(['items' => $items]);
+    }
+
+    public function myCommentActivity(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $items = $this->circle->myCommentActivity($user);
+
+        return response()->json(['items' => $items]);
+    }
 }

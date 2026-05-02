@@ -1,5 +1,5 @@
 <template>
-  <view class="mp-page sc has-bottom-nav">
+  <view class="mp-page sc mp-page--inline-body has-bottom-nav">
     <view v-if="loadingRec || recipeLoading" class="sc__gen-overlay">
       <view class="sc__phase-wrap sc__phase-wrap--loading">
         <view class="sc__ai-loading-full" :class="{ 'sc__ai-loading-full--active': loadingRec || recipeLoading }">
@@ -626,7 +626,7 @@ function goLogin() {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 24rpx;
+  padding: 24rpx $mp-inline-gutter;
 }
 
 .sc__phase-wrap {
@@ -826,7 +826,8 @@ function goLogin() {
 
 .sc__scroll {
   max-height: calc(100vh - 120rpx);
-  padding-bottom: 48rpx;
+  padding: 0 $mp-inline-gutter 48rpx;
+  box-sizing: border-box;
 }
 
 .sc__panel {

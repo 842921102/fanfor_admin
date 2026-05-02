@@ -90,6 +90,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { onShareAppMessage, onShow } from '@dcloudio/uni-app'
+import { GLOBAL_SHARE_IMAGE_URL } from '@/lib/globalShare'
 import { useAppConfig } from '@/composables/useAppConfig'
 import { useAppMessages } from '@/composables/useAppMessages'
 import { goLoginGate } from '@/lib/loginNav'
@@ -228,6 +229,7 @@ onShareAppMessage(() => {
   return {
     title,
     path: '/pages/help-choose/pick',
+    imageUrl: GLOBAL_SHARE_IMAGE_URL,
   }
 })
 </script>
@@ -236,15 +238,18 @@ onShareAppMessage(() => {
 $hc-primary: #7b57e4;
 $hc-soft: #ebe4ff;
 
+/* 与 today-eat 首页一致：去掉 mp-page 默认 32rpx，横向留白同 te__home-main（16rpx） */
 .hc-pick {
   min-height: 100vh;
-  background: #f5f5f7;
+  background: #f5f6fa;
   box-sizing: border-box;
+  padding: 0 !important;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom)) !important;
 }
 
 .hc-pick__scroll {
   height: 100vh;
-  padding: 24rpx 24rpx 0;
+  padding: 24rpx 16rpx 0;
   box-sizing: border-box;
 }
 

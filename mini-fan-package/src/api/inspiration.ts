@@ -2,6 +2,7 @@ import { HttpError, request } from '@/api/http'
 import type {
   CreateInspirationPayload,
   InspirationComment,
+  InspirationCommentActivity,
   InspirationItem,
   InspirationListParams,
 } from '@/types/inspiration'
@@ -427,6 +428,74 @@ export async function getMyInspirations(): Promise<InspirationItem[]> {
     },
   )
   return Array.isArray(raw?.items) ? raw.items : []
+}
+
+/**
+ * 线上若尚未部署对应 Laravel 路由，主路径与 /api/circle 回退会连续 404。
+ * 此时返回空列表，避免「我的灵感」评论/收藏/赞过 Tab 抛错；部署含新接口的后端后即恢复数据。
+ */
+function emptyListIfRouteNotDeployed(e: unknown): boolean {
+  return e instanceof HttpError && e.statusCode === 404
+}
+
+export async function getMyCollectedInspirations(): Promise<InspirationItem[]> {
+  if (INSPIRATION_USE_MOCK) return []
+  try {
+    const raw = await requestWithFallback<{ items?: InspirationItem[] }>(
+      {
+        url: '/api/inspiration/me/collected-posts',
+        method: 'GET',
+      },
+      {
+        url: '/api/circle/me/collected-posts',
+        method: 'GET',
+      },
+    )
+    return Array.isArray(raw?.items) ? raw.items : []
+  } catch (e: unknown) {
+    if (emptyListIfRouteNotDeployed(e)) return []
+    throw e
+  }
+}
+
+export async function getMyLikedInspirations(): Promise<InspirationItem[]> {
+  if (INSPIRATION_USE_MOCK) return []
+  try {
+    const raw = await requestWithFallback<{ items?: InspirationItem[] }>(
+      {
+        url: '/api/inspiration/me/liked-posts',
+        method: 'GET',
+      },
+      {
+        url: '/api/circle/me/liked-posts',
+        method: 'GET',
+      },
+    )
+    return Array.isArray(raw?.items) ? raw.items : []
+  } catch (e: unknown) {
+    if (emptyListIfRouteNotDeployed(e)) return []
+    throw e
+  }
+}
+
+export async function getMyInspirationCommentActivity(): Promise<InspirationCommentActivity[]> {
+  if (INSPIRATION_USE_MOCK) return []
+  try {
+    const raw = await requestWithFallback<{ items?: InspirationCommentActivity[] }>(
+      {
+        url: '/api/inspiration/me/comment-activity',
+        method: 'GET',
+      },
+      {
+        url: '/api/circle/me/comment-activity',
+        method: 'GET',
+      },
+    )
+    return Array.isArray(raw?.items) ? raw.items : []
+  } catch (e: unknown) {
+    if (emptyListIfRouteNotDeployed(e)) return []
+    throw e
+  }
 }
 
 async function requestWithFallback<T>(

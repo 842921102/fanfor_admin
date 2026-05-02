@@ -5,14 +5,21 @@
         <text>⌕</text>
         <input v-model="keyword" placeholder="搜索" confirm-type="search" @confirm="reload" />
       </view>
-      <view class="ins__tabs">
-        <view
-          v-for="t in tabs"
-          :key="t.value"
-          class="ins__tab"
-          :class="{ 'ins__tab--on': tab === t.value }"
-          @click="switchTab(t.value)"
-        >{{ t.label }}</view>
+      <view class="ins__tabs-wrap">
+        <scroll-view class="ins__tabs-scroll" scroll-x :show-scrollbar="false" enable-flex>
+          <view class="ins__tabs-inner">
+            <view
+              v-for="t in tabs"
+              :key="t.value"
+              class="ins__tab"
+              :class="{ 'ins__tab--on': tab === t.value }"
+              @click="switchTab(t.value)"
+            >{{ t.label }}</view>
+          </view>
+        </scroll-view>
+        <view class="ins__tab-mine-wrap">
+          <view class="ins__tab-mine" @click="goMyInspiration">我的灵感</view>
+        </view>
       </view>
     </view>
 
@@ -150,6 +157,10 @@ function goPublish() {
   uni.navigateTo({ url: '/pages/inspiration/publish' })
 }
 
+function goMyInspiration() {
+  uni.navigateTo({ url: '/pages/inspiration/mine' })
+}
+
 onReady(() => {
   nextTick(() => measureInsScrollHeight())
 })
@@ -165,25 +176,112 @@ onPullDownRefresh(() => {
 
 <style lang="scss" scoped>
 @import '@/uni.scss';
-/* 避免 mp-page 默认 padding-bottom 在 scroll-view 下方再留一条空带 */
+/*
+ * 灵感 feed：对齐小红书「发现」双列流 —— 页边与列间距约 4–6px（12rpx @750），浅灰底 + 白卡片。
+ * 避免 mp-page 默认 32rpx 边距 + scroll 内再缩进导致两侧过宽。
+ */
 .ins {
-  padding-bottom: 0;
+  padding: 12rpx 12rpx 0;
+  background: #f5f5f6;
 }
 .ins__head {
-  padding: 20rpx;
+  padding: 12rpx 4rpx 16rpx;
+  margin-bottom: 4rpx;
+  border: none;
+  box-shadow: none;
+  background: transparent;
 }
-.ins__search{padding:12rpx 14rpx;border-radius:14rpx;border:1rpx solid $mp-border;background:#fafbfc;display:flex;gap:10rpx;align-items:center}
-.ins__search input{flex:1;font-size:26rpx}
-.ins__tabs{display:flex;gap:10rpx;flex-wrap:wrap;margin-top:14rpx}
-.ins__tab{padding:10rpx 16rpx;border-radius:999rpx;background:#f5f5f7;color:$mp-text-secondary;font-size:22rpx}
-.ins__tab--on{color:$mp-accent;background:$mp-accent-soft;border:1rpx solid $mp-ring-accent}
+.ins__search {
+  padding: 12rpx 16rpx;
+  border-radius: 999rpx;
+  border: none;
+  background: #fff;
+  display: flex;
+  gap: 10rpx;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+.ins__search input {
+  flex: 1;
+  font-size: 26rpx;
+}
+/* 左侧 Tab 可横向滑动；右侧「我的灵感」固定不占滚动区 */
+.ins__tabs-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-top: 16rpx;
+  gap: 0;
+}
+.ins__tabs-scroll {
+  flex: 1;
+  min-width: 0;
+  height: 72rpx;
+}
+.ins__tabs-inner {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 12rpx;
+  padding: 0 8rpx 10rpx 2rpx;
+  min-height: 56rpx;
+}
+.ins__tab-mine-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  padding-left: 12rpx;
+  margin-left: 4rpx;
+  border-left: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+.ins__tab-mine {
+  padding: 8rpx 4rpx 10rpx 8rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: $mp-accent;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.ins__tab {
+  flex-shrink: 0;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: transparent;
+  color: $mp-text-secondary;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+.ins__tab--on {
+  color: $mp-text-primary;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  position: relative;
+}
+.ins__tab--on::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 28rpx;
+  height: 4rpx;
+  border-radius: 999rpx;
+  background: $mp-accent;
+}
 .ins__scroll {
-  background: $mp-bg-page;
+  background: #f5f5f6;
 }
 .ins__cols {
   display: flex;
-  gap: 14rpx;
-  padding: 0 4rpx 24rpx;
+  gap: 12rpx;
+  padding: 0 0 24rpx;
 }
-.ins__col{flex:1;min-width:0}
+.ins__col {
+  flex: 1;
+  min-width: 0;
+}
 </style>

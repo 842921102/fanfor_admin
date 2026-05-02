@@ -1,5 +1,5 @@
 <template>
-  <view class="mp-page gl has-bottom-nav">
+  <view class="mp-page gl gl--rail has-bottom-nav">
     <view class="mp-card gl__head-card">
       <view class="gl__head-row">
         <view class="gl__head-ico">
@@ -403,6 +403,13 @@ function goHome() {
 
 .has-bottom-nav {
   padding-bottom: calc(120rpx + env(safe-area-inset-bottom));
+}
+
+/* 与 today-eat 主列同宽：去掉 mp-page 默认左右，再统一 16rpx 内边距 */
+.gl--rail {
+  padding-left: $mp-inline-gutter !important;
+  padding-right: $mp-inline-gutter !important;
+  padding-top: 24rpx !important;
 }
 
 .gl__head-card {

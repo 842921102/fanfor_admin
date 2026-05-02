@@ -1,5 +1,5 @@
 <template>
-  <view class="mp-page fc has-bottom-nav" :class="{ 'fc--loading-phase': phase === 'loading' }">
+  <view class="mp-page fc mp-page--inline-body has-bottom-nav" :class="{ 'fc--loading-phase': phase === 'loading' }">
     <scroll-view v-if="phase === 'idle'" class="fc__scroll-idle" scroll-y>
       <view class="mp-card fc__panel fc__panel--idle">
         <view class="fc__panel-badge">
@@ -710,7 +710,7 @@ function goLogin() {
 
 .fc__phase-wrap {
   box-sizing: border-box;
-  padding: 24rpx;
+  padding: 24rpx $mp-inline-gutter;
   flex: 1;
   width: 100%;
 }
@@ -723,7 +723,8 @@ function goLogin() {
 
 .fc__scroll-idle {
   max-height: calc(100vh - 120rpx);
-  padding-bottom: 48rpx;
+  padding: 0 $mp-inline-gutter 48rpx;
+  box-sizing: border-box;
 }
 
 .fc__panel--idle {
@@ -1033,6 +1034,8 @@ function goLogin() {
 .fc__panel--state {
   padding: 48rpx 32rpx;
   text-align: center;
+  margin-left: $mp-inline-gutter;
+  margin-right: $mp-inline-gutter;
 }
 
 .fc__ai-loading {
@@ -1327,7 +1330,8 @@ function goLogin() {
 
 .fc__scroll {
   max-height: calc(100vh - 120rpx);
-  padding-bottom: 48rpx;
+  padding: 0 $mp-inline-gutter 48rpx;
+  box-sizing: border-box;
 }
 
 .fc__result {
