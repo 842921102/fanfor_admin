@@ -1,5 +1,6 @@
 {
   "name": "what-to-eat-workspace",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev:mp-weixin": "npm --prefix mini-fan-package run dev:mp-weixin",

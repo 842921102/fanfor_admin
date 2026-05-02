@@ -2,6 +2,15 @@
 
 中文: [README.md](./README.md)
 
+## Versioning
+
+- **Current version**: `1.0.0` (see [`VERSION`](./VERSION) at repo root)
+- **History**: [`CHANGELOG.md`](./CHANGELOG.md)
+
+When cutting a release, bump `VERSION`, update `CHANGELOG.md`, and keep `mini-fan-package/package.json` and `mini-fan-package/src/manifest.json` (`versionName` / `versionCode`) in sync (see notes at the top of the changelog).
+
+---
+
 This repository now keeps only these parts:
 
 - `admin-backend`: Laravel admin backend and APIs (including mini-program generative AI)
