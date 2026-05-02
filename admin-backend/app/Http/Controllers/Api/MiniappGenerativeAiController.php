@@ -79,10 +79,16 @@ final class MiniappGenerativeAiController extends Controller
             return response()->json(['error' => ['message' => $message]], $status);
         } catch (\Throwable $e) {
             $message = trim((string) $e->getMessage());
-            if (preg_match('/^recipe_image_http_(\d{3})$/', $message, $m) === 1) {
+            if (preg_match('/^recipe_image_http_(\d{3})(?::\s*(.*))?$/', $message, $m) === 1) {
                 $status = (int) $m[1];
                 if ($status >= 400 && $status <= 599) {
-                    return response()->json(['error' => ['message' => $message]], $status);
+                    $error = ['message' => "recipe_image_http_{$status}"];
+                    $detail = trim((string) ($m[2] ?? ''));
+                    if ($detail !== '') {
+                        $error['detail'] = $detail;
+                    }
+
+                    return response()->json(['error' => $error], $status);
                 }
             }
 

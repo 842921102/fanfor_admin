@@ -1,10 +1,5 @@
 <template>
   <view class="mp-page te te--home">
-    <view class="te__topbar" :class="{ 'te__topbar--solid': phase !== 'idle' }">
-      <view class="te__topbar-safe" />
-      <view class="te__topbar-inner" :class="{ 'te__topbar-inner--idle': phase === 'idle' }" />
-    </view>
-
     <view v-if="phase === 'idle'" class="te__idle-root">
       <view class="te__banner">
         <image class="te__banner-photo" src="/static/home/banner-hero-home.jpg" mode="aspectFill" />
@@ -976,7 +971,9 @@ async function hydrateMeContext() {
 syncBannerCapsuleAlign()
 
 onMounted(() => {
-  nextTick(() => syncBannerCapsuleAlign())
+  nextTick(() => {
+    syncBannerCapsuleAlign()
+  })
 })
 
 onShow(() => {
@@ -1198,7 +1195,9 @@ function resetIdle() {
   favoriteLoading.value = false
   isFavorited.value = false
   statusSheetOpen.value = false
-  nextTick(() => syncBannerCapsuleAlign())
+  nextTick(() => {
+    syncBannerCapsuleAlign()
+  })
 }
 
 function goLogin() {
@@ -1251,47 +1250,6 @@ $te-primary-soft: #b8a3f0;
   padding: 0 !important;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom)) !important;
   background: $te-bg !important;
-}
-
-$te-topbar-h: 88rpx;
-
-.te__topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 80;
-  pointer-events: none;
-}
-
-.te__topbar-safe {
-  width: 100%;
-  height: env(safe-area-inset-top);
-}
-
-.te__topbar-inner {
-  min-height: $te-topbar-h;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-}
-
-/* 首页 idle：无顶栏标题，不占额外高度，仅保留安全区 */
-.te__topbar-inner--idle {
-  min-height: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.te__topbar--solid .te__topbar-inner {
-  min-height: $te-topbar-h;
-  height: auto;
-  overflow: visible;
-  background: #ffffff;
-  border-bottom: 1rpx solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 2rpx 16rpx rgba(0, 0, 0, 0.04);
 }
 
 .te__idle-root {
@@ -1982,7 +1940,8 @@ $te-topbar-h: 88rpx;
 }
 
 .te__phase-wrap {
-  padding: calc(env(safe-area-inset-top) + 88rpx + 24rpx) 24rpx 32rpx;
+  /* 自定义导航：无系统标题栏；生成中/失败态避开状态栏与右侧系统按钮区 */
+  padding: calc(env(safe-area-inset-top) + 12rpx) 24rpx 32rpx;
   box-sizing: border-box;
   min-height: 100vh;
   background: $te-bg;
@@ -2541,12 +2500,12 @@ $te-topbar-h: 88rpx;
 }
 
 .te__scroll--padded {
-  padding-top: calc(env(safe-area-inset-top) + 88rpx + 16rpx);
+  max-height: 100vh;
+  box-sizing: border-box;
+  padding-top: calc(env(safe-area-inset-top) + 12rpx);
   padding-left: 24rpx;
   padding-right: 24rpx;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
-  max-height: 100vh;
-  box-sizing: border-box;
 }
 
 .te__result {
