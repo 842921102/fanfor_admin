@@ -112,13 +112,13 @@
             <view class="home__wizard-presets">
               <text class="home__wizard-picker-title">场景预设</text>
               <view class="home__wizard-preset-row">
-                <view v-for="p in scenePresets" :key="p.id" class="home__wizard-preset" @click="applyPreset(p.prompt)">
+                <view v-for="p in scenePresets" :key="p.id" class="home__wizard-preset" @click="applyPreset(p.prompt, p.id)">
                   {{ p.name }}
                 </view>
               </view>
               <text class="home__wizard-picker-title">口味预设</text>
               <view class="home__wizard-preset-row">
-                <view v-for="p in tastePresets" :key="p.id" class="home__wizard-preset" @click="applyPreset(p.prompt)">
+                <view v-for="p in tastePresets" :key="p.id" class="home__wizard-preset" @click="applyPreset(p.prompt, p.id)">
                   {{ p.name }}
                 </view>
               </view>
@@ -187,6 +187,7 @@ import {
 import { upsertLocalGalleryItem } from '@/api/gallery'
 import { favoriteContentDigest } from '@/lib/favoriteDigest'
 import { goLoginGate } from '@/lib/loginNav'
+import { AnalyticsEvents, trackAnalytics, trackPageView } from '@/lib/analytics'
 import type { TodayEatResult } from '@/types/ai'
 
 const msg = useAppMessages()
@@ -248,6 +249,7 @@ const tastePresets = [
 ] as const
 
 onShow(() => {
+  trackPageView(AnalyticsEvents.HOME_PAGE_VIEW)
   void syncAuthFromSupabase()
 })
 
@@ -256,20 +258,24 @@ function addIngredient() {
   if (!v || ingredients.value.includes(v) || ingredients.value.length >= 10) return
   ingredients.value.push(v)
   currentIngredient.value = ''
+  trackAnalytics(AnalyticsEvents.HOME_INGREDIENT_ADD_MANUAL, { eventValue: v })
 }
 
 function removeIngredient(ing: string) {
   ingredients.value = ingredients.value.filter((x) => x !== ing)
+  trackAnalytics(AnalyticsEvents.HOME_INGREDIENT_REMOVE, { eventValue: ing })
 }
 
 function addIngredientByName(name: string) {
   if (!name || ingredients.value.includes(name) || ingredients.value.length >= 10) return
   ingredients.value.push(name)
+  trackAnalytics(AnalyticsEvents.HOME_INGREDIENT_ADD_QUICK, { eventValue: name })
 }
 
 async function pickIngredientPhoto() {
   if (photoLoading.value) return
   photoLoading.value = true
+  trackAnalytics(AnalyticsEvents.HOME_INGREDIENT_RECOGNIZE_PHOTO)
   try {
     const choose = await uni.chooseImage({
       count: 1,
@@ -352,6 +358,9 @@ function addRecognizedIngredients() {
   recognizedCandidates.value = []
   recognizedSelected.value = []
   cancelEditCandidate()
+  trackAnalytics(AnalyticsEvents.HOME_INGREDIENT_RECOGNIZED_CONFIRM, {
+    meta: { added_count: added },
+  })
   uni.showToast({ title: added > 0 ? `已加入 ${added} 个食材` : '没有可加入的新食材', icon: 'none' })
 }
 
@@ -361,15 +370,21 @@ function toggleCuisine(id: string) {
   } else {
     selectedCuisines.value.push(id)
   }
+  trackAnalytics(AnalyticsEvents.HOME_CUISINE_TOGGLE, {
+    eventValue: id,
+    meta: { selected: selectedCuisines.value.includes(id) },
+  })
 }
 
 function getRandomInspiration() {
   const text = randomInspirations[Math.floor(Math.random() * randomInspirations.length)]
   customPrompt.value = customPrompt.value ? `${customPrompt.value}；${text}` : text
+  trackAnalytics(AnalyticsEvents.HOME_INSPIRATION_RANDOM)
 }
 
-function applyPreset(prompt: string) {
+function applyPreset(prompt: string, presetId?: string) {
   if (!prompt) return
+  trackAnalytics(AnalyticsEvents.HOME_PRESET_APPLY, { eventValue: presetId ?? null })
   customPrompt.value = customPrompt.value ? `${customPrompt.value}；${prompt}` : prompt
 }
 
@@ -453,6 +468,10 @@ async function onToggleFavorite() {
       image_url: null,
     })
     isFavorited.value = favorited
+    trackAnalytics(AnalyticsEvents.HOME_RECIPE_FAVORITE_TOGGLE, {
+      eventValue: favorited ? 'favorited' : 'unfavorited',
+      meta: { title: r.title },
+    })
     if (favorited) msg.toastFavoriteSuccess()
     else msg.toastFavoriteCancel()
   } catch (e: unknown) {
@@ -479,6 +498,12 @@ async function generateFromWizard() {
   }
 
   wizardLoading.value = true
+  trackAnalytics(AnalyticsEvents.HOME_WIZARD_GENERATE_START, {
+    meta: {
+      ingredient_count: ingredients.value.length,
+      cuisine_count: selectedCuisines.value.length,
+    },
+  })
   wizardProgress.value = 8
   wizardStageText.value = '大师正在挑选食材…'
   wizardError.value = ''
@@ -523,6 +548,7 @@ async function generateFromWizard() {
     }
     wizardProgress.value = 100
     wizardStageText.value = '生成完成'
+    trackAnalytics(AnalyticsEvents.HOME_WIZARD_GENERATE_SUCCESS, { eventValue: title })
     void maybeSaveHistory(res, tasteText)
     void syncFavoriteState()
   } catch (e: unknown) {
@@ -532,6 +558,7 @@ async function generateFromWizard() {
       const err = e as Error
       wizardError.value = err.message || '生成失败，请稍后重试'
     }
+    trackAnalytics(AnalyticsEvents.HOME_WIZARD_GENERATE_FAIL, { eventValue: wizardError.value.slice(0, 120) })
   } finally {
     if (wizardTimer) {
       clearInterval(wizardTimer)
@@ -544,6 +571,7 @@ async function generateFromWizard() {
 async function generateWizardImage() {
   if (!wizardRecipe.value || recipeImageLoading.value) return
   recipeImageLoading.value = true
+  trackAnalytics(AnalyticsEvents.HOME_RECIPE_IMAGE_GENERATE, { eventValue: wizardRecipe.value.title })
   try {
     const prompt = [
       `生成一道美食成品图，菜名：${wizardRecipe.value.title}`,

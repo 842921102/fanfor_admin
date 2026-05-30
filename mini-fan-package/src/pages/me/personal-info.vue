@@ -112,6 +112,10 @@ import type { UserProfileDto } from '@/types/profile'
 import { useAuth } from '@/composables/useAuth'
 import { API_BASE_URL } from '@/constants'
 import { goLoginGate } from '@/lib/loginNav'
+import { AnalyticsEvents, trackAnalytics } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_PAGE_VIEW)
 
 const STORAGE_REGION = 'me_personal_region_v1'
 const STORAGE_PHONE = 'me_personal_phone_digits_v1'
@@ -263,6 +267,7 @@ onShow(async () => {
 
 function onAvatarTap() {
   if (!currentUser.value) return
+  trackAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_AVATAR_CHANGE)
   uni.showActionSheet({
     itemList: ['使用微信头像', '从相册选择', '拍照'],
     success: (res) => {
@@ -327,6 +332,7 @@ async function saveNickname() {
     nickname: v || undefined,
   })
   closeNicknameSheet()
+  trackAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_NICKNAME_SAVE)
   uni.showToast({ title: '昵称已保存', icon: 'success' })
 }
 
@@ -335,12 +341,14 @@ function onGenderPick(e: { detail?: { value?: string | number } }) {
   const opt = genderOptions[i]
   if (!opt) return
   gender.value = opt.value
+  trackAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_GENDER_CHANGE, { eventValue: opt.value })
   void persistProfilePatch({ gender: opt.value })
 }
 
 function onBirthPick(e: { detail?: { value?: string } }) {
   const v = String(e.detail?.value || '').trim()
   birthday.value = v
+  trackAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_BIRTHDAY_CHANGE)
   void persistProfilePatch({ birthday: v || null })
 }
 
@@ -348,10 +356,12 @@ function onRegionPick(e: { detail?: { value?: string[] } }) {
   const v = e.detail?.value
   if (!v || v.length < 3) return
   saveRegion([String(v[0] || ''), String(v[1] || ''), String(v[2] || '')])
+  trackAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_REGION_CHANGE)
   uni.showToast({ title: '地区已保存', icon: 'success' })
 }
 
 function onChangePhoneTap() {
+  trackAnalytics(AnalyticsEvents.ME_PERSONAL_INFO_PHONE_CHANGE)
   uni.showModal({
     title: '更换手机号',
     editable: true,

@@ -2,8 +2,8 @@
   "name": "mini-fan-package",
   "appid": "wx20c1fc3979d3ff29",
   "description": "饭否小程序用户端（第一阶段骨架）",
-  "versionName": "1.1.0",
-  "versionCode": "101",
+  "versionName": "1.2.0",
+  "versionCode": "102",
   "transformPx": false,
   "mp-weixin": {
     "appid": "wx20c1fc3979d3ff29",

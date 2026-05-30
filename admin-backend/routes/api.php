@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\InternalRecommendationRecordController;
 use App\Http\Controllers\Api\MeDailyStatusController;
 use App\Http\Controllers\Api\MeProfileController;
 use App\Http\Controllers\Api\MeSponsorController;
+use App\Http\Controllers\Api\MiniappAnalyticsController;
 use App\Http\Controllers\Api\MiniappEatMemeController;
 use App\Http\Controllers\Api\MiniappFeatureDataController;
 use App\Http\Controllers\Api\MiniappGenerativeAiController;
@@ -54,6 +55,7 @@ Route::get('/uploads/cos/config', [UploadController::class, 'cosConfig']);
 
 Route::get('/miniapp/config', [MiniappPublicController::class, 'config']);
 Route::get('/miniapp/home-banner-ambient', [MiniappPublicController::class, 'homeBannerAmbient']);
+Route::post('/analytics/events', [MiniappAnalyticsController::class, 'store']);
 
 Route::get('/internal/ai-runtime/scenes/{sceneCode}', [InternalAiRuntimeController::class, 'scene']);
 Route::get('/internal/eat-meme', [InternalEatMemeController::class, 'index']);

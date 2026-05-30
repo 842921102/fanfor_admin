@@ -23,6 +23,10 @@ import { HttpError } from '@/api/http'
 import type { UserProfileDto } from '@/types/profile'
 import { goLoginGate } from '@/lib/loginNav'
 import { useAuth } from '@/composables/useAuth'
+import { AnalyticsEvents, trackAnalytics } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_BASIC_PROFILE_PAGE_VIEW)
 
 const { isLoggedIn, syncAuthFromSupabase } = useAuth()
 const loading = ref(false)
@@ -73,14 +77,17 @@ function onGenderChange(e: { detail?: { value?: string | number } }) {
 
 async function onSave() {
   loading.value = true
+  trackAnalytics(AnalyticsEvents.ME_BASIC_PROFILE_SAVE)
   try {
     await putMeProfile({
       birthday: birthday.value.trim() || null,
       gender: gender.value,
     })
+    trackAnalytics(AnalyticsEvents.ME_BASIC_PROFILE_SAVE_SUCCESS)
     uni.showToast({ title: '已保存', icon: 'success' })
   } catch (e) {
     const msg = e instanceof HttpError ? e.message : '保存失败'
+    trackAnalytics(AnalyticsEvents.ME_BASIC_PROFILE_SAVE_FAIL, { eventValue: msg.slice(0, 120) })
     uni.showToast({ title: msg.slice(0, 200), icon: 'none' })
   } finally {
     loading.value = false

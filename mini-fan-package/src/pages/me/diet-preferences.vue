@@ -49,6 +49,10 @@ import { fetchMeProfile, putMeProfile } from '@/api/me'
 import { HttpError } from '@/api/http'
 import { goLoginGate } from '@/lib/loginNav'
 import { useAuth } from '@/composables/useAuth'
+import { AnalyticsEvents, trackAnalytics } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_DIET_PREFS_PAGE_VIEW)
 
 const { isLoggedIn, syncAuthFromSupabase } = useAuth()
 const loading = ref(false)
@@ -88,6 +92,7 @@ onShow(() => {
 
 async function onSave() {
   loading.value = true
+  trackAnalytics(AnalyticsEvents.ME_DIET_PREFS_SAVE)
   try {
     await putMeProfile({
       flavor_preferences: splitTags(flavorText.value),
@@ -95,9 +100,11 @@ async function onSave() {
       diet_preferences: splitTags(dietText.value),
       health_goal: healthGoal.value.trim() || null,
     })
+    trackAnalytics(AnalyticsEvents.ME_DIET_PREFS_SAVE_SUCCESS)
     uni.showToast({ title: '已保存', icon: 'success' })
   } catch (e) {
     const msg = e instanceof HttpError ? e.message : '保存失败'
+    trackAnalytics(AnalyticsEvents.ME_DIET_PREFS_SAVE_FAIL, { eventValue: msg.slice(0, 120) })
     uni.showToast({ title: msg.slice(0, 200), icon: 'none' })
   } finally {
     loading.value = false

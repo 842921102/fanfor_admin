@@ -82,6 +82,10 @@ import { useAuth } from '@/composables/useAuth'
 import { API_BASE_URL } from '@/constants'
 import { isSupabaseConfigured } from '@/lib/supabase'
 import { requestWechatPayment, waitForPayOrderPaid, yuanStringToFen } from '@/lib/wechatPay'
+import { AnalyticsEvents, trackAnalytics } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_SPONSORSHIP_PAGE_VIEW)
 
 const { isLoggedIn, syncAuthFromSupabase } = useAuth()
 
@@ -178,6 +182,7 @@ function onCancelSponsor() {
       if (!res.confirm) return
       try {
         await postMeSponsorCancel()
+        trackAnalytics(AnalyticsEvents.ME_SPONSORSHIP_CANCEL_IDENTITY)
         isSponsor.value = false
         sponsorUntilText.value = ''
         uni.showToast({ title: '已取消', icon: 'success' })
@@ -230,6 +235,9 @@ async function runLoveSponsorPay(amountFen: number) {
   }
 
   payLoading.value = true
+  trackAnalytics(AnalyticsEvents.ME_SPONSORSHIP_PAY_START, {
+    meta: { amount_fen: amountFen },
+  })
   try {
     const order = await createPayOrder({
       business_type: 'sponsor_love',
@@ -249,17 +257,20 @@ async function runLoveSponsorPay(amountFen: number) {
     }
 
     if (outcome === 'paid') {
+      trackAnalytics(AnalyticsEvents.ME_SPONSORSHIP_PAY_SUCCESS, { meta: { amount_fen: amountFen } })
       uni.showToast({ title: '支付成功，感谢支持', icon: 'success' })
       await loadSponsorStatus()
       await loadHistory()
       return
     }
     if (outcome === 'failed') {
+      trackAnalytics(AnalyticsEvents.ME_SPONSORSHIP_PAY_FAIL, { eventValue: 'failed' })
       uni.showToast({ title: '订单未成功', icon: 'none' })
       return
     }
     const late = await getPayOrder(order.id)
     if (late.status === 'paid') {
+      trackAnalytics(AnalyticsEvents.ME_SPONSORSHIP_PAY_SUCCESS, { meta: { amount_fen: amountFen } })
       uni.showToast({ title: '支付成功，感谢支持', icon: 'success' })
     } else {
       uni.showToast({
@@ -272,6 +283,9 @@ async function runLoveSponsorPay(amountFen: number) {
     await loadHistory()
   } catch (e: unknown) {
     uni.hideLoading()
+    trackAnalytics(AnalyticsEvents.ME_SPONSORSHIP_PAY_FAIL, {
+      eventValue: payErrorMessage(e).slice(0, 120),
+    })
     uni.showToast({ title: payErrorMessage(e), icon: 'none', duration: 2600 })
   } finally {
     payLoading.value = false

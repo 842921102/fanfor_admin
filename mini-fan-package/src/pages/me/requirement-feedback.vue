@@ -83,6 +83,10 @@ import {
   type UserFeedbackStatus,
 } from '@/api/userFeedback'
 import { HttpError } from '@/api/http'
+import { AnalyticsEvents, trackAnalytics } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_FEEDBACK_PAGE_VIEW)
 
 const form = ref({
   title: '',
@@ -148,12 +152,14 @@ async function submitFeedback() {
   }
 
   submitting.value = true
+  trackAnalytics(AnalyticsEvents.ME_FEEDBACK_SUBMIT)
   try {
     await apiCreateUserFeedback({
       title,
       content,
       contact: contact || null,
     })
+    trackAnalytics(AnalyticsEvents.ME_FEEDBACK_SUBMIT_SUCCESS)
     uni.showToast({ title: '已提交，感谢你的建议', icon: 'success' })
     form.value = {
       title: '',
@@ -162,6 +168,9 @@ async function submitFeedback() {
     }
     await loadFeedbackList()
   } catch (error) {
+    trackAnalytics(AnalyticsEvents.ME_FEEDBACK_SUBMIT_FAIL, {
+      eventValue: errorText(error).slice(0, 120),
+    })
     uni.showToast({ title: errorText(error), icon: 'none', duration: 2600 })
   } finally {
     submitting.value = false

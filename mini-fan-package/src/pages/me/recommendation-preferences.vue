@@ -88,11 +88,18 @@
 </template>
 
 <script setup lang="ts">
+import { AnalyticsEvents, trackAnalytics, trackMeTastePrefsNav } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_TASTE_PREFS_PAGE_VIEW)
+
 function go(url: string) {
+  trackMeTastePrefsNav(url)
   uni.navigateTo({ url })
 }
 
 function goOnboarding() {
+  trackAnalytics(AnalyticsEvents.ME_TASTE_PREFS_NAV_ONBOARDING)
   uni.navigateTo({
     url: `/pages/onboarding/index?redirect=${encodeURIComponent('/pages/me/recommendation-preferences')}`,
   })

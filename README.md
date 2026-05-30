@@ -4,7 +4,7 @@ English: [README_EN.md](./README_EN.md)
 
 ## 版本与更新记录
 
-- **当前版本**：`1.1.0`（见根目录 [`VERSION`](./VERSION)）
+- **当前版本**：`1.2.0`（见根目录 [`VERSION`](./VERSION)）
 - **完整变更**：[CHANGELOG.md](./CHANGELOG.md)
 
 发版时请按 `CHANGELOG.md` 顶部说明，同步小程序 `manifest.json` 的 `versionName` / `versionCode` 与 `mini-fan-package/package.json` 的 `version`。

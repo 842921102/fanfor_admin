@@ -180,6 +180,7 @@
                   open-type="contact"
                   hover-class="me__list-row--hover"
                   :hover-stay-time="80"
+                  @contact="onWechatContact"
                 >
                   <view class="me__list-ico">
                     <MeThemedIcon name="chat" :size-rpx="36" />
@@ -367,6 +368,14 @@ import {
 } from '@/lib/resultDetail'
 import type { MeThemedIconName } from '@/lib/meThemedIcons'
 import MeThemedIcon from '@/components/MeThemedIcon.vue'
+import {
+  AnalyticsEvents,
+  trackAnalytics,
+  trackMeHistorySource,
+  trackMeNav,
+  trackPageView,
+  type AnalyticsEventName,
+} from '@/lib/analytics'
 
 const {
   currentUser,
@@ -393,6 +402,10 @@ const helpQaOpen = ref<Record<number, boolean>>({})
 function toggleHelpQa(index: number) {
   const cur = helpQaOpen.value[index] === true
   helpQaOpen.value = { ...helpQaOpen.value, [index]: !cur }
+  trackAnalytics(AnalyticsEvents.ME_HELP_QA_TOGGLE, {
+    eventValue: String(index),
+    meta: { expanded: !cur },
+  })
 }
 
 const legalSheetTitle = computed(() => {
@@ -590,6 +603,7 @@ onReady(() => {
 })
 
 onShow(() => {
+  trackPageView(AnalyticsEvents.ME_PAGE_VIEW)
   try {
     const p = String(uni.getSystemInfoSync()?.platform || '').toLowerCase()
     isWxDevtools.value = p === 'devtools'
@@ -654,6 +668,7 @@ function pickAvatarFromUser(wxUser: Record<string, unknown>): string | undefined
 }
 
 async function onWeChatLoginInline() {
+  trackAnalytics(AnalyticsEvents.ME_WECHAT_LOGIN)
   if (!apiReady.value) {
     uni.showToast({ title: '服务连接未就绪，请稍后再试', icon: 'none' })
     return
@@ -675,6 +690,7 @@ async function onWeChatLoginInline() {
 
     if (accessToken) {
       setToken(accessToken)
+      trackAnalytics(AnalyticsEvents.ME_WECHAT_LOGIN_SUCCESS)
       if (wxUser && wxUser.id != null) {
         const nickname = typeof wxUser.nickname === 'string' ? wxUser.nickname : undefined
         setCurrentUser({
@@ -715,17 +731,24 @@ async function onWeChatLoginInline() {
 }
 
 function goMenu(path: string) {
+  trackMeNav(path)
   uni.navigateTo({ url: path })
 }
 
 function onAvatarTap() {
   if (!currentUser.value) return
+  trackAnalytics(AnalyticsEvents.ME_AVATAR_CHANGE_MENU)
   uni.showActionSheet({
     itemList: ['使用微信头像', '从相册选择', '拍照'],
     success: (res) => {
       if (res.tapIndex === 0) wxAvatarPickerVisible.value = true
-      else if (res.tapIndex === 1) pickLocalAvatar(['album'])
-      else if (res.tapIndex === 2) pickLocalAvatar(['camera'])
+      else if (res.tapIndex === 1) {
+        trackAnalytics(AnalyticsEvents.ME_AVATAR_LOCAL_PICK, { eventValue: 'album' })
+        pickLocalAvatar(['album'])
+      } else if (res.tapIndex === 2) {
+        trackAnalytics(AnalyticsEvents.ME_AVATAR_LOCAL_PICK, { eventValue: 'camera' })
+        pickLocalAvatar(['camera'])
+      }
     },
   })
 }
@@ -751,12 +774,14 @@ function onWxChooseAvatar(e: { detail?: { avatarUrl?: string } }) {
   const url = e?.detail?.avatarUrl?.trim()
   wxAvatarPickerVisible.value = false
   if (!url || !u) return
+  trackAnalytics(AnalyticsEvents.ME_AVATAR_WECHAT_CHOOSE)
   setCurrentUser({ ...u, avatarUrl: url })
   uni.showToast({ title: '头像已更新', icon: 'success' })
 }
 
 function onNicknameTap() {
   if (!currentUser.value) return
+  trackAnalytics(AnalyticsEvents.ME_NICKNAME_EDIT_OPEN)
   nicknameDraft.value = displayPrimary.value === '用户' ? '' : displayPrimary.value
   nickSheetVisible.value = true
 }
@@ -782,22 +807,33 @@ async function saveNicknameDraft() {
     nickname: v || undefined,
   })
   closeNickSheet()
+  trackAnalytics(AnalyticsEvents.ME_NICKNAME_SAVE)
   uni.showToast({ title: '昵称已保存', icon: 'success' })
 }
 
 function onSettingsTap() {
+  trackAnalytics(AnalyticsEvents.ME_NAV_SETTINGS)
   uni.navigateTo({ url: '/pages/me/personal-info' })
 }
 
 function onRecordTileTap(type: ResultSourceType) {
   const allowed: ResultSourceType[] = ['custom_wizard', 'table_design', 'fortune_cooking', 'sauce_design']
   if (!allowed.includes(type)) return
+  trackMeHistorySource(type)
   uni.navigateTo({
     url: `/pages/histories/index?source_type=${encodeURIComponent(type)}`,
   })
 }
 
 function onServiceTap(id: ServiceId) {
+  const serviceEvents: Partial<Record<ServiceId, AnalyticsEventName>> = {
+    help_center: AnalyticsEvents.ME_SERVICE_HELP_CENTER,
+    about_us: AnalyticsEvents.ME_SERVICE_ABOUT_US,
+    user_agreement: AnalyticsEvents.ME_SERVICE_USER_AGREEMENT,
+    privacy_policy: AnalyticsEvents.ME_SERVICE_PRIVACY_POLICY,
+  }
+  const evt = serviceEvents[id]
+  if (evt) trackAnalytics(evt)
   if (id === 'help_center') {
     helpQaOpen.value = {}
     legalSheetKind.value = 'help_center'
@@ -817,6 +853,10 @@ function onServiceTap(id: ServiceId) {
   }
 }
 
+function onWechatContact() {
+  trackAnalytics(AnalyticsEvents.ME_SERVICE_WECHAT_CONTACT)
+}
+
 function onLogoutTap() {
   uni.showModal({
     title: LOGOUT_CONFIRM_TITLE,
@@ -830,6 +870,7 @@ function onLogoutTap() {
 }
 
 async function doLogout() {
+  trackAnalytics(AnalyticsEvents.ME_LOGOUT)
   await logout()
   favCount.value = 0
   histCount.value = 0

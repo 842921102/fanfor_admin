@@ -64,6 +64,9 @@ class AdminPanelProvider extends PanelProvider
                     ->label('数据管理')
                     ->collapsed(),
                 NavigationGroup::make()
+                    ->label('数据分析')
+                    ->collapsed(),
+                NavigationGroup::make()
                     ->label('系统管理')
                     ->collapsed(),
                 NavigationGroup::make()

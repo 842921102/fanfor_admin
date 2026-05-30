@@ -140,6 +140,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
+import { AnalyticsEvents, trackAnalytics } from '@/lib/analytics'
+import { usePageAnalytics } from '@/composables/usePageAnalytics'
+
+usePageAnalytics(AnalyticsEvents.ME_PROFILE_EDIT_PAGE_VIEW)
 import OptionChipGroup from '@/components/onboarding/OptionChipGroup.vue'
 import OptionSingleCardGroup from '@/components/onboarding/OptionSingleCardGroup.vue'
 import { fetchMeProfile, putMeProfile } from '@/api/me'
@@ -330,6 +334,7 @@ async function onSave() {
   const heightCm = 120 + heightIndex.value
 
   saving.value = true
+  trackAnalytics(AnalyticsEvents.ME_PROFILE_EDIT_SAVE)
   try {
     const dg = dietGoalSingle.value
     const dislike = normalizeListForSave(dislikeIngredients.value, '暂无')
@@ -366,11 +371,13 @@ async function onSave() {
       periodFeatureEnabled: genderSel.value === 'female' ? periodFeatureEnabled.value : false,
     })
     uni.showToast({ title: '已保存', icon: 'success' })
+    trackAnalytics(AnalyticsEvents.ME_PROFILE_EDIT_SAVE_SUCCESS)
     setTimeout(() => {
       uni.switchTab({ url: '/pages/me/index' })
     }, 400)
   } catch (e) {
     const msg = e instanceof HttpError ? e.message : '保存失败'
+    trackAnalytics(AnalyticsEvents.ME_PROFILE_EDIT_SAVE_FAIL, { eventValue: msg.slice(0, 120) })
     uni.showToast({ title: msg.slice(0, 200), icon: 'none' })
   } finally {
     saving.value = false
