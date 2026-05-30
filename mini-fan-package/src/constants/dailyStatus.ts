@@ -32,24 +32,45 @@ export const DAILY_PERIOD_OPTIONS = [
   { value: 'unknown', label: '不确定' },
 ] as const
 
-const MOOD_SET = new Set(DAILY_MOOD_OPTIONS.map((o) => o.value))
-const WANT_SET = new Set(DAILY_WANT_OPTIONS.map((o) => o.value))
-const BODY_SET = new Set(DAILY_BODY_OPTIONS.map((o) => o.value))
-const PERIOD_SET = new Set(DAILY_PERIOD_OPTIONS.map((o) => o.value))
+export type DailyMoodValue = (typeof DAILY_MOOD_OPTIONS)[number]['value']
+export type DailyWantValue = (typeof DAILY_WANT_OPTIONS)[number]['value']
+export type DailyBodyValue = (typeof DAILY_BODY_OPTIONS)[number]['value']
+export type DailyPeriodValue = (typeof DAILY_PERIOD_OPTIONS)[number]['value']
+
+const MOOD_SET = new Set<DailyMoodValue>(DAILY_MOOD_OPTIONS.map((o) => o.value))
+const WANT_SET = new Set<DailyWantValue>(DAILY_WANT_OPTIONS.map((o) => o.value))
+const BODY_SET = new Set<DailyBodyValue>(DAILY_BODY_OPTIONS.map((o) => o.value))
+const PERIOD_SET = new Set<DailyPeriodValue>(DAILY_PERIOD_OPTIONS.map((o) => o.value))
+
+function isDailyMoodValue(value: string): value is DailyMoodValue {
+  return MOOD_SET.has(value as DailyMoodValue)
+}
+
+function isDailyWantValue(value: string): value is DailyWantValue {
+  return WANT_SET.has(value as DailyWantValue)
+}
+
+function isDailyBodyValue(value: string): value is DailyBodyValue {
+  return BODY_SET.has(value as DailyBodyValue)
+}
+
+function isDailyPeriodValue(value: string): value is DailyPeriodValue {
+  return PERIOD_SET.has(value as DailyPeriodValue)
+}
 
 /** 历史小程序选项 → MVP */
 export function normalizeMoodFromApi(raw: string | null | undefined): string {
   if (raw == null || raw === '') return ''
   const legacy: Record<string, string> = { anxious: 'stressed' }
   const v = legacy[raw] ?? raw
-  return MOOD_SET.has(v) ? v : ''
+  return isDailyMoodValue(v) ? v : ''
 }
 
 export function normalizeWantFromApi(raw: string | null | undefined): string {
   if (raw == null || raw === '') return ''
   const legacy: Record<string, string> = { warm: 'hot', indulgent: 'comforting' }
   const v = legacy[raw] ?? raw
-  return WANT_SET.has(v) ? v : ''
+  return isDailyWantValue(v) ? v : ''
 }
 
 export function normalizeBodyFromApi(raw: string | null | undefined): string {
@@ -63,10 +84,10 @@ export function normalizeBodyFromApi(raw: string | null | undefined): string {
     greasy: 'greasy_tired',
   }
   const v = legacy[raw] ?? raw
-  return BODY_SET.has(v) ? v : ''
+  return isDailyBodyValue(v) ? v : ''
 }
 
 export function normalizePeriodFromApi(raw: string | null | undefined): string {
   if (raw == null || raw === '') return 'none'
-  return PERIOD_SET.has(raw) ? raw : 'none'
+  return isDailyPeriodValue(raw) ? raw : 'none'
 }

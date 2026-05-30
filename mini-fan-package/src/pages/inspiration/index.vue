@@ -106,7 +106,7 @@ function measureInsScrollHeight() {
   uni.createSelectorQuery()
     .select('.ins__head')
     .boundingClientRect((rect) => {
-      if (rect && typeof rect.bottom === 'number') {
+      if (rect && !Array.isArray(rect) && typeof rect.bottom === 'number') {
         insScrollHeightPx.value = Math.max(160, wh - rect.bottom)
       } else {
         insScrollHeightPx.value = Math.max(160, wh - 220)
@@ -203,7 +203,7 @@ onPullDownRefresh(() => {
 }
 .ins__search input {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 /* 左侧 Tab 可横向滑动；右侧「我的灵感」固定不占滚动区 */
 .ins__tabs-wrap {

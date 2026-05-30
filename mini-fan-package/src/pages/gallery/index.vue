@@ -438,7 +438,7 @@ function goHome() {
 }
 
 .gl__head-emoji {
-  font-size: 48rpx;
+  font-size: 44rpx;
 }
 
 .gl__head-text {
@@ -448,8 +448,8 @@ function goHome() {
 
 .gl__head-title {
   display: block;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -511,7 +511,7 @@ function goHome() {
   flex: 1;
   min-width: 0;
   height: 76rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
 }
 
@@ -554,7 +554,7 @@ function goHome() {
 
 .gl__pick-val {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: $mp-text-primary;
 }
@@ -571,7 +571,7 @@ function goHome() {
 }
 
 .gl__state-ico {
-  font-size: 56rpx;
+  font-size: 44rpx;
 }
 
 .gl__state-title {
@@ -671,8 +671,8 @@ function goHome() {
 
 .gl__thumb-title {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: #fff;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -700,7 +700,7 @@ function goHome() {
 }
 
 .gl__thumb-tag {
-  font-size: 18rpx;
+  font-size: 20rpx;
   color: #fff;
   padding: 4rpx 10rpx;
   border-radius: 8rpx;
@@ -709,7 +709,7 @@ function goHome() {
 }
 
 .gl__thumb-more {
-  font-size: 18rpx;
+  font-size: 20rpx;
   color: rgba(255, 255, 255, 0.75);
   padding: 4rpx 8rpx;
 }
@@ -730,15 +730,15 @@ function goHome() {
 }
 
 .gl__empty-ico {
-  font-size: 72rpx;
+  font-size: 44rpx;
 }
 
 .gl__empty-title {
   display: block;
   width: 100%;
   margin-top: 16rpx;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -747,9 +747,9 @@ function goHome() {
   width: 100%;
   box-sizing: border-box;
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
-  line-height: 1.55;
+  line-height: 1.6;
   text-align: left;
 }
 
@@ -800,8 +800,8 @@ function goHome() {
 }
 
 .gl__modal-title {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -832,7 +832,7 @@ function goHome() {
   padding: 80rpx;
   text-align: center;
   color: #9ca3af;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 
 .gl__modal-body {
@@ -841,8 +841,8 @@ function goHome() {
 
 .gl__modal-k {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-accent-deep;
   margin-bottom: 12rpx;
   margin-top: 8rpx;
@@ -864,9 +864,9 @@ function goHome() {
 }
 
 .gl__modal-prompt {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #374151;
-  line-height: 1.55;
+  line-height: 1.6;
   white-space: pre-wrap;
 }
 

@@ -329,7 +329,7 @@ $te-bg: #f5f6fa;
 }
 
 .te__recent-title {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-text-primary;
 }
@@ -366,7 +366,7 @@ $te-bg: #f5f6fa;
 }
 
 .te__recent-name {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -394,11 +394,11 @@ $te-bg: #f5f6fa;
 }
 
 .te__again-txt {
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .te__again-go {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
 }
 </style>

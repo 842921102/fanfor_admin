@@ -107,7 +107,7 @@ const familyOptions = [
   display: block;
   margin-top: 12rpx;
   margin-bottom: 22rpx;
-  font-size: 23rpx;
+  font-size: 22rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
 }
@@ -131,7 +131,7 @@ const familyOptions = [
 }
 
 .ls__mod-title {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-text-primary;
 }

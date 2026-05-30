@@ -477,7 +477,9 @@ function measureMeScroll() {
     .select('.me__nav')
     .boundingClientRect((rect) => {
       const inset =
-        rect && typeof rect.bottom === 'number' ? rect.bottom : statusBarPx.value + navBarPx.value
+        rect && !Array.isArray(rect) && typeof rect.bottom === 'number'
+          ? rect.bottom
+          : statusBarPx.value + navBarPx.value
       navBleedBottomPx.value = inset
       meScrollHeightPx.value = Math.max(200, wh)
     })
@@ -1040,7 +1042,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 }
 
 .me__avatar-ring--atmos .me__avatar-letter {
-  font-size: 52rpx;
+  font-size: 44rpx;
 }
 
 .me__atmos-meta {
@@ -1054,7 +1056,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__atmos-name {
   font-size: 40rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $me-text;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -1178,8 +1180,8 @@ $me-line: rgba(139, 92, 246, 0.09);
 }
 
 .me__benefit-title {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $me-text;
 }
 
@@ -1232,7 +1234,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__stat-num {
   font-size: 44rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $me-purple;
   line-height: 1;
 }
@@ -1372,7 +1374,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__section-title {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $me-text;
 }
 
@@ -1428,8 +1430,8 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__newbie-txt {
   flex: 1;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: #5b4a9e;
   padding-top: 4rpx;
 }
@@ -1452,22 +1454,22 @@ $me-line: rgba(139, 92, 246, 0.09);
 }
 
 .me__avatar-letter {
-  font-weight: 800;
+  font-weight: 700;
   color: $me-purple;
 }
 
 .me__guest-lead {
   margin-top: 28rpx;
-  font-size: 36rpx;
-  font-weight: 800;
+  font-size: 34rpx;
+  font-weight: 700;
   color: $me-text;
   line-height: 1.3;
 }
 
 .me__guest-sub {
   margin-top: 14rpx;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: $me-text-2;
   padding: 0 16rpx;
 }
@@ -1479,12 +1481,12 @@ $me-line: rgba(139, 92, 246, 0.09);
   padding-top: 28rpx !important;
   padding-bottom: 28rpx !important;
   font-size: 30rpx !important;
-  font-weight: 800 !important;
+  font-weight: 700 !important;
   box-shadow: 0 12rpx 36rpx rgba(139, 92, 246, 0.22);
 }
 
 .me__wx-login-txt {
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .me__pill {
@@ -1541,8 +1543,8 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__ua-title {
   display: block;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $me-text;
   text-align: center;
   line-height: 1.3;
@@ -1597,7 +1599,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 .me__ua-sec-h {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $me-text;
   margin-bottom: 12rpx;
   line-height: 1.4;
@@ -1605,7 +1607,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__ua-sec-p {
   display: block;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.65;
   color: $me-text-2;
   margin-bottom: 16rpx;
@@ -1663,7 +1665,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__hc-q-arrow {
   flex-shrink: 0;
-  font-size: 36rpx;
+  font-size: 34rpx;
   line-height: 1;
   color: $me-purple;
   opacity: 0.65;
@@ -1682,7 +1684,7 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__hc-a-line {
   display: block;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.65;
   color: $me-text-2;
   margin-bottom: 14rpx;
@@ -1703,8 +1705,8 @@ $me-line: rgba(139, 92, 246, 0.09);
 
 .me__sheet-title {
   display: block;
-  font-size: 32rpx;
-  font-weight: 900;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $me-text;
   text-align: center;
 }
@@ -1714,7 +1716,7 @@ $me-line: rgba(139, 92, 246, 0.09);
   width: 100%;
   padding: 26rpx;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff !important;
   background: #07c160;
   border-radius: 16rpx;
@@ -1769,7 +1771,7 @@ $me-line: rgba(139, 92, 246, 0.09);
   flex: 1;
   padding: 22rpx;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff !important;
   background: $me-purple;
   border-radius: 16rpx;

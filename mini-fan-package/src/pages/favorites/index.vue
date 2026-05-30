@@ -341,7 +341,7 @@ function onDelete(item: FavoriteRow) {
 
 .fav__tab--active .fav__tab-label {
   color: $mp-text-primary;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .fav__tab--active::after {
@@ -463,7 +463,7 @@ function onDelete(item: FavoriteRow) {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-accent;
   background: rgba(122, 87, 209, 0.1);
   border: 1rpx solid rgba(122, 87, 209, 0.22);

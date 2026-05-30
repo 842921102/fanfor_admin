@@ -10,13 +10,16 @@
 
 function pickGlobalRoot(): Record<string, any> {
   const candidates: any[] = []
+  const globalObj = globalThis as typeof globalThis & {
+    global?: unknown
+  }
   try {
     if (typeof globalThis !== 'undefined') candidates.push(globalThis)
   } catch {
     /* ignore */
   }
   try {
-    if (typeof global !== 'undefined') candidates.push(global)
+    if (typeof globalObj.global !== 'undefined') candidates.push(globalObj.global)
   } catch {
     /* ignore */
   }

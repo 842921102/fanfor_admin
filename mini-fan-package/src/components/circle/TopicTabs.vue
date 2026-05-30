@@ -57,8 +57,9 @@ const options: { value: CircleFeedTab; label: string }[] = [
 }
 
 .topic-tabs__txt {
-  font-size: 26rpx;
-  font-weight: 600;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 1.6;
   color: $mp-text-secondary;
 }
 

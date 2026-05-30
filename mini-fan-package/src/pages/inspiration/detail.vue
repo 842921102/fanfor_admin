@@ -193,7 +193,7 @@ async function sendComment() {
   display: block;
   margin-top: 0;
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.35;
 }
@@ -202,7 +202,7 @@ async function sendComment() {
   display: block;
   margin-top: 12rpx;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: $mp-text-primary;
   white-space: pre-wrap;
 }
@@ -252,7 +252,7 @@ async function sendComment() {
   border-radius: 999rpx;
   border: none;
   background: #f5f5f6;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 
 .idt__send {

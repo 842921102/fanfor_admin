@@ -811,18 +811,22 @@ function applySheetToDaily() {
 
 function flavorTagsToPreferenceTaste(tags: string[]): string | undefined {
   if (!tags.length) return undefined
-  const labels = tags
-    .map((k) => MEAL_FLAVOR_TAG_OPTIONS.find((o) => o.value === k)?.label)
-    .filter((x): x is string => Boolean(x))
+  const labels = tags.reduce<string[]>((acc, key) => {
+    const label = MEAL_FLAVOR_TAG_OPTIONS.find((o) => o.value === key)?.label
+    if (typeof label === 'string') acc.push(label)
+    return acc
+  }, [])
   return labels.length ? labels.join('、') : undefined
 }
 
 function tabooTagsToPreferenceAvoid(tags: string[]): string | undefined {
   if (!tags.length || tags.includes('none')) return undefined
-  const labels = tags
-    .filter((k) => k !== 'none')
-    .map((k) => MEAL_TABOO_TAG_OPTIONS.find((o) => o.value === k)?.label)
-    .filter((x): x is string => Boolean(x))
+  const labels = tags.reduce<string[]>((acc, key) => {
+    if (key === 'none') return acc
+    const label = MEAL_TABOO_TAG_OPTIONS.find((o) => o.value === key)?.label
+    if (typeof label === 'string') acc.push(label)
+    return acc
+  }, [])
   return labels.length ? labels.join('、') : undefined
 }
 
@@ -963,16 +967,16 @@ async function hydrateMeContext() {
     const res = await fetchMeProfile()
     periodFeatureEnabled.value = Boolean(res.profile.period_feature_enabled)
     profileFlavorPreferences.value = Array.isArray(res.profile.flavor_preferences)
-      ? res.profile.flavor_preferences.filter((x): x is string => typeof x === 'string' && x.trim())
+      ? res.profile.flavor_preferences.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
       : []
     profileTabooIngredients.value = Array.isArray(res.profile.taboo_ingredients)
-      ? res.profile.taboo_ingredients.filter((x): x is string => typeof x === 'string' && x.trim())
+      ? res.profile.taboo_ingredients.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
       : []
     profileCuisinePreferences.value = Array.isArray(res.profile.cuisine_preferences)
-      ? res.profile.cuisine_preferences.filter((x): x is string => typeof x === 'string' && x.trim())
+      ? res.profile.cuisine_preferences.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
       : []
     profileDietPreferences.value = Array.isArray(res.profile.diet_preferences)
-      ? res.profile.diet_preferences.filter((x): x is string => typeof x === 'string' && x.trim())
+      ? res.profile.diet_preferences.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
       : []
     const t = res.today_status
     if (t) {
@@ -1384,7 +1388,7 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__banner-meteo-city {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.92);
   text-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.35);
@@ -1425,8 +1429,8 @@ $te-primary-soft: #b8a3f0;
 .te__banner-title {
   display: block;
   margin-top: 24rpx;
-  font-size: 48rpx;
-  font-weight: 800;
+  font-size: 44rpx;
+  font-weight: 700;
   color: #fff;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -1435,8 +1439,8 @@ $te-primary-soft: #b8a3f0;
 .te__banner-sub {
   display: block;
   margin-top: 24rpx;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.88);
   max-width: 420rpx;
 }
@@ -1490,7 +1494,7 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__folder-tab-txt {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 500;
   color: #5f6673;
   line-height: 1.25;
@@ -1627,12 +1631,12 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__cta-txt {
-  font-size: 36rpx;
+  font-size: 34rpx;
   font-weight: 700;
 }
 
 .te__cta-arrow {
-  font-size: 36rpx;
+  font-size: 34rpx;
   font-weight: 700;
 }
 
@@ -1642,7 +1646,7 @@ $te-primary-soft: #b8a3f0;
   width: 100%;
   text-align: center;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: #9ca3af;
 }
 
@@ -1652,7 +1656,7 @@ $te-primary-soft: #b8a3f0;
   width: 100%;
   text-align: center;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: #7c5cf3;
   font-weight: 500;
   text-decoration: none;
@@ -1698,8 +1702,8 @@ $te-primary-soft: #b8a3f0;
   padding: 0 16rpx;
   box-sizing: border-box;
   text-align: center;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: #9ca3af;
 }
 
@@ -1912,7 +1916,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__taste-profile-title {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $te-primary;
 }
 
@@ -1924,7 +1928,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__taste-profile-go {
   flex-shrink: 0;
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
   color: rgba(123, 87, 228, 0.55);
   line-height: 1;
@@ -1955,7 +1959,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__hot-title {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $te-title;
 }
 
@@ -1970,7 +1974,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__hot-go {
   flex-shrink: 0;
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
   color: rgba(123, 87, 228, 0.55);
   line-height: 1;
@@ -2148,7 +2152,7 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__ai-title {
-  font-size: 38rpx;
+  font-size: 44rpx;
   line-height: 1.3;
   font-weight: 700;
   color: #2f234f;
@@ -2157,7 +2161,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__ai-sub {
   margin-top: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   color: #7d7299;
 }
@@ -2349,7 +2353,7 @@ $te-primary-soft: #b8a3f0;
 .te__sheet-title {
   display: block;
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -2380,7 +2384,7 @@ $te-primary-soft: #b8a3f0;
 .te__sheet-k {
   display: block;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: $mp-text-muted;
@@ -2398,7 +2402,7 @@ $te-primary-soft: #b8a3f0;
   border-radius: 999rpx;
   background: #f3f4f6;
   border: 1rpx solid #e5e7eb;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #4b5563;
 }
 
@@ -2484,7 +2488,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__state-kicker {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: $mp-accent;
@@ -2498,7 +2502,7 @@ $te-primary-soft: #b8a3f0;
   display: block;
   margin-top: 10rpx;
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -2527,7 +2531,7 @@ $te-primary-soft: #b8a3f0;
 .te__loading-hint {
   display: block;
   text-align: center;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
   padding: 0 32rpx;
@@ -2558,9 +2562,9 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__err-msg {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #7f1d1d;
-  line-height: 1.55;
+  line-height: 1.6;
   word-break: break-word;
 }
 
@@ -2604,7 +2608,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__result-hero-k {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: $mp-accent;
@@ -2613,15 +2617,15 @@ $te-primary-soft: #b8a3f0;
 .te__result-hero-title {
   display: block;
   margin-top: 12rpx;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
 .te__result-hero-sub {
   display: block;
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
   padding: 0 16rpx;
@@ -2640,7 +2644,7 @@ $te-primary-soft: #b8a3f0;
   margin-top: 28rpx;
   margin-bottom: 12rpx;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: $mp-text-muted;
@@ -2687,8 +2691,8 @@ $te-primary-soft: #b8a3f0;
 .te__result-title {
   display: block;
   margin-top: 8rpx;
-  font-size: 36rpx;
-  font-weight: 800;
+  font-size: 34rpx;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.35;
   word-break: break-word;
@@ -2738,7 +2742,7 @@ $te-primary-soft: #b8a3f0;
 
 .te__body-k {
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-accent;
   letter-spacing: 0.04em;
 }
@@ -2790,12 +2794,12 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__again-txt {
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .te__again-go {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
 }
 
 .te__recent {
@@ -2805,7 +2809,7 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__recent-title {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-text-primary;
 }
@@ -2842,7 +2846,7 @@ $te-primary-soft: #b8a3f0;
 }
 
 .te__recent-name {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
   overflow: hidden;
   text-overflow: ellipsis;

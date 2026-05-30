@@ -47,7 +47,7 @@ function mapApiToFavoriteRow(it: FavoriteApiItem): FavoriteRow {
         : null
 
   const tagList = Array.isArray(extra.tags)
-    ? extra.tags.filter((x): x is string => typeof x === 'string' && x.trim())
+    ? extra.tags.filter((x): x is string => typeof x === 'string' && x.trim().length > 0)
     : []
 
   return {

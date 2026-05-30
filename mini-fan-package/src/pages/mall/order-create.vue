@@ -91,9 +91,9 @@ async function submitOrder() {
 .moc__product{display:flex;gap:12rpx;margin-top:8rpx}
 .moc__img{width:136rpx;height:136rpx;border-radius:12rpx;background:#f3f4f6;flex-shrink:0}
 .moc__body{flex:1}
-.moc__name{display:block;font-size:27rpx;font-weight:700;color:$mp-text-primary}
-.moc__price{display:block;margin-top:8rpx;font-size:25rpx;color:#d15454}
-.moc__input,.moc__textarea{width:100%;margin-top:10rpx;padding:14rpx 16rpx;border-radius:14rpx;border:1rpx solid $mp-border;background:#fafbfc;font-size:25rpx}
+.moc__name{display:block;font-size: 30rpx;font-weight:600;line-height:1.4;color:$mp-text-primary}
+.moc__price{display:block;margin-top:8rpx;font-size: 24rpx;color:#d15454}
+.moc__input,.moc__textarea{width:100%;margin-top:10rpx;padding:14rpx 16rpx;border-radius:14rpx;border:1rpx solid $mp-border;background:#fafbfc;font-size: 28rpx}
 .moc__textarea{min-height:140rpx}
 .moc__qty-row{display:flex;align-items:center;gap:14rpx;margin-top:8rpx}
 .moc__qty-btn{width:90rpx}

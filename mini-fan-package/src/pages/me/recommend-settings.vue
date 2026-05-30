@@ -97,8 +97,8 @@ async function onSave() {
 }
 .pg__label {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: #1f2937;
   margin-bottom: 12rpx;
 }
@@ -110,7 +110,7 @@ async function onSave() {
   background: #f7f8fa;
   border: 1rpx solid #e5e7eb;
   border-radius: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #111827;
   line-height: 84rpx;
 }
@@ -130,8 +130,8 @@ async function onSave() {
   border-top: 1rpx solid #e5e7eb;
 }
 .pg__row-title {
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: #111827;
 }
 .pg__btn {

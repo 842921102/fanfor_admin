@@ -416,7 +416,7 @@ function buildImagePrompt(payload: ResultDetailPayload): string {
 
 .rd__step-text {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   color: $mp-text-primary;
 }

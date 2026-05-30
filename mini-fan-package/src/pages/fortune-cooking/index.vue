@@ -757,7 +757,7 @@ function goLogin() {
 
 .fc__panel-badge-txt {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: $mp-accent;
@@ -799,7 +799,7 @@ function goLogin() {
   display: block;
   text-align: center;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -863,7 +863,7 @@ function goLogin() {
 }
 
 .fc__pick-sym {
-  font-size: 32rpx;
+  font-size: 30rpx;
   line-height: 1.2;
 }
 
@@ -899,7 +899,7 @@ function goLogin() {
 }
 
 .fc__mood-emoji {
-  font-size: 36rpx;
+  font-size: 34rpx;
 }
 
 .fc__mood-name {
@@ -926,7 +926,7 @@ function goLogin() {
   width: 160rpx;
   text-align: center;
   font-size: 40rpx;
-  font-weight: 800;
+  font-weight: 700;
   padding: 20rpx;
   border-radius: 16rpx;
   background: #fff;
@@ -960,7 +960,7 @@ function goLogin() {
 .fc__couple-label {
   display: block;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-accent-deep;
   margin-bottom: 16rpx;
 }
@@ -1024,7 +1024,7 @@ function goLogin() {
 
 .fc__submit-txt {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .fc__submit-go {
@@ -1074,7 +1074,7 @@ function goLogin() {
 }
 
 .fc__ai-title {
-  font-size: 38rpx;
+  font-size: 44rpx;
   line-height: 1.3;
   font-weight: 700;
   color: #2f234f;
@@ -1083,7 +1083,7 @@ function goLogin() {
 
 .fc__ai-sub {
   margin-top: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   color: #7d7299;
 }
@@ -1196,7 +1196,8 @@ function goLogin() {
 .fc__state-kicker {
   display: block;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 500;
+  line-height: 1.3;
   letter-spacing: 0.12em;
   color: $mp-accent;
   text-transform: uppercase;
@@ -1209,14 +1210,14 @@ function goLogin() {
 .fc__state-title {
   display: block;
   margin-top: 8rpx;
-  font-size: 32rpx;
-  font-weight: 800;
-  color: $mp-text-primary;
+  font-size: 30rpx;
+  font-weight: 600;
   line-height: 1.4;
+  color: $mp-text-primary;
 }
 
 .fc__loading-icon {
-  font-size: 72rpx;
+  font-size: 44rpx;
   margin: 24rpx 0;
 }
 
@@ -1290,8 +1291,8 @@ function goLogin() {
 }
 
 .fc__err-icon {
-  font-size: 56rpx;
-  font-weight: 900;
+  font-size: 44rpx;
+  font-weight: 700;
   margin: 16rpx 0;
 }
 
@@ -1313,7 +1314,7 @@ function goLogin() {
 }
 
 .fc__err-msg {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #7f1d1d;
   line-height: 1.5;
 }
@@ -1346,10 +1347,10 @@ function goLogin() {
 
 .fc__result-dish {
   display: block;
-  font-size: 38rpx;
-  font-weight: 900;
-  color: #fff;
+  font-size: 44rpx;
+  font-weight: 700;
   line-height: 1.25;
+  color: #fff;
 }
 
 .fc__result-meta {
@@ -1362,7 +1363,8 @@ function goLogin() {
 
 .fc__meta-chip {
   font-size: 22rpx;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1.3;
   color: rgba(255, 255, 255, 0.95);
   padding: 6rpx 14rpx;
   border-radius: 999rpx;
@@ -1406,7 +1408,7 @@ function goLogin() {
 
 .fc__lucky-num {
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fef08a;
 }
 
@@ -1428,16 +1430,16 @@ function goLogin() {
 
 .fc__sheet-k {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 12rpx;
 }
 
 .fc__sheet-body {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #374151;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .fc__section {
@@ -1447,7 +1449,7 @@ function goLogin() {
 .fc__section-k {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 12rpx;
 }
@@ -1471,7 +1473,7 @@ function goLogin() {
 }
 
 .fc__ing-txt {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #374151;
 }
 
@@ -1496,13 +1498,13 @@ function goLogin() {
   background: $mp-accent;
   color: #fff;
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
 .fc__step-txt {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #1f2937;
   line-height: 1.5;
 }
@@ -1525,7 +1527,7 @@ function goLogin() {
 
 .fc__tip-txt {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #78350f;
   line-height: 1.45;
 }
@@ -1540,16 +1542,16 @@ function goLogin() {
 
 .fc__mystic-k {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-accent-deep;
   margin-bottom: 12rpx;
 }
 
 .fc__mystic-body {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #4b5563;
-  line-height: 1.55;
+  line-height: 1.6;
   font-style: italic;
   text-align: center;
 }
@@ -1586,10 +1588,10 @@ function goLogin() {
 
 .fc__again-txt {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .fc__again-go {
-  font-size: 32rpx;
+  font-size: 30rpx;
 }
 </style>

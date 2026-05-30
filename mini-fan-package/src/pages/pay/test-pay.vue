@@ -27,6 +27,7 @@
 import { computed, ref } from 'vue'
 import { createPayOrder, createWechatPrepay, getPayOrder, type PayOrder } from '@/api/pay'
 import { HttpError } from '@/api/http'
+import { requestWechatPayment, yuanStringToFen } from '@/lib/wechatPay'
 
 const loading = ref(false)
 const title = ref('饭否支付测试订单')
@@ -39,7 +40,7 @@ const statusText = computed(() => status.value)
 
 async function startPay() {
   if (loading.value) return
-  const amountFen = yuanToFen(amountYuan.value)
+  const amountFen = yuanStringToFen(amountYuan.value)
   if (amountFen <= 0) {
     uni.showToast({ title: '请输入正确金额', icon: 'none' })
     return
@@ -58,7 +59,7 @@ async function startPay() {
     status.value = order.status
 
     const payParams = await createWechatPrepay(order.id)
-    await requestPayment(payParams)
+    await requestWechatPayment(payParams)
 
     await queryStatus()
   } catch (e: unknown) {
@@ -84,33 +85,6 @@ async function queryStatus() {
   }
 }
 
-function requestPayment(params: {
-  timeStamp: string
-  nonceStr: string
-  package: string
-  paySign: string
-  signType: 'RSA'
-}): Promise<void> {
-  return new Promise((resolve, reject) => {
-    uni.requestPayment({
-      provider: 'wxpay',
-      timeStamp: params.timeStamp,
-      nonceStr: params.nonceStr,
-      package: params.package,
-      signType: params.signType,
-      paySign: params.paySign,
-      success: () => resolve(),
-      fail: (err) => reject(err),
-    })
-  })
-}
-
-function yuanToFen(value: string): number {
-  const n = Number(value)
-  if (!Number.isFinite(n) || n <= 0) return 0
-  return Math.round(n * 100)
-}
-
 function toErrorMessage(e: unknown): string {
   const maybe = e as { errMsg?: string }
   if (maybe?.errMsg?.includes('cancel')) return '已取消支付'
@@ -132,7 +106,7 @@ function toErrorMessage(e: unknown): string {
 }
 
 .pay-title {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 700;
 }
 
@@ -145,7 +119,7 @@ function toErrorMessage(e: unknown): string {
   border: 1rpx solid #e8e8ef;
   border-radius: 12rpx;
   padding: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   background: #fafbfc;
 }
 

@@ -705,7 +705,7 @@ async function generateWizardImage() {
 }
 
 .home__ai-title {
-  font-size: 38rpx;
+  font-size: 44rpx;
   line-height: 1.3;
   font-weight: 700;
   color: $mp-text-primary;
@@ -714,7 +714,7 @@ async function generateWizardImage() {
 
 .home__ai-sub {
   margin-top: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   color: $mp-text-secondary;
 }
@@ -798,7 +798,7 @@ async function generateWizardImage() {
   text-align: center;
   border-radius: 999rpx;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-accent-deep;
   background: $mp-accent-soft;
   border: 1rpx solid $mp-ring-accent;
@@ -815,7 +815,7 @@ async function generateWizardImage() {
 .home__wizard-title {
   display: block;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   letter-spacing: -0.02em;
 }
@@ -841,7 +841,7 @@ async function generateWizardImage() {
   min-height: 200rpx;
   box-sizing: border-box;
   padding: 20rpx 24rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   border: 1rpx solid $mp-border;
   border-radius: 20rpx;
   background: $mp-surface;
@@ -1054,7 +1054,7 @@ async function generateWizardImage() {
 .home__wizard-err {
   display: block;
   margin-top: 10rpx;
-  font-size: 23rpx;
+  font-size: 22rpx;
   color: $mp-text-secondary;
 }
 
@@ -1251,6 +1251,6 @@ async function generateWizardImage() {
 .home__wizard-input-ph,
 .home__wizard-textarea-ph {
   color: #8a8f99;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 </style>

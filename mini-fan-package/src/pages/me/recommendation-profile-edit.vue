@@ -266,32 +266,38 @@ function applyProfile(p: UserProfileDto) {
   destinyModeEnabled.value = Boolean(p.destiny_mode_enabled)
 }
 
-function onBirthChange(e: { detail?: { value?: string } }) {
-  birthdayVal.value = e.detail?.value || ''
+function onBirthChange(e: unknown) {
+  const detail = e as { detail?: { value?: string } }
+  birthdayVal.value = detail.detail?.value || ''
 }
 
-function onHeightChange(e: { detail?: { value?: string | number } }) {
-  const v = e.detail?.value
+function onHeightChange(e: unknown) {
+  const detail = e as { detail?: { value?: string | number } }
+  const v = detail.detail?.value
   const n = typeof v === 'number' ? v : parseInt(String(v), 10)
   if (Number.isFinite(n)) heightIndex.value = n
 }
 
-function onPeriodDateChange(e: { detail?: { value?: string } }) {
-  lastPeriodStart.value = e.detail?.value || ''
+function onPeriodDateChange(e: unknown) {
+  const detail = e as { detail?: { value?: string } }
+  lastPeriodStart.value = detail.detail?.value || ''
 }
 
-function onCycleChange(e: { detail?: { value?: string | number } }) {
-  const v = e.detail?.value
+function onCycleChange(e: unknown) {
+  const detail = e as { detail?: { value?: string | number } }
+  const v = detail.detail?.value
   const n = typeof v === 'number' ? v : parseInt(String(v), 10)
   if (Number.isFinite(n)) cycleDayIndex.value = n
 }
 
-function onPeriodSwitch(e: { detail?: { value?: boolean } }) {
-  periodFeatureEnabled.value = Boolean(e.detail?.value)
+function onPeriodSwitch(e: unknown) {
+  const detail = e as { detail?: { value?: boolean } }
+  periodFeatureEnabled.value = Boolean(detail.detail?.value)
 }
 
-function onDestinySwitch(e: { detail?: { value?: boolean } }) {
-  destinyModeEnabled.value = Boolean(e.detail?.value)
+function onDestinySwitch(e: unknown) {
+  const detail = e as { detail?: { value?: boolean } }
+  destinyModeEnabled.value = Boolean(detail.detail?.value)
 }
 
 async function load() {
@@ -395,7 +401,7 @@ async function onSave() {
 .pe__page-desc {
   display: block;
   font-size: 24rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: $mp-text-secondary;
   padding: 4rpx 10rpx 20rpx;
 }
@@ -406,8 +412,8 @@ async function onSave() {
 
 .pe__mod-k {
   display: block;
-  font-size: 23rpx;
-  font-weight: 800;
+  font-size: 22rpx;
+  font-weight: 700;
   letter-spacing: 0.06em;
   color: $mp-text-secondary;
   margin-bottom: 10rpx;
@@ -422,7 +428,7 @@ async function onSave() {
 .pe__label {
   display: block;
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -432,7 +438,7 @@ async function onSave() {
 
 .pe__hint {
   display: block;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: $mp-text-muted;
   margin-top: 6rpx;
   margin-bottom: 10rpx;
@@ -486,14 +492,14 @@ async function onSave() {
 .pe__switch-title {
   display: block;
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
 .pe__switch-sub {
   display: block;
   margin-top: 6rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
   color: $mp-text-muted;
   line-height: 1.45;
 }
@@ -518,8 +524,8 @@ async function onSave() {
 
 .pe__style-name {
   display: block;
-  font-size: 25rpx;
-  font-weight: 900;
+  font-size: 24rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -543,7 +549,7 @@ async function onSave() {
 }
 
 .pe :deep(.oscg__txt) {
-  font-size: 25rpx;
+  font-size: 24rpx;
   font-weight: 700;
 }
 
@@ -560,7 +566,7 @@ async function onSave() {
 }
 
 .pe :deep(.ocg__txt) {
-  font-size: 23rpx;
+  font-size: 22rpx;
   font-weight: 600;
 }
 

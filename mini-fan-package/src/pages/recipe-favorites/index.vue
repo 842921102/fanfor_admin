@@ -246,7 +246,7 @@ function onDelete(item: FavoriteRow) {
 }
 
 .rf__cover-ph {
-  font-size: 48rpx;
+  font-size: 44rpx;
 }
 
 .rf__body {
@@ -258,8 +258,8 @@ function onDelete(item: FavoriteRow) {
 }
 
 .rf__title {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.3;
   word-break: break-word;

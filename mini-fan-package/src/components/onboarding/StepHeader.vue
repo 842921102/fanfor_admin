@@ -58,13 +58,14 @@ const emit = defineEmits<{
 
 .osh__progress {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
+  line-height: 1.4;
   color: $mp-text-primary;
   letter-spacing: 0.04em;
 }
 
 .osh__link {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: $mp-accent;
   padding: 10rpx 8rpx;

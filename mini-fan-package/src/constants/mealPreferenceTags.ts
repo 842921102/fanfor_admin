@@ -19,17 +19,28 @@ export const MEAL_TABOO_TAG_OPTIONS = [
   { value: 'none', label: '暂无' },
 ] as const
 
-const FLAVOR_SET = new Set(MEAL_FLAVOR_TAG_OPTIONS.map((o) => o.value))
-const TABOO_SET = new Set(MEAL_TABOO_TAG_OPTIONS.map((o) => o.value))
+export type MealFlavorTagValue = (typeof MEAL_FLAVOR_TAG_OPTIONS)[number]['value']
+export type MealTabooTagValue = (typeof MEAL_TABOO_TAG_OPTIONS)[number]['value']
+
+const FLAVOR_SET = new Set<MealFlavorTagValue>(MEAL_FLAVOR_TAG_OPTIONS.map((o) => o.value))
+const TABOO_SET = new Set<MealTabooTagValue>(MEAL_TABOO_TAG_OPTIONS.map((o) => o.value))
+
+function isMealFlavorTagValue(value: string): value is MealFlavorTagValue {
+  return FLAVOR_SET.has(value as MealFlavorTagValue)
+}
+
+function isMealTabooTagValue(value: string): value is MealTabooTagValue {
+  return TABOO_SET.has(value as MealTabooTagValue)
+}
 
 export function normalizeFlavorTagsFromApi(raw: unknown): string[] {
   if (!Array.isArray(raw)) return []
-  return raw.filter((x): x is string => typeof x === 'string' && FLAVOR_SET.has(x))
+  return raw.filter((x): x is MealFlavorTagValue => typeof x === 'string' && isMealFlavorTagValue(x))
 }
 
 export function normalizeTabooTagsFromApi(raw: unknown): string[] {
   if (!Array.isArray(raw)) return []
-  const list = raw.filter((x): x is string => typeof x === 'string' && TABOO_SET.has(x))
+  const list = raw.filter((x): x is MealTabooTagValue => typeof x === 'string' && isMealTabooTagValue(x))
   if (list.includes('none')) return ['none']
   return list
 }

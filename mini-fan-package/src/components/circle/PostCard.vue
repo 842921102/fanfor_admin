@@ -136,7 +136,8 @@ function preview(index: number) {
 
 .post-card__avatar-txt {
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
+  line-height: 1.4;
   color: $mp-accent;
 }
 
@@ -147,7 +148,8 @@ function preview(index: number) {
 
 .post-card__nick {
   font-size: 28rpx;
-  font-weight: 700;
+  font-weight: 500;
+  line-height: 1.6;
   color: $mp-text-primary;
 }
 
@@ -155,6 +157,8 @@ function preview(index: number) {
   display: block;
   margin-top: 4rpx;
   font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: $mp-text-muted;
 }
 
@@ -168,7 +172,8 @@ function preview(index: number) {
 
 .post-card__topic-txt {
   font-size: 22rpx;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1.3;
   color: $mp-accent;
 }
 
@@ -176,16 +181,17 @@ function preview(index: number) {
   display: block;
   margin-top: 16rpx;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
   color: $mp-text-primary;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .post-card__summary {
   display: block;
   margin-top: 12rpx;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  font-weight: 400;
+  line-height: 1.6;
   color: $mp-text-primary;
   white-space: pre-wrap;
 }
@@ -266,8 +272,9 @@ function preview(index: number) {
 
 .post-card__stat-num,
 .post-card__stat-lbl {
-  font-size: 24rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: $mp-text-secondary;
-  font-weight: 600;
 }
 </style>

@@ -55,7 +55,7 @@ const options = [
   display: block;
   margin-top: 12rpx;
   margin-bottom: 24rpx;
-  font-size: 23rpx;
+  font-size: 22rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
 }

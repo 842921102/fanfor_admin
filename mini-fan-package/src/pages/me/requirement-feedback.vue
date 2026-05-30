@@ -209,7 +209,7 @@ onMounted(() => {
 .feedback-field__label {
   display: block;
   margin-bottom: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: #1f2329;
 }
@@ -269,7 +269,7 @@ onMounted(() => {
   display: block;
   margin-bottom: 12rpx;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #1f2329;
 }
 
@@ -302,7 +302,7 @@ onMounted(() => {
 .feedback-history-item__title {
   flex: 1;
   min-width: 0;
-  font-size: 27rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: #1f2329;
 }

@@ -145,7 +145,7 @@ function onAltTap(alt: string) {
 
 .te-body__main-kicker {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   color: $mp-accent;
   text-transform: uppercase;
@@ -155,7 +155,7 @@ function onAltTap(alt: string) {
   display: block;
   margin-top: 12rpx;
   font-size: 44rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.25;
   letter-spacing: -0.02em;
@@ -165,8 +165,8 @@ function onAltTap(alt: string) {
 .te-body__main-tagline {
   display: block;
   margin-top: 16rpx;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: $mp-text-secondary;
 }
 
@@ -176,7 +176,7 @@ function onAltTap(alt: string) {
 
 .te-body__explain-label {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: $mp-text-muted;
   text-transform: uppercase;
@@ -185,7 +185,7 @@ function onAltTap(alt: string) {
 .te-body__explain-title {
   display: block;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 16rpx;
   line-height: 1.35;
@@ -297,7 +297,7 @@ function onAltTap(alt: string) {
 
 .te-body__detail-fold-k {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: $mp-text-muted;
   text-transform: uppercase;

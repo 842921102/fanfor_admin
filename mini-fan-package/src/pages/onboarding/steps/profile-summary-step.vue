@@ -221,8 +221,8 @@ function labelBoolAccept(v: boolean | null) {
 .psu__hero-sub {
   display: block;
   margin-top: 16rpx;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: $mp-text-secondary;
 }
 
@@ -282,7 +282,7 @@ function labelBoolAccept(v: boolean | null) {
 }
 
 .psu__value-txt {
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.65;
   color: $mp-text-secondary;
 }

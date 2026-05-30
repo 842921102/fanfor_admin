@@ -59,10 +59,10 @@ function buyNow() {
 .mpd{padding-bottom:calc(150rpx + env(safe-area-inset-bottom))}
 .mpd__swiper{height:560rpx;border-radius:16rpx;overflow:hidden;background:#f5f5f7}
 .mpd__img{width:100%;height:100%}
-.mpd__title{display:block;margin-top:14rpx;font-size:34rpx;font-weight:800;color:$mp-text-primary}
-.mpd__price{display:block;margin-top:8rpx;font-size:32rpx;font-weight:800;color:#d15454}
-.mpd__origin{display:block;margin-top:6rpx;font-size:22rpx;color:$mp-text-muted;text-decoration:line-through}
-.mpd__desc{display:block;margin-top:12rpx;font-size:25rpx;line-height:1.55;color:$mp-text-secondary;white-space:pre-wrap}
-.mpd__muted{display:block;padding:16rpx 0;font-size:24rpx;color:$mp-text-muted}
+.mpd__title{display:block;margin-top:14rpx;font-size:34rpx;font-weight:600;line-height:1.35;color:$mp-text-primary}
+.mpd__price{display:block;margin-top:8rpx;font-size: 30rpx;font-weight:700;line-height:1.4;color:#d15454}
+.mpd__origin{display:block;margin-top:6rpx;font-size:22rpx;font-weight:500;line-height:1.3;color:$mp-text-muted;text-decoration:line-through}
+.mpd__desc{display:block;margin-top:12rpx;font-size: 24rpx;font-weight:400;line-height:1.5;color:$mp-text-secondary;white-space:pre-wrap}
+.mpd__muted{display:block;padding:16rpx 0;font-size:24rpx;font-weight:400;line-height:1.5;color:$mp-text-muted}
 .mpd__bar{position:fixed;left:0;right:0;bottom:0;background:#fdfdfe;border-top:1rpx solid $mp-border;padding:12rpx 20rpx calc(12rpx + env(safe-area-inset-bottom))}
 </style>

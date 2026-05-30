@@ -19,9 +19,9 @@ defineProps<{ comment: InspirationComment }>()
 <style lang="scss" scoped>
 @import '@/uni.scss';
 .ic{display:flex;gap:14rpx;padding:18rpx 0;border-bottom:1rpx solid #f3f4f6}
-.ic__avatar{width:58rpx;height:58rpx;border-radius:50%;background:$mp-accent-soft;color:$mp-accent;display:flex;align-items:center;justify-content:center;font-size:24rpx}
+.ic__avatar{width:58rpx;height:58rpx;border-radius:50%;background:$mp-accent-soft;color:$mp-accent;display:flex;align-items:center;justify-content:center;font-size:22rpx;font-weight:500;line-height:1.3}
 .ic__body{flex:1;min-width:0}
-.ic__nick{font-size:24rpx;font-weight:700;color:$mp-text-primary}
-.ic__time{display:block;margin-top:4rpx;font-size:20rpx;color:$mp-text-muted}
-.ic__content{display:block;margin-top:8rpx;font-size:25rpx;line-height:1.5;color:$mp-text-primary;white-space:pre-wrap}
+.ic__nick{font-size:28rpx;font-weight:600;line-height:1.6;color:$mp-text-primary}
+.ic__time{display:block;margin-top:4rpx;font-size:20rpx;font-weight:400;line-height:1.2;color:$mp-text-muted}
+.ic__content{display:block;margin-top:8rpx;font-size: 28rpx;font-weight:400;line-height:1.6;color:$mp-text-primary;white-space:pre-wrap}
 </style>

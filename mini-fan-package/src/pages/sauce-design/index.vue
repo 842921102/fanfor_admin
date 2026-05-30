@@ -56,7 +56,7 @@
               active-color="#7a57d1"
               background-color="#e5e7eb"
               block-size="18"
-              @change="(e) => onTasteChange(row.key, e)"
+              @change="onTasteChange(row.key, $event)"
             />
           </view>
         </view>
@@ -370,9 +370,10 @@ onShow(() => {
 
 function onTasteChange(
   key: 'spiceLevel' | 'sweetLevel' | 'saltLevel' | 'sourLevel',
-  e: { detail?: { value?: number } },
+  e: unknown,
 ) {
-  const v = e.detail?.value
+  const detail = e as { detail?: { value?: number } }
+  const v = detail.detail?.value
   if (typeof v === 'number' && v >= 1 && v <= 5) prefs[key] = v
 }
 
@@ -718,7 +719,7 @@ function goLogin() {
 }
 
 .sc__ai-title {
-  font-size: 38rpx;
+  font-size: 44rpx;
   line-height: 1.3;
   font-weight: 700;
   color: #2f234f;
@@ -727,7 +728,7 @@ function goLogin() {
 
 .sc__ai-sub {
   margin-top: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   color: #7d7299;
 }
@@ -859,14 +860,14 @@ function goLogin() {
 
 .sc__badge-txt {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   color: $mp-accent;
   text-transform: uppercase;
 }
 
 .sc__panel-desc {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
   line-height: 1.5;
   margin-bottom: 24rpx;
@@ -888,7 +889,7 @@ function goLogin() {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: #374151;
   margin-bottom: 8rpx;
@@ -896,7 +897,7 @@ function goLogin() {
 
 .sc__slider-val {
   color: $mp-accent;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .sc__block-title {
@@ -948,7 +949,7 @@ function goLogin() {
   border-radius: 14rpx;
   background: #fff;
   border: 1rpx solid $mp-border;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 
 .sc__input--grow {
@@ -959,7 +960,7 @@ function goLogin() {
   padding: 0 24rpx;
   height: 72rpx;
   line-height: 72rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, #9575e8, #7a57d1);
@@ -1073,13 +1074,13 @@ function goLogin() {
 .sc__mini-loading-txt {
   display: block;
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
 }
 
 .sc__rec-head {
   display: block;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 16rpx;
@@ -1114,13 +1115,13 @@ function goLogin() {
   background: $mp-accent;
   color: #fff;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .sc__rec-name {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   padding-right: 48rpx;
 }
@@ -1144,7 +1145,7 @@ function goLogin() {
   height: 80rpx;
   line-height: 80rpx;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, #6366f1, #7a57d1);
   border-radius: 16rpx;
@@ -1163,7 +1164,7 @@ function goLogin() {
 .sc__empty-title {
   display: block;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 16rpx;
 }
@@ -1184,14 +1185,14 @@ function goLogin() {
   display: block;
   margin-top: 12rpx;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
 .sc__state-sub {
   display: block;
   margin-top: 8rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
 }
 
@@ -1203,14 +1204,14 @@ function goLogin() {
 .sc__err-title {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #b91c1c;
 }
 
 .sc__err-msg {
   display: block;
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #7f1d1d;
   line-height: 1.5;
   text-align: left;
@@ -1233,8 +1234,8 @@ function goLogin() {
 
 .sc__r-name {
   display: block;
-  font-size: 36rpx;
-  font-weight: 900;
+  font-size: 34rpx;
+  font-weight: 700;
   color: #fff;
 }
 
@@ -1277,22 +1278,22 @@ function goLogin() {
 
 .sc__sheet-k {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 10rpx;
 }
 
 .sc__sheet-body {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #374151;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .sc__sec-k {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   margin: 28rpx 0 12rpx;
 }
@@ -1306,7 +1307,7 @@ function goLogin() {
   margin-bottom: 8rpx;
   background: #f9fafb;
   border-radius: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #374151;
 }
 
@@ -1338,7 +1339,7 @@ function goLogin() {
   background: #ea580c;
   color: #fff;
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
@@ -1347,7 +1348,7 @@ function goLogin() {
 }
 
 .sc__step-desc {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #1f2937;
   line-height: 1.5;
 }
@@ -1365,7 +1366,7 @@ function goLogin() {
   background: #fffbeb;
   border-radius: 12rpx;
   border: 1rpx solid #fde68a;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #78350f;
 }
 
@@ -1374,7 +1375,7 @@ function goLogin() {
 }
 
 .sc__stor-line {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #374151;
   line-height: 1.5;
 }
@@ -1438,7 +1439,7 @@ function goLogin() {
 .sc__hist-title {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 16rpx;
 }

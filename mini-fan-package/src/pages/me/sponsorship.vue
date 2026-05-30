@@ -189,8 +189,9 @@ function onCancelSponsor() {
   })
 }
 
-function onLoveInput(e: { detail?: { value?: string } }) {
-  let v = String(e.detail?.value ?? '')
+function onLoveInput(e: unknown) {
+  const detail = e as { detail?: { value?: string } }
+  let v = String(detail.detail?.value ?? '')
   v = v.replace(/[^\d.]/g, '')
   const dot = v.indexOf('.')
   if (dot !== -1) {
@@ -326,14 +327,14 @@ $sp-text-3: #9ca3af;
 
 .sp__title {
   font-size: 40rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $sp-text;
   letter-spacing: -0.02em;
 }
 
 .sp__one {
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $sp-text-2;
 }
 
@@ -349,8 +350,8 @@ $sp-text-3: #9ca3af;
 
 .sp__status-badge {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: #b45309;
 }
 
@@ -415,8 +416,8 @@ $sp-text-3: #9ca3af;
 }
 
 .sp__row-name {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $sp-text;
 }
 
@@ -473,7 +474,7 @@ $sp-text-3: #9ca3af;
 .sp__input-ph {
   color: #b8bec9;
   font-weight: 500;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 
 .sp__btn {
@@ -496,7 +497,7 @@ $sp-text-3: #9ca3af;
 
 .sp__btn-txt {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
 }
 
@@ -521,7 +522,7 @@ $sp-text-3: #9ca3af;
 .sp__history-title {
   display: block;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $sp-text;
   margin-bottom: 8rpx;
 }
@@ -573,7 +574,7 @@ $sp-text-3: #9ca3af;
 
 .sp__history-amount {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $sp-purple;
 }
 

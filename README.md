@@ -4,7 +4,7 @@ English: [README_EN.md](./README_EN.md)
 
 ## 版本与更新记录
 
-- **当前版本**：`1.0.0`（见根目录 [`VERSION`](./VERSION)）
+- **当前版本**：`1.1.0`（见根目录 [`VERSION`](./VERSION)）
 - **完整变更**：[CHANGELOG.md](./CHANGELOG.md)
 
 发版时请按 `CHANGELOG.md` 顶部说明，同步小程序 `manifest.json` 的 `versionName` / `versionCode` 与 `mini-fan-package/package.json` 的 `version`。
@@ -36,6 +36,8 @@ npm run dev:mp-weixin
 # Laravel（默认 http://127.0.0.1:8000）
 npm run admin:serve
 ```
+
+说明：`mini-fan-package` 当前可在根目录 `.nvmrc` 的 Node 18 下完成小程序构建；`admin-backend` 的 Vite 8 前端资源构建/开发需要 Node `^20.19.0 || >=22.12.0`，进入 `admin-backend` 后可直接使用其 `.nvmrc`。
 
 或分别在子目录执行：
 

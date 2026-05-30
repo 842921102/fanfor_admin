@@ -3,8 +3,11 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build": "bash scripts/with-node.sh vite build",
+        "dev": "bash scripts/with-node.sh vite"
+    },
+    "engines": {
+        "node": "^20.19.0 || >=22.12.0"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",

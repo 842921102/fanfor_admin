@@ -168,7 +168,7 @@ function measureScroll() {
   const q = inst ? uni.createSelectorQuery().in(inst) : uni.createSelectorQuery()
   q.select('.ins-mine__hdr')
     .boundingClientRect((rect) => {
-      if (rect && typeof rect.bottom === 'number') {
+      if (rect && !Array.isArray(rect) && typeof rect.bottom === 'number') {
         scrollH.value = Math.max(200, wh - rect.bottom - 8)
       } else {
         scrollH.value = Math.max(200, wh - 200)
@@ -375,7 +375,7 @@ onPullDownRefresh(() => {
 }
 
 .ins-mine__loading-t {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-muted;
 }
 

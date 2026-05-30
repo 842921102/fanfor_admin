@@ -434,8 +434,9 @@ $pi-purple: #8b5cf6;
 }
 
 .pi__avatar-letter {
-  font-size: 72rpx;
-  font-weight: 800;
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 1.25;
   color: $pi-purple;
 }
 
@@ -455,13 +456,15 @@ $pi-purple: #8b5cf6;
 }
 
 .pi__avatar-cam-ico {
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1;
 }
 
 .pi__avatar-hint {
   margin-top: 20rpx;
-  font-size: 26rpx;
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 1.5;
   color: $pi-sub;
 }
 
@@ -475,8 +478,9 @@ $pi-purple: #8b5cf6;
 
 .pi__sec-title {
   display: block;
-  font-size: 26rpx;
-  font-weight: 700;
+  font-size: 34rpx;
+  font-weight: 600;
+  line-height: 1.35;
   color: $pi-text;
   margin: 8rpx 8rpx 16rpx;
 }
@@ -522,7 +526,7 @@ $pi-purple: #8b5cf6;
 
 .pi__chev {
   flex-shrink: 0;
-  font-size: 32rpx;
+  font-size: 30rpx;
   color: #c4c4c4;
   line-height: 1;
 }
@@ -577,8 +581,8 @@ $pi-purple: #8b5cf6;
 
 .pi__sheet-title {
   display: block;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $pi-text;
   text-align: center;
 }
@@ -588,7 +592,7 @@ $pi-purple: #8b5cf6;
   width: 100%;
   padding: 26rpx;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff !important;
   background: #07c160;
   border-radius: 16rpx;

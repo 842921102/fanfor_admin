@@ -724,7 +724,7 @@ function goLogin() {
 }
 
 .tm__hero-icon-emoji {
-  font-size: 64rpx;
+  font-size: 44rpx;
   line-height: 1;
 }
 
@@ -732,8 +732,8 @@ function goLogin() {
   display: block;
   text-align: center;
   margin-top: 8rpx;
-  font-size: 36rpx;
-  font-weight: 800;
+  font-size: 34rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -802,7 +802,7 @@ function goLogin() {
 
 .tm__block-title {
   display: block;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: #374151;
   margin-bottom: 16rpx;
@@ -833,7 +833,7 @@ function goLogin() {
 }
 
 .tm__chip-txt {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: $mp-text-primary;
 }
@@ -848,7 +848,7 @@ function goLogin() {
 
 .tm__inline-label,
 .tm__inline-unit {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
 }
 
@@ -917,7 +917,7 @@ function goLogin() {
   border-radius: 16rpx;
   background: #fff;
   border: 1rpx solid $mp-border;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 
 .tm__input--grow {
@@ -929,7 +929,7 @@ function goLogin() {
   padding: 0 28rpx;
   height: 72rpx;
   line-height: 72rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: #fff;
   background: linear-gradient(135deg, #9575e8, #7a57d1);
@@ -1045,7 +1045,7 @@ function goLogin() {
   border-radius: 16rpx;
   background: #f5f6f8;
   border: 1rpx solid $mp-border;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 
 .tm__prefs-status {
@@ -1087,11 +1087,11 @@ function goLogin() {
 
 .tm__submit-txt {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .tm__submit-go {
-  font-size: 32rpx;
+  font-size: 30rpx;
 }
 
 .tm__panel--state {
@@ -1237,7 +1237,7 @@ function goLogin() {
 .tm__state-kicker {
   display: block;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   color: $mp-accent;
   text-transform: uppercase;
@@ -1251,12 +1251,12 @@ function goLogin() {
   display: block;
   margin-top: 8rpx;
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
 .tm__loading-icon {
-  font-size: 72rpx;
+  font-size: 44rpx;
   margin: 24rpx 0;
 }
 
@@ -1330,8 +1330,8 @@ function goLogin() {
 }
 
 .tm__err-icon {
-  font-size: 56rpx;
-  font-weight: 900;
+  font-size: 44rpx;
+  font-weight: 700;
   margin: 16rpx 0;
 }
 
@@ -1353,7 +1353,7 @@ function goLogin() {
 }
 
 .tm__err-msg {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #7f1d1d;
   line-height: 1.5;
 }
@@ -1387,7 +1387,7 @@ function goLogin() {
 .tm__result-hero-k {
   display: block;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-accent;
   letter-spacing: 0.08em;
 }
@@ -1395,15 +1395,15 @@ function goLogin() {
 .tm__result-hero-title {
   display: block;
   margin-top: 8rpx;
-  font-size: 36rpx;
-  font-weight: 800;
+  font-size: 34rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
 .tm__result-hero-sub {
   display: block;
   margin-top: 8rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
   line-height: 1.45;
 }
@@ -1440,8 +1440,8 @@ function goLogin() {
 
 .tm__dish-name {
   flex: 1;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -1458,7 +1458,7 @@ function goLogin() {
 .tm__dish-desc {
   display: block;
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
   line-height: 1.5;
 }
@@ -1505,11 +1505,11 @@ function goLogin() {
 
 .tm__again-txt {
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .tm__again-go {
-  font-size: 32rpx;
+  font-size: 30rpx;
 }
 
 .tm__mask {
@@ -1548,14 +1548,14 @@ function goLogin() {
 
 .tm__modal-title {
   flex: 1;
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
   padding-right: 16rpx;
 }
 
 .tm__modal-close {
-  font-size: 36rpx;
+  font-size: 34rpx;
   color: $mp-text-muted;
   padding: 8rpx;
 }
@@ -1571,8 +1571,8 @@ function goLogin() {
 
 .tm__modal-section {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-accent-deep;
   margin-top: 24rpx;
   margin-bottom: 12rpx;
@@ -1584,9 +1584,9 @@ function goLogin() {
 
 .tm__modal-p {
   display: block;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
-  line-height: 1.55;
+  line-height: 1.6;
   margin-bottom: 8rpx;
 }
 
@@ -1599,8 +1599,8 @@ function goLogin() {
 }
 
 .tm__step-num {
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-accent;
   min-width: 40rpx;
 }
@@ -1610,9 +1610,9 @@ function goLogin() {
 }
 
 .tm__step-desc {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .tm__step-meta {

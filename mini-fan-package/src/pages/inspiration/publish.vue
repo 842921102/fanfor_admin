@@ -126,17 +126,17 @@ async function submit() {
 <style lang="scss" scoped>
 @import '@/uni.scss';
 .ipb__types{display:flex;gap:12rpx;margin-top:10rpx}
-.ipb__type{padding:10rpx 18rpx;border-radius:999rpx;background:#f5f5f7;font-size:24rpx;color:$mp-text-secondary}
+.ipb__type{padding:10rpx 18rpx;border-radius:999rpx;background:#f5f5f7;font-size:22rpx;font-weight:500;line-height:1.3;color:$mp-text-secondary}
 .ipb__type--on{background:$mp-accent-soft;color:$mp-accent;border:1rpx solid $mp-ring-accent}
 .ipb__imgs{margin-top:10rpx;display:flex;flex-wrap:wrap;gap:12rpx}
 .ipb__img-wrap{position:relative;width:200rpx;height:200rpx;border-radius:12rpx;overflow:hidden;border:1rpx solid $mp-border}
 .ipb__img{width:100%;height:100%}
 .ipb__x{position:absolute;top:2rpx;right:2rpx;width:36rpx;height:36rpx;line-height:36rpx;text-align:center;border-radius:50%;background:rgba(0,0,0,.4);color:#fff}
-.ipb__add{width:200rpx;height:200rpx;border-radius:12rpx;border:1rpx dashed $mp-border;background:#fafbfc;display:flex;align-items:center;justify-content:center;font-size:56rpx;color:$mp-text-muted}
-.ipb__input{margin-top:10rpx;padding:12rpx 0;font-size:26rpx;border-bottom:1rpx solid #f3f4f6}
-.ipb__textarea{margin-top:10rpx;min-height:220rpx;font-size:26rpx;line-height:1.55}
+.ipb__add{width:200rpx;height:200rpx;border-radius:12rpx;border:1rpx dashed $mp-border;background:#fafbfc;display:flex;align-items:center;justify-content:center;font-size: 44rpx;color:$mp-text-muted}
+.ipb__input{margin-top:10rpx;padding:12rpx 0;font-size: 28rpx;border-bottom:1rpx solid #f3f4f6}
+.ipb__textarea{margin-top:10rpx;min-height:220rpx;font-size: 28rpx;font-weight:400;line-height:1.6}
 .ipb__vis{display:flex;align-items:center;justify-content:space-between}
-.ipb__vis-label{font-size:28rpx;color:$mp-text-primary}
-.ipb__vis-value{display:flex;align-items:center;gap:10rpx;font-size:26rpx;color:$mp-text-secondary}
-.ipb__vis-arrow{font-size:26rpx;color:$mp-text-muted}
+.ipb__vis-label{font-size:28rpx;font-weight:500;line-height:1.6;color:$mp-text-primary}
+.ipb__vis-value{display:flex;align-items:center;gap:10rpx;font-size: 28rpx;color:$mp-text-secondary}
+.ipb__vis-arrow{font-size: 28rpx;color:$mp-text-muted}
 </style>

@@ -7,7 +7,7 @@ export interface HttpRequestOptions {
   /** 相对路径（如 /api/me/profile）或完整 https URL */
   url: string
   method?: HttpMethod
-  data?: Record<string, unknown>
+  data?: unknown
   header?: Record<string, string>
 }
 
@@ -199,7 +199,7 @@ export function request<T = unknown>(options: HttpRequestOptions): Promise<T> {
     uni.request({
       url,
       method: method as UniApp.RequestOptions['method'],
-      data: options.data,
+      data: options.data as string | AnyObject | ArrayBuffer | undefined,
       header,
       timeout: REQUEST_TIMEOUT_MS,
       dataType: 'text',

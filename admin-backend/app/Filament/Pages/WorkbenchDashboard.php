@@ -2,7 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\AdminVersionFooterWidget;
 use App\Filament\Widgets\RecommendationCountChartWidget;
 use App\Filament\Widgets\RecommendationFavoriteRateChartWidget;
 use App\Filament\Widgets\RecommendationHealthStatsWidget;
@@ -70,18 +69,4 @@ class WorkbenchDashboard extends Dashboard
         ];
     }
 
-    /**
-     * @return array<class-string<Widget> | WidgetConfiguration>
-     */
-    protected function getFooterWidgets(): array
-    {
-        return [
-            AdminVersionFooterWidget::class,
-        ];
-    }
-
-    public function getFooterWidgetsColumns(): int|array
-    {
-        return 1;
-    }
 }

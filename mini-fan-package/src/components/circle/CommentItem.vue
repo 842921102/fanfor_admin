@@ -54,8 +54,9 @@ const avatarText = computed(() => {
 }
 
 .c-comment__avatar-txt {
-  font-size: 28rpx;
-  font-weight: 700;
+  font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: $mp-accent;
 }
 
@@ -65,8 +66,9 @@ const avatarText = computed(() => {
 }
 
 .c-comment__nick {
-  font-size: 26rpx;
-  font-weight: 700;
+  font-size: 28rpx;
+  font-weight: 600;
+  line-height: 1.6;
   color: $mp-text-primary;
 }
 
@@ -74,14 +76,17 @@ const avatarText = computed(() => {
   display: block;
   margin-top: 4rpx;
   font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: $mp-text-muted;
 }
 
 .c-comment__content {
   display: block;
   margin-top: 10rpx;
-  font-size: 26rpx;
-  line-height: 1.5;
+  font-size: 28rpx;
+  font-weight: 400;
+  line-height: 1.6;
   color: $mp-text-primary;
   white-space: pre-wrap;
 }

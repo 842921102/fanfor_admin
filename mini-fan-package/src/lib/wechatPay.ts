@@ -3,7 +3,7 @@ import { createWechatPrepay, getPayOrder, type WechatPayParams } from '@/api/pay
 /** 调起微信小程序支付（与后端 wechat-prepay 返回字段一致） */
 export function requestWechatPayment(params: WechatPayParams): Promise<void> {
   return new Promise((resolve, reject) => {
-    uni.requestPayment({
+    const options = {
       provider: 'wxpay',
       timeStamp: params.timeStamp,
       nonceStr: params.nonceStr,
@@ -11,8 +11,9 @@ export function requestWechatPayment(params: WechatPayParams): Promise<void> {
       signType: params.signType,
       paySign: params.paySign,
       success: () => resolve(),
-      fail: (err) => reject(err),
-    })
+      fail: (err: unknown) => reject(err),
+    } as unknown as UniApp.RequestPaymentOptions
+    uni.requestPayment(options)
   })
 }
 

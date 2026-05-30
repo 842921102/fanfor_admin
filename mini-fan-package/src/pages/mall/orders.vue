@@ -331,7 +331,7 @@ $ord-red: #dc2626;
 .ord__search-input {
   flex: 1;
   min-width: 0;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $ord-text;
 }
 
@@ -378,7 +378,7 @@ $ord-red: #dc2626;
 
 .ord__tab--active .ord__tab-txt {
   color: $ord-text;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .ord__tab--active::after {
@@ -425,7 +425,7 @@ $ord-red: #dc2626;
   margin: 28rpx auto 0;
   display: inline-block;
   padding: 16rpx 40rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $ord-purple;
   border: 1rpx solid rgba(139, 92, 246, 0.35);
@@ -440,7 +440,7 @@ $ord-red: #dc2626;
 }
 
 .ord__empty-ico {
-  font-size: 88rpx;
+  font-size: 44rpx;
   line-height: 1;
   opacity: 0.35;
 }
@@ -448,13 +448,13 @@ $ord-red: #dc2626;
 .ord__empty-title {
   margin-top: 24rpx;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $ord-text;
 }
 
 .ord__empty-sub {
   margin-top: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $ord-muted;
 }
 
@@ -500,13 +500,13 @@ $ord-red: #dc2626;
 
 .ord__shop-name {
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $ord-text;
 }
 
 .ord__status {
   flex-shrink: 0;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
 }
 
@@ -616,8 +616,8 @@ $ord-red: #dc2626;
 }
 
 .ord__sum-money {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $ord-text;
 }
 
@@ -632,7 +632,7 @@ $ord-red: #dc2626;
 
 .ord__btn {
   padding: 14rpx 28rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   border-radius: 999rpx;
   box-sizing: border-box;

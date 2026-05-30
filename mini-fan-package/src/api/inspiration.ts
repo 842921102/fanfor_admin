@@ -499,8 +499,8 @@ export async function getMyInspirationCommentActivity(): Promise<InspirationComm
 }
 
 async function requestWithFallback<T>(
-  primary: { url: string; method: 'GET' | 'POST'; data?: Record<string, unknown> },
-  fallback: { url: string; method: 'GET' | 'POST'; data?: Record<string, unknown> },
+  primary: { url: string; method: 'GET' | 'POST'; data?: unknown },
+  fallback: { url: string; method: 'GET' | 'POST'; data?: unknown },
 ): Promise<T> {
   try {
     return await request<T>(primary)

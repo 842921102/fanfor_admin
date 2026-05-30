@@ -86,17 +86,18 @@ const avatarText = computed(() => (props.item.nickname || '访').slice(0, 1))
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   overflow: hidden;
-  font-size: 26rpx;
+  font-size: 30rpx;
   font-weight: 600;
   color: $mp-text-primary;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 .iw-card__desc {
   display: block;
   margin-top: 8rpx;
-  font-size: 22rpx;
+  font-size: 24rpx;
+  font-weight: 400;
   color: $mp-text-secondary;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 .iw-card__meta {
   margin-top: 12rpx;
@@ -125,6 +126,8 @@ const avatarText = computed(() => (props.item.nickname || '访').slice(0, 1))
 }
 .iw-card__nick {
   font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: #8a8a8e;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -132,6 +135,8 @@ const avatarText = computed(() => (props.item.nickname || '访').slice(0, 1))
 }
 .iw-card__type {
   font-size: 20rpx;
+  font-weight: 400;
+  line-height: 1.2;
   color: #8a8a8e;
   flex-shrink: 0;
 }
@@ -140,6 +145,8 @@ const avatarText = computed(() => (props.item.nickname || '访').slice(0, 1))
   display: flex;
   gap: 20rpx;
   font-size: 22rpx;
+  font-weight: 500;
+  line-height: 1.3;
   color: #8a8a8e;
 }
 </style>

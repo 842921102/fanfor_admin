@@ -62,11 +62,12 @@ defineProps<{
 
 /* 配色沿用全局 mp-btn-*；宽度由外层 bab__slot 的 3:7 决定 */
 .bab__slot :deep(.mp-btn-primary) {
-  height: 44rpx;
+  height: 48rpx;
   padding: 0 20rpx;
   border-radius: 12rpx;
-  font-size: 28rpx;
-  line-height: 44rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 48rpx;
   box-sizing: border-box;
   white-space: nowrap;
   display: flex;
@@ -75,11 +76,12 @@ defineProps<{
 }
 
 .bab__slot :deep(.mp-btn-ghost) {
-  height: 44rpx;
+  height: 48rpx;
   padding: 0 16rpx;
   border-radius: 12rpx;
-  font-size: 24rpx;
-  line-height: 44rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  line-height: 48rpx;
   box-sizing: border-box;
   color: #6b7280 !important;
   background: #f8fafc !important;

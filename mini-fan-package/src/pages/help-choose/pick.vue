@@ -262,7 +262,7 @@ $hc-soft: #ebe4ff;
 .hc-pick__h {
   display: block;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #1a1c21;
   margin-bottom: 12rpx;
 }
@@ -347,7 +347,7 @@ $hc-soft: #ebe4ff;
 }
 
 .hc-pick__scene-txt {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 600;
   color: #3d4446;
 }
@@ -410,7 +410,7 @@ $hc-soft: #ebe4ff;
   display: block;
   margin-top: 12rpx;
   font-size: 40rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #1a1c21;
   line-height: 1.25;
 }

@@ -4,7 +4,7 @@
 
 ## Versioning
 
-- **Current version**: `1.0.0` (see [`VERSION`](./VERSION) at repo root)
+- **Current version**: `1.1.0` (see [`VERSION`](./VERSION) at repo root)
 - **History**: [`CHANGELOG.md`](./CHANGELOG.md)
 
 When cutting a release, bump `VERSION`, update `CHANGELOG.md`, and keep `mini-fan-package/package.json` and `mini-fan-package/src/manifest.json` (`versionName` / `versionCode`) in sync (see notes at the top of the changelog).

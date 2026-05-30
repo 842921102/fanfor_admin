@@ -76,7 +76,7 @@ function payStatusText(status: string): string {
 .mod__line{display:block;margin-top:8rpx;font-size:24rpx;color:$mp-text-secondary;line-height:1.5}
 .mod__product{display:flex;gap:12rpx;margin-top:8rpx}
 .mod__img{width:136rpx;height:136rpx;border-radius:12rpx;background:#f3f4f6;flex-shrink:0}
-.mod__name{display:block;font-size:27rpx;font-weight:700;color:$mp-text-primary}
+.mod__name{display:block;font-size: 30rpx;font-weight:600;line-height:1.4;color:$mp-text-primary}
 .mod__total{display:block;margin-top:10rpx;font-size:28rpx;font-weight:700;color:$mp-accent}
 .mod__muted{display:block;padding:16rpx 0;font-size:24rpx;color:$mp-text-muted}
 </style>

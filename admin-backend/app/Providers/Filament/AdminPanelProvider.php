@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Pages\Auth\AdminLogin;
 use App\Filament\Pages\WorkbenchDashboard;
 use App\Http\Middleware\SetAdminLocale;
+use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -13,6 +14,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -30,10 +32,21 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->homeUrl(fn (): string => WorkbenchDashboard::getUrl(panel: 'admin'))
             ->login(AdminLogin::class)
-            ->brandName('后台管理')
+            ->brandName('饭否 · 后台管理')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::hex('#7a57d1'),
             ])
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->defaultThemeMode(ThemeMode::Light)
+            ->darkMode(false)
+            ->sidebarWidth('15rem')
+            ->font(
+                '-apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Segoe UI", sans-serif',
+            )
+            ->renderHook(
+                PanelsRenderHook::FOOTER,
+                fn (): string => view('filament.layout.footer')->render(),
+            )
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label('用户管理')

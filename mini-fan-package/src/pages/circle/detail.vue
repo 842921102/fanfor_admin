@@ -222,7 +222,7 @@ async function sendComment() {
 }
 
 .cr-detail__avatar-txt {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 700;
   color: $mp-accent;
 }

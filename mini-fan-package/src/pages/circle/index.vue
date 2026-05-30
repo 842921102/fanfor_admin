@@ -234,7 +234,7 @@ function goMyPosts() {
 .cr-home__link {
   margin: 0;
   padding: 0;
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-accent !important;
   background: transparent !important;

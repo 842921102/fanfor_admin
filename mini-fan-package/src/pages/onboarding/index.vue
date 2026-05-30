@@ -643,7 +643,7 @@ function onStepNext() {
 .ob__section-k {
   display: block;
   margin: 28rpx 8rpx 14rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -667,7 +667,7 @@ function onStepNext() {
 
 .ob__value-dot {
   flex-shrink: 0;
-  font-size: 32rpx;
+  font-size: 30rpx;
   line-height: 1.4;
   color: $mp-accent;
   font-weight: 700;
@@ -675,8 +675,8 @@ function onStepNext() {
 
 .ob__value-txt {
   flex: 1;
-  font-size: 25rpx;
-  line-height: 1.55;
+  font-size: 24rpx;
+  line-height: 1.6;
   color: $mp-text-primary;
 }
 
@@ -730,7 +730,7 @@ function onStepNext() {
 }
 
 .ob :deep(.ocg__txt) {
-  font-size: 23rpx;
+  font-size: 22rpx;
   font-weight: 600;
 }
 
@@ -745,7 +745,7 @@ function onStepNext() {
 }
 
 .ob :deep(.oscg__txt) {
-  font-size: 25rpx;
+  font-size: 24rpx;
   font-weight: 700;
 }
 

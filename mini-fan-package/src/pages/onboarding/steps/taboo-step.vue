@@ -99,7 +99,7 @@ const allergyOptions = [
   display: block;
   margin-top: 12rpx;
   margin-bottom: 22rpx;
-  font-size: 23rpx;
+  font-size: 22rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
 }
@@ -139,7 +139,7 @@ const allergyOptions = [
 .ts__module-title {
   display: block;
   margin-top: 8rpx;
-  font-size: 27rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-text-primary;
 }

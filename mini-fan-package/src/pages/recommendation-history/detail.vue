@@ -343,7 +343,7 @@ async function onToggleRecipeFavorite() {
 }
 
 .rh-detail__muted {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-muted;
 }
 
@@ -362,7 +362,7 @@ async function onToggleRecipeFavorite() {
 
 .rh-detail__banner-k {
   font-size: 20rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.12em;
   color: $mp-accent;
   text-transform: uppercase;
@@ -371,7 +371,7 @@ async function onToggleRecipeFavorite() {
 .rh-detail__banner-t {
   display: block;
   margin-top: 10rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.45;
   color: $mp-text-secondary;
 }
@@ -424,7 +424,7 @@ async function onToggleRecipeFavorite() {
 
 .rh-detail__value {
   margin-top: 6rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
 }
 
@@ -477,7 +477,7 @@ async function onToggleRecipeFavorite() {
 
 .rh-detail__step-text {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   color: $mp-text-primary;
 }

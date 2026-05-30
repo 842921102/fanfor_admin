@@ -300,7 +300,7 @@ async function onToggleFavorite(item: RecommendationRecordListItem) {
   flex: 1;
   min-width: 0;
   height: 56rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
 }
 
@@ -338,8 +338,8 @@ async function onToggleFavorite(item: RecommendationRecordListItem) {
 }
 
 .rh__row-title {
-  font-size: 32rpx;
-  font-weight: 800;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.35;
   word-break: break-word;
@@ -367,7 +367,7 @@ async function onToggleFavorite(item: RecommendationRecordListItem) {
 }
 
 .rh__fav-btn-txt {
-  font-size: 36rpx;
+  font-size: 34rpx;
   color: #f59e0b;
 }
 
@@ -392,7 +392,7 @@ async function onToggleFavorite(item: RecommendationRecordListItem) {
 .rh__summary {
   display: block;
   margin-top: 14rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
   overflow: hidden;

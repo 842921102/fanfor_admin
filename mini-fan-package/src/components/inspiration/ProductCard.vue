@@ -23,7 +23,7 @@ defineEmits<{ view: [] }>()
 .ip-card{display:flex;gap:14rpx;padding:16rpx;border:1rpx solid $mp-border;border-radius:16rpx;background:#fff}
 .ip-card__img{width:140rpx;height:140rpx;border-radius:12rpx;flex-shrink:0;background:#f3f4f6}
 .ip-card__body{flex:1;min-width:0}
-.ip-card__name{display:block;font-size:26rpx;font-weight:700;color:$mp-text-primary}
+.ip-card__name{display:block;font-size: 30rpx;font-weight:600;line-height:1.4;color:$mp-text-primary}
 .ip-card__price{display:block;margin-top:8rpx;font-size:24rpx;color:#d15454}
 .ip-card__actions{margin-top:12rpx;display:flex;gap:10rpx}
 .ip-card__btn{flex:1}

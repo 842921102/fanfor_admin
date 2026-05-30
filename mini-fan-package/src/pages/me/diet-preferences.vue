@@ -121,8 +121,8 @@ async function onSave() {
 }
 .pg__label {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: #1f2937;
   margin-bottom: 10rpx;
 }
@@ -134,7 +134,7 @@ async function onSave() {
   background: #f6f7fb;
   border: 1rpx solid rgba(31, 35, 41, 0.1);
   border-radius: 16rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: #111827;
   line-height: 84rpx;
 }

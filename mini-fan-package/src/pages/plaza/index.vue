@@ -161,7 +161,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 }
 
 .plaza__circle-emoji {
-  font-size: 52rpx;
+  font-size: 44rpx;
   line-height: 1;
 }
 
@@ -182,7 +182,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 
 .plaza__circle-title {
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -193,7 +193,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 }
 
 .plaza__circle-arrow {
-  font-size: 36rpx;
+  font-size: 34rpx;
   font-weight: 700;
   color: #7a57d1;
 }
@@ -240,7 +240,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 .plaza__rail-k {
   display: block;
   font-size: 20rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: $mp-text-muted;
@@ -250,7 +250,7 @@ function onEntryTap(item: PlazaEntryConfig) {
   display: block;
   margin-top: 8rpx;
   font-size: 34rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   letter-spacing: -0.02em;
 }
@@ -258,7 +258,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 .plaza__pill {
   flex-shrink: 0;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-accent;
   padding: 10rpx 22rpx;
   border-radius: 999rpx;
@@ -366,13 +366,13 @@ function onEntryTap(item: PlazaEntryConfig) {
 }
 
 .plaza__icon-emoji {
-  font-size: 32rpx;
+  font-size: 30rpx;
   line-height: 1;
 }
 
 .plaza__status {
   font-size: 20rpx;
-  font-weight: 800;
+  font-weight: 700;
   padding: 8rpx 14rpx;
   border-radius: 999rpx;
 }
@@ -391,7 +391,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 
 .plaza__card-title {
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.35;
 }
@@ -434,7 +434,7 @@ function onEntryTap(item: PlazaEntryConfig) {
 
 .plaza__card-action {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-accent;
 }
 
@@ -444,8 +444,8 @@ function onEntryTap(item: PlazaEntryConfig) {
 }
 
 .plaza__card-arrow {
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-accent;
 }
 

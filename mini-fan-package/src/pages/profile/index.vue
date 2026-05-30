@@ -138,7 +138,7 @@ async function onSaveProfile() {
 .profile__kicker {
   display: block;
   font-size: 24rpx;
-  font-weight: 900;
+  font-weight: 700;
   color: $mp-accent;
   margin-bottom: 18rpx;
 }
@@ -163,7 +163,7 @@ async function onSaveProfile() {
 
 .profile__avatar-text {
   font-size: 40rpx;
-  font-weight: 900;
+  font-weight: 700;
   color: $mp-accent;
 }
 
@@ -175,7 +175,7 @@ async function onSaveProfile() {
 .profile__name {
   display: block;
   font-size: 34rpx;
-  font-weight: 900;
+  font-weight: 700;
   color: $mp-text-primary;
   word-break: break-all;
 }
@@ -207,7 +207,7 @@ async function onSaveProfile() {
 }
 
 .profile__item-value {
-  font-size: 26rpx;
+  font-size: 28rpx;
   font-weight: 700;
   color: $mp-text-primary;
 }
@@ -226,13 +226,13 @@ async function onSaveProfile() {
   border: 1rpx solid $mp-border;
   background: #fff;
   padding: 0 18rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
 }
 
 .profile__guest-sub {
   color: $mp-text-secondary;
-  font-size: 26rpx;
+  font-size: 28rpx;
 }
 </style>
 

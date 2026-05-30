@@ -76,8 +76,9 @@ watch(
   { immediate: true },
 )
 
-function onHeightInput(e: { detail?: { value?: string } }) {
-  const raw = String(e.detail?.value ?? '')
+function onHeightInput(e: unknown) {
+  const detail = e as { detail?: { value?: string } }
+  const raw = String(detail.detail?.value ?? '')
   heightText.value = raw
   if (!raw.trim()) {
     emit('update:heightCm', null)
@@ -87,8 +88,9 @@ function onHeightInput(e: { detail?: { value?: string } }) {
   emit('update:heightCm', Number.isFinite(n) ? n : null)
 }
 
-function onWeightInput(e: { detail?: { value?: string } }) {
-  const raw = String(e.detail?.value ?? '')
+function onWeightInput(e: unknown) {
+  const detail = e as { detail?: { value?: string } }
+  const raw = String(detail.detail?.value ?? '')
   weightText.value = raw
   if (!raw.trim()) {
     emit('update:weightKg', null)
@@ -98,8 +100,9 @@ function onWeightInput(e: { detail?: { value?: string } }) {
   emit('update:weightKg', Number.isFinite(n) ? n : null)
 }
 
-function onTargetInput(e: { detail?: { value?: string } }) {
-  const raw = String(e.detail?.value ?? '')
+function onTargetInput(e: unknown) {
+  const detail = e as { detail?: { value?: string } }
+  const raw = String(detail.detail?.value ?? '')
   targetText.value = raw
   if (!raw.trim()) {
     emit('update:targetWeightKg', null)
@@ -130,7 +133,7 @@ function onTargetInput(e: { detail?: { value?: string } }) {
   display: block;
   margin-top: 12rpx;
   margin-bottom: 22rpx;
-  font-size: 23rpx;
+  font-size: 22rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
 }
@@ -155,7 +158,7 @@ function onTargetInput(e: { detail?: { value?: string } }) {
 }
 
 .vs__opt {
-  font-size: 21rpx;
+  font-size: 22rpx;
   font-weight: 500;
   color: $mp-text-muted;
 }
@@ -186,7 +189,7 @@ function onTargetInput(e: { detail?: { value?: string } }) {
 .vs__footnote {
   display: block;
   margin-top: 18rpx;
-  font-size: 21rpx;
+  font-size: 22rpx;
   line-height: 1.45;
   color: $mp-text-muted;
 }

@@ -186,7 +186,7 @@ function goBack() {
   display: block;
   margin-top: 20rpx;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: #6b7280;
 }
 
@@ -204,7 +204,7 @@ function goBack() {
   background: #07c160;
   color: #ffffff;
   border-radius: 16rpx;
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
   border: none;
 }
@@ -218,7 +218,7 @@ function goBack() {
 .warn {
   display: block;
   margin-top: 24rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: #b45309;
 }

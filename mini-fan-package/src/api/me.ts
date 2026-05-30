@@ -64,7 +64,7 @@ export async function putMeProfile(
   return request<MeProfileResponse>({
     url: '/api/me/profile',
     method: 'PUT',
-    data: body as Record<string, unknown>,
+    data: body,
   })
 }
 
@@ -75,7 +75,7 @@ export async function putUserProfile(
   return request<MeProfileResponse>({
     url: '/api/user/profile',
     method: 'PUT',
-    data: body as Record<string, unknown>,
+    data: body,
   })
 }
 
@@ -86,7 +86,7 @@ export async function postUserProfileOnboarding(
     /** 与 GET/PUT /api/me/profile 同前缀，便于统一 /api/me/* 前缀 */
     url: '/api/me/profile/onboarding',
     method: 'POST',
-    data: body as Record<string, unknown>,
+    data: body,
   })
 }
 
@@ -114,6 +114,6 @@ export async function putMeDailyToday(body: {
   return request({
     url: '/api/me/daily-status/today',
     method: 'PUT',
-    data: body as Record<string, unknown>,
+    data: body,
   })
 }

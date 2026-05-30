@@ -408,7 +408,7 @@ async function onToggleRecipeFavorite() {
 }
 
 .recipe-page__muted {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-muted;
 }
 
@@ -432,7 +432,7 @@ async function onToggleRecipeFavorite() {
 
 .recipe-page__hero-k {
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   color: $mp-accent;
   text-transform: uppercase;
@@ -442,7 +442,7 @@ async function onToggleRecipeFavorite() {
   display: block;
   margin-top: 12rpx;
   font-size: 44rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   line-height: 1.25;
   word-break: break-word;
@@ -452,7 +452,7 @@ async function onToggleRecipeFavorite() {
   display: block;
   margin-top: 16rpx;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: $mp-text-secondary;
 }
 
@@ -490,7 +490,7 @@ async function onToggleRecipeFavorite() {
 }
 
 .recipe-page__meta-val {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
 }
 
@@ -524,14 +524,14 @@ async function onToggleRecipeFavorite() {
   display: block;
   margin-top: 8rpx;
   font-size: 30rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
 .recipe-page__sec-title {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
   margin-bottom: 16rpx;
 }
@@ -539,7 +539,7 @@ async function onToggleRecipeFavorite() {
 .recipe-page__sec-title--sub {
   margin-top: 28rpx;
   margin-bottom: 14rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-secondary;
 }
 
@@ -552,7 +552,7 @@ async function onToggleRecipeFavorite() {
 .recipe-page__chip {
   padding: 10rpx 18rpx;
   border-radius: 12rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-primary;
   background: #f3f4f6;
   font-weight: 600;
@@ -564,7 +564,7 @@ async function onToggleRecipeFavorite() {
 }
 
 .recipe-page__empty-line {
-  font-size: 26rpx;
+  font-size: 28rpx;
   color: $mp-text-muted;
 }
 
@@ -594,14 +594,14 @@ async function onToggleRecipeFavorite() {
 
 .recipe-page__step-no text {
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: #fff;
 }
 
 .recipe-page__step-body {
   flex: 1;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: $mp-text-primary;
 }
 
@@ -611,15 +611,15 @@ async function onToggleRecipeFavorite() {
 
 .recipe-page__fallback-title {
   display: block;
-  font-size: 26rpx;
-  font-weight: 800;
+  font-size: 28rpx;
+  font-weight: 700;
   color: $mp-text-secondary;
 }
 
 .recipe-page__fallback-desc {
   display: block;
   margin-top: 10rpx;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: $mp-text-muted;
 }
@@ -633,8 +633,8 @@ async function onToggleRecipeFavorite() {
 }
 
 .recipe-page__legacy-txt {
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: $mp-text-secondary;
   white-space: pre-wrap;
   word-break: break-word;
@@ -650,12 +650,12 @@ async function onToggleRecipeFavorite() {
 
 .recipe-page__tip-dot {
   color: $mp-accent;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .recipe-page__tip-txt {
   flex: 1;
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: $mp-text-secondary;
 }
@@ -666,7 +666,7 @@ async function onToggleRecipeFavorite() {
 }
 
 .recipe-page__warn-txt {
-  font-size: 26rpx;
+  font-size: 28rpx;
   line-height: 1.5;
   color: #92400e;
 }

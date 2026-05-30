@@ -167,7 +167,7 @@ async function submit() {
   width: 100%;
   min-height: 220rpx;
   font-size: 28rpx;
-  line-height: 1.55;
+  line-height: 1.6;
   color: $mp-text-primary;
 }
 
@@ -258,7 +258,7 @@ async function submit() {
 }
 
 .cr-pub__add-txt {
-  font-size: 64rpx;
+  font-size: 44rpx;
   font-weight: 300;
   color: $mp-text-muted;
 }

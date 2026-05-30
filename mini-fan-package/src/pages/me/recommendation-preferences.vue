@@ -118,7 +118,7 @@ function goOnboarding() {
 .rp__lead-k {
   display: block;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.1em;
   color: $mp-accent;
   text-transform: uppercase;
@@ -127,8 +127,8 @@ function goOnboarding() {
 
 .rp__lead-body {
   display: block;
-  font-size: 26rpx;
-  line-height: 1.55;
+  font-size: 28rpx;
+  line-height: 1.6;
   color: $mp-text-secondary;
 }
 
@@ -154,8 +154,8 @@ function goOnboarding() {
 
 .rp__hero-name {
   display: block;
-  font-size: 32rpx;
-  font-weight: 900;
+  font-size: 30rpx;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -181,7 +181,7 @@ function goOnboarding() {
 .rp__sec-k {
   display: block;
   font-size: 22rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-muted;
   padding: 12rpx 16rpx 8rpx;
 }
@@ -330,7 +330,7 @@ function goOnboarding() {
 .rp__row-name {
   display: block;
   font-size: 28rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-primary;
 }
 
@@ -343,7 +343,7 @@ function goOnboarding() {
 }
 
 .rp__row-arrow {
-  font-size: 32rpx;
+  font-size: 30rpx;
   color: $mp-text-muted;
   flex-shrink: 0;
 }
@@ -355,7 +355,7 @@ function goOnboarding() {
 .rp__ph-k {
   display: block;
   font-size: 24rpx;
-  font-weight: 800;
+  font-weight: 700;
   color: $mp-text-secondary;
   margin-bottom: 8rpx;
 }

@@ -86,7 +86,15 @@ export interface AppConfig {
   help_choose_share_title_prefix: string
 }
 
-export const APP_CONFIG_STRING_KEYS: (keyof AppConfig)[] = [
+export type AppConfigStringKey = {
+  [K in keyof AppConfig]: AppConfig[K] extends string ? K : never
+}[keyof AppConfig]
+
+export type AppConfigBooleanKey = {
+  [K in keyof AppConfig]: AppConfig[K] extends boolean ? K : never
+}[keyof AppConfig]
+
+export const APP_CONFIG_STRING_KEYS: AppConfigStringKey[] = [
   'home_title',
   'home_subtitle',
   'home_banner_title',
@@ -140,7 +148,7 @@ export const APP_CONFIG_STRING_KEYS: (keyof AppConfig)[] = [
   'help_choose_share_title_prefix',
 ]
 
-export const APP_CONFIG_BOOLEAN_KEYS: (keyof AppConfig)[] = [
+export const APP_CONFIG_BOOLEAN_KEYS: AppConfigBooleanKey[] = [
   'show_home_banner',
   'show_home_recommend',
   'show_home_hot',
